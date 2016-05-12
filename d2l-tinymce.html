@@ -1,0 +1,141 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../polymer/polymer.html">
+<script type="text/javascript" src="../tinymce/tinymce.min.js"></script>
+
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <d2l-tinymce></d2l-tinymce>
+
+@demo
+-->
+<dom-module id="d2l-tinymce">
+
+  <style>
+    :host {
+    }
+  </style>
+
+  <template>
+    <content></content>
+  </template>
+
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'd2l-tinymce',
+
+    /**
+     * @see tinymce config
+     */
+    properties: {
+        content_css: {
+            type: String,
+            value: null
+        },
+        baseUrl: {
+            type: String,
+            value: null
+        },
+        plugins: {
+            type: String,
+            value: ''
+        },
+        menubar: {
+            type: String,
+            value: ''
+        },
+        toolbar: {
+            type: Array,
+            value: ['bold italic title']
+        }
+    },
+
+
+    /**
+     * Textarea where tinymce is instantiate
+     * @return {HTMLElement}
+     */
+    element: null,
+
+    // Element Lifecycle
+
+    ready: function() {
+      // `ready` is called after all elements have been configured, but
+      // propagates bottom-up. This element's children are ready, but parents
+      // are not.
+      //
+      // This is the point where you should make modifications to the DOM (when
+      // necessary), or kick off any processes the element wants to perform.
+    },
+
+    attached: function() {
+      // `attached` fires once the element and its parents have been inserted
+      // into a document.
+      //
+      // This is a good place to perform any work related to your element's
+      // visual state or active behavior (measuring sizes, beginning animations,
+      // loading resources, etc).
+      if (null !== this.baseUrl)
+        tinyMCE.baseURL = this.baseUrl;
+
+        this.element = Polymer.dom(this).querySelector('div');
+        this._initTinyMCE();
+    },
+
+    detached: function() {
+      // The analog to `attached`, `detached` fires when the element has been
+      // removed from a document.
+      //
+      // Use this to clean up anything you did in `attached`.
+    },
+
+    /**
+     * Init tinyMCE
+     * @private
+     */
+    _initTinyMCE: function () {
+        var that = this;
+        var config = {
+            selector: '#' + this.element.id,
+            // plugins: this.plugins,
+            menubar: false,
+            toolbar: false,
+            inline: true,
+
+            setup: function(editor) {
+                editor.on('change', function(e) {
+                    that.element.value = editor.getContent();
+                    console.log('change', that.element.value);
+                });
+
+                editor.on('keyup', function(e) {
+                    that.element.value = editor.getContent();
+                    console.log('keyup', that.element.value);
+                });
+            }
+        };
+
+        if (this.content_css) {
+            config.content_css = this.content_css;
+        }
+
+        tinymce.init(config);
+    }
+
+  });
+
+</script>
