@@ -17,17 +17,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="../../web-component-tester/browser.js"></script>
 
     <!-- Step 1: import the element to test -->
-    <link rel="import" href="../d2l-tinymce.html">
+    <link rel="import" href="../d2l-html-editor.html">
   </head>
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
-    <d2l-tinymce></d2l-tinymce>
+    <d2l-html-editor></d2l-html-editor>
 
     <script>
-      var myEl = document.querySelector('d2l-tinymce');
+      var myEl = document.querySelector('d2l-html-editor');
 
-      suite('<d2l-tinymce>', function() {
+      suite('<d2l-html-editor>', function() {
 
         test('defines the "author" property', function() {
           assert.equal(myEl.author.name, 'Dimitri Glazkov');
@@ -35,14 +35,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         });
 
         test('says hello', function() {
-          assert.equal(myEl.sayHello(), 'd2l-tinymce says, Hello World!');
+          assert.equal(myEl.sayHello(), 'd2l-html-editor says, Hello World!');
 
           var greetings = myEl.sayHello('greetings Earthlings');
-          assert.equal(greetings, 'd2l-tinymce says, greetings Earthlings');
+          assert.equal(greetings, 'd2l-html-editor says, greetings Earthlings');
         });
 
         test('fires lasers', function(done) {
-          myEl.addEventListener('d2l-tinymce-lasers', function(event) {
+          myEl.addEventListener('d2l-html-editor-lasers', function(event) {
             assert.equal(event.detail.sound, 'Pew pew!');
             done();
           });

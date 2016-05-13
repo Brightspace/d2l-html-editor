@@ -1,19 +1,19 @@
 {
-  "name": "d2l-tinymce",
-  "version": "1.0.0",
+  "name": "d2l-html-editor",
+  "version": "0.0.1",
   "authors": [
     "Anonymous <anonymous@example.com>"
   ],
-  "description": "An element providing a solution to no problem in particular.",
+  "description": "An HTML editor.",
   "keywords": [
     "web-component",
     "web-components",
     "polymer",
     "seed"
   ],
-  "main": "d2l-tinymce.html",
+  "main": "d2l-html-editor.html",
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/<USERNAME>/d2l-tinymce/",
+  "homepage": "https://github.com/Brightspace/d2l-html-editor/",
   "ignore": [
     "/.*",
     "/test/",
