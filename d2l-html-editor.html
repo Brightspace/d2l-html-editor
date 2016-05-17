@@ -60,7 +60,7 @@ Example:
     </style>
 
     <div id="toolbar" class="toolbar">My Toolbar</div>
-
+    <div id="content"></div>
     <content></content>
 
   </template>
@@ -82,6 +82,7 @@ Example:
      * @see tinymce config
      */
     properties: {
+        content: String,
         content_css: {
             type: String,
             value: null
@@ -133,7 +134,10 @@ Example:
       if (null !== this.baseUrl)
         tinyMCE.baseURL = this.baseUrl;
 
-        this.element = Polymer.dom(this).querySelector('div');
+        this.element = Polymer.dom(this.root).querySelector('#content');
+        console.log('Where is my VALUE', this.content);
+        Polymer.dom(this.element).innerHTML = this.content;
+
         this._initTinyMCE();
     },
 
