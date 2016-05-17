@@ -1,0 +1,26 @@
+{
+  "name": "d2l-html-editor",
+  "version": "1.0.0",
+  "description": "An element providing a starting point for your own reusable Polymer elements.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brightspace/d2l-html-editor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brightspace/d2l-html-editor/issues"
+  },
+  "homepage": "https://github.com/Brightspace/d2l-html-editor#readme",
+  "dependencies": {
+    "vui-dropdown": "^0.6.4",
+    "vui-input": "^1.5.6"
+  }
+}

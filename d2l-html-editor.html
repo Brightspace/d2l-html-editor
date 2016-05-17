@@ -8,7 +8,9 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../polymer/polymer.html">
-<script type="text/javascript" src="../tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="../tinymce/tinymce.js"></script>
+
+<!--<link rel="import" href="./vui-input-styles.html">-->
 
 <!--
 An element providing a solution to no problem in particular.
@@ -21,13 +23,46 @@ Example:
 -->
 <dom-module id="d2l-html-editor">
 
-  <style>
-    :host {
-    }
-  </style>
-
   <template>
+<!--    <style include="vui-input-styles"></style>-->
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        border: 1px solid red;
+      }
+
+      .toolbar {
+        border: 1px solid green;
+        display: none;
+        right: 2rem;
+        position: absolute;
+        bottom: 2rem;
+        margin-top: 0.5rem;
+        z-index: 1001;
+      }
+
+      [dir="rtl"] .toolbar {
+          left: auto;
+          right: 0;
+      }
+
+      .toolbar-visible {
+        display: inline-block;
+      }
+
+      :host ::content > p:first-child {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+
+    </style>
+
+    <div id="toolbar" class="toolbar">My Toolbar</div>
+
     <content></content>
+
   </template>
 
 </dom-module>
@@ -37,6 +72,11 @@ Example:
   Polymer({
 
     is: 'd2l-html-editor',
+
+    listeners: {
+        'focus': 'toolbarVisible',
+        'blur': 'toolbarHidden'
+    },
 
     /**
      * @see tinymce config
@@ -139,6 +179,14 @@ Example:
         }
 
         tinymce.init(config);
+    },
+
+    toolbarVisible: function() {
+      this.toggleClass('toolbar-visible', true, this.$.toolbar);
+    },
+
+    toolbarHidden: function() {
+      this.toggleClass('toolbar-visible', false, this.$.toolbar);
     }
 
   });
