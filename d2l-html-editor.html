@@ -39,13 +39,15 @@ Example:
         display: inline-block;
         right: -1rem;
       }
-
+      /*
       :host[dir="ltr"] .toolbar {
         right: -1rem;
       }
+      */
 
-      :host[dir="rtl"] .toolbar {
+      :host-context([dir='rtl']) .toolbar {
         left: -1rem;
+        right: inherit;
       }
 
       .toolbar-visible {
@@ -83,28 +85,36 @@ Example:
      * @see tinymce config
      */
     properties: {
+        minRows: {
+          type: Number,
+          value: 2
+        },
+        maxRows: {
+          type: Number,
+          value: 4
+        },
+        baseFontSize: {
+          type: Number,
+          value: 20
+        },
+        lineHeight: {
+          type: Number,
+          value: 1.2
+        },
+        minHeight: {
+          type: String,
+          computed: 'computeHeight(minRows, baseFontSize, lineHeight)'
+        },
+        maxHeight: {
+          type: String,
+          computed: 'computeHeight(maxRows, baseFontSize, lineHeight)'
+        },
         editorId: String,
         toolbarId: {
           type: String,
           computed: 'computeToolbarId(editorId)'
         },
-        content: String,
-        content_css: {
-            type: String,
-            value: null
-        },
-        baseUrl: {
-            type: String,
-            value: null
-        },
-        plugins: {
-            type: String,
-            value: ''
-        },
-        menubar: {
-            type: String,
-            value: ''
-        }
+        content: String
     },
 
 
@@ -165,9 +175,10 @@ Example:
             toolbar: "bold italic underline image media code fullscreen",
             fixed_toolbar_container: '#' + this.toolbarId,
             inline: true,
-            // skin_url: 'bower_components/d2l-html-editor/css/d2ltinymceskin',
             theme_url: 'bower_components/d2l-html-editor/theme.js',
             theme: 'd2l',
+            max_height: this.maxHeight,
+            min_height: this.minHeight,
             setup: function(editor) {
                 editor.on('change', function(e) {
                     that.fire('change', {content: editor.getContent()});
@@ -199,7 +210,11 @@ Example:
 
     computeToolbarId: function(editorId) {
       return editorId + '-toolbar';
-    }
+    },
+
+    computeHeight(rows, baseFontSize, lineHeight) {
+      return baseFontSize * lineHeight * rows;
+    },
 
   });
 
