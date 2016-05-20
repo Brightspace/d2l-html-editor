@@ -29,22 +29,23 @@ Example:
       :host {
         display: block;
         position: relative;
-        border: 1px solid red;
       }
 
       .toolbar {
-        border: 1px solid green;
         display: none;
-        right: 2rem;
         position: absolute;
-        bottom: 2rem;
-        margin-top: 0.5rem;
+        top: -3.8rem;
         z-index: 1001;
+        display: inline-block;
+        right: -1rem;
       }
 
-      [dir="rtl"] .toolbar {
-          left: auto;
-          right: 0;
+      :host[dir="ltr"] .toolbar {
+        right: -1rem;
+      }
+
+      :host[dir="rtl"] .toolbar {
+        left: -1rem;
       }
 
       .toolbar-visible {
@@ -59,8 +60,8 @@ Example:
 
     </style>
 
-    <div id="toolbar" class="toolbar">My Toolbar</div>
-    <div id="content"></div>
+    <div id="[[toolbarId]]" class="toolbar"></div>
+    <!--<div id="[[editorId]]"></div>-->
     <content></content>
 
   </template>
@@ -72,16 +73,21 @@ Example:
   Polymer({
 
     is: 'd2l-html-editor',
-
+/*
     listeners: {
         'focus': 'toolbarVisible',
         'blur': 'toolbarHidden'
     },
-
+*/
     /**
      * @see tinymce config
      */
     properties: {
+        editorId: String,
+        toolbarId: {
+          type: String,
+          computed: 'computeToolbarId(editorId)'
+        },
         content: String,
         content_css: {
             type: String,
@@ -98,10 +104,6 @@ Example:
         menubar: {
             type: String,
             value: ''
-        },
-        toolbar: {
-            type: Array,
-            value: ['bold italic title']
         }
     },
 
@@ -134,9 +136,9 @@ Example:
       if (null !== this.baseUrl)
         tinyMCE.baseURL = this.baseUrl;
 
-        this.element = Polymer.dom(this.root).querySelector('#content');
+        this.element = Polymer.dom(this).querySelector('#' + this.editorId);
         console.log('Where is my VALUE', this.content);
-        Polymer.dom(this.element).innerHTML = this.content;
+        // Polymer.dom(this.element).innerHTML = this.content;
 
         this._initTinyMCE();
     },
@@ -147,7 +149,7 @@ Example:
       //
       // Use this to clean up anything you did in `attached`.
       console.log('detached');
-      tinymce.EditorManager.execCommand('mceRemoveEditor', true, this.element.id); // eslint-disable-line no-undef
+      tinymce.EditorManager.execCommand('mceRemoveEditor', true, this.editorId); // eslint-disable-line no-undef
     },
 
     /**
@@ -157,13 +159,15 @@ Example:
     _initTinyMCE: function () {
         var that = this;
         var config = {
-            selector: '#' + this.element.id,
-            // plugins: this.plugins,
+            selector: '#' + this.editorId,
+            plugins: 'code image media fullscreen',
             menubar: false,
-            toolbar: false,
+            toolbar: "bold italic underline image media code fullscreen",
+            fixed_toolbar_container: '#' + this.toolbarId,
             inline: true,
-            skin_url: '/css/mytinymceskin',
-
+            // skin_url: 'bower_components/d2l-html-editor/css/d2ltinymceskin',
+            theme_url: 'bower_components/d2l-html-editor/theme.js',
+            theme: 'd2l',
             setup: function(editor) {
                 editor.on('change', function(e) {
                     that.fire('change', {content: editor.getContent()});
@@ -191,6 +195,10 @@ Example:
 
     toolbarHidden: function() {
       this.toggleClass('toolbar-visible', false, this.$.toolbar);
+    },
+
+    computeToolbarId: function(editorId) {
+      return editorId + '-toolbar';
     }
 
   });

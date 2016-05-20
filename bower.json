@@ -21,9 +21,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
-    "tinymce": "^4.3.12",
-    "vui-input": "^1.5.6",
-    "vui-dropdown": "^0.6.4"
+    "tinymce": "git+ssh://git@github.com/mdgbayly/tinymce-dist.git"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
