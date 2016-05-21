@@ -37,7 +37,7 @@ Example:
         top: -3.8rem;
         z-index: 1001;
         display: inline-block;
-        right: -1rem;
+        right: 0rem;
       }
       /*
       :host[dir="ltr"] .toolbar {
@@ -46,7 +46,7 @@ Example:
       */
 
       :host-context([dir='rtl']) .toolbar {
-        left: -1rem;
+        left: 0rem;
         right: inherit;
       }
 
@@ -54,16 +54,17 @@ Example:
         display: inline-block;
       }
 
-      :host ::content > p:first-child {
-        margin-top: 0;
-        margin-bottom: 0;
+      :host ::content div > p:first-child {
+        margin-top: 0
       }
 
+      :host ::content div > p:last-child {
+        margin-bottom: 0;
+      }
 
     </style>
 
     <div id="[[toolbarId]]" class="toolbar"></div>
-    <!--<div id="[[editorId]]"></div>-->
     <content></content>
 
   </template>
@@ -75,27 +76,22 @@ Example:
   Polymer({
 
     is: 'd2l-html-editor',
-/*
+
     listeners: {
         'focus': 'toolbarVisible',
         'blur': 'toolbarHidden'
     },
-*/
     /**
      * @see tinymce config
      */
     properties: {
         minRows: {
           type: Number,
-          value: 2
+          value: 1
         },
         maxRows: {
           type: Number,
-          value: 4
-        },
-        baseFontSize: {
-          type: Number,
-          value: 20
+          value: 3
         },
         lineHeight: {
           type: Number,
@@ -103,18 +99,22 @@ Example:
         },
         minHeight: {
           type: String,
-          computed: 'computeHeight(minRows, baseFontSize, lineHeight)'
+          computed: 'computeHeight(minRows, lineHeight)'
         },
         maxHeight: {
           type: String,
-          computed: 'computeHeight(maxRows, baseFontSize, lineHeight)'
+          computed: 'computeHeight(maxRows, lineHeight)'
         },
         editorId: String,
         toolbarId: {
           type: String,
           computed: 'computeToolbarId(editorId)'
         },
-        content: String
+        content: String,
+        baseUrl: {
+          type: String,
+          value: null
+        }
     },
 
 
@@ -137,6 +137,7 @@ Example:
 
     attached: function() {
       console.log('attached');
+
       // `attached` fires once the element and its parents have been inserted
       // into a document.
       //
@@ -147,18 +148,20 @@ Example:
         tinyMCE.baseURL = this.baseUrl;
 
         this.element = Polymer.dom(this).querySelector('#' + this.editorId);
-        console.log('Where is my VALUE', this.content);
-        // Polymer.dom(this.element).innerHTML = this.content;
+        this.element.style.overflowY = 'auto';
+        this.element.style.minHeight = this.minHeight;
+        this.element.style.maxHeight = this.maxHeight;
 
         this._initTinyMCE();
     },
 
     detached: function() {
+      console.log('detached');
+
       // The analog to `attached`, `detached` fires when the element has been
       // removed from a document.
       //
       // Use this to clean up anything you did in `attached`.
-      console.log('detached');
       tinymce.EditorManager.execCommand('mceRemoveEditor', true, this.editorId); // eslint-disable-line no-undef
     },
 
@@ -177,18 +180,24 @@ Example:
             inline: true,
             theme_url: 'bower_components/d2l-html-editor/theme.js',
             theme: 'd2l',
-            max_height: this.maxHeight,
-            min_height: this.minHeight,
             setup: function(editor) {
                 editor.on('change', function(e) {
                     that.fire('change', {content: editor.getContent()});
-                    that.element.value = editor.getContent();
-                    console.log('change', that.element.value);
+                    // that.element.value = editor.getContent();
+                });
+                editor.on('focusin', function(e) {
+                    console.log("FOCUS IN");
+                    that.fire('focus');
+                    // that.element.value = editor.getContent();
+                });
+                editor.on('focusout', function(e) {
+                    console.log("FOCUS OUT");
+                    that.fire('blur');
+                    // that.element.value = editor.getContent();
                 });
 
                 editor.on('keyup', function(e) {
                     that.element.value = editor.getContent();
-                    console.log('keyup', that.element.value);
                 });
             }
         };
@@ -212,8 +221,8 @@ Example:
       return editorId + '-toolbar';
     },
 
-    computeHeight(rows, baseFontSize, lineHeight) {
-      return baseFontSize * lineHeight * rows;
+    computeHeight(rows, lineHeight) {
+      return (lineHeight * rows) + 'rem';
     },
 
   });
