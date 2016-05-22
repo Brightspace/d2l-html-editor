@@ -93,17 +93,21 @@ Example:
           type: Number,
           value: 3
         },
+        totalPadding: {
+          type: Number,
+          value: 0.9
+        },
         lineHeight: {
           type: Number,
           value: 1.2
         },
         minHeight: {
           type: String,
-          computed: 'computeHeight(minRows, lineHeight)'
+          computed: 'computeHeight(totalPadding, minRows, lineHeight)'
         },
         maxHeight: {
           type: String,
-          computed: 'computeHeight(maxRows, lineHeight)'
+          computed: 'computeHeight(totalPadding, maxRows, lineHeight)'
         },
         editorId: String,
         toolbarId: {
@@ -221,8 +225,8 @@ Example:
       return editorId + '-toolbar';
     },
 
-    computeHeight(rows, lineHeight) {
-      return (lineHeight * rows) + 'rem';
+    computeHeight(totalPadding, rows, lineHeight) {
+      return totalPadding + (lineHeight * rows) + 'rem';
     },
 
   });

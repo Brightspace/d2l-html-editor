@@ -7,7 +7,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "bower install",
+    "test": "npm run test:lint:js && npm run test:lint:wc && wct --skip-plugin sauce",
+    "test:lint:js": "eslint *.html",
+    "test:lint:wc": "polylint"
   },
   "repository": {
     "type": "git",
@@ -20,7 +23,5 @@
   },
   "homepage": "https://github.com/Brightspace/d2l-html-editor#readme",
   "dependencies": {
-    "vui-dropdown": "^0.6.4",
-    "vui-input": "^1.5.6"
   }
 }
