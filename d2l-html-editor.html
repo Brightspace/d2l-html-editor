@@ -1,146 +1,214 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <link rel="import" href="../polymer/polymer.html">
-<script type="text/javascript" src="../tinymce/tinymce.min.js"></script>
+<script type="text/javascript" src="../tinymce/tinymce.js"></script>
+
+<!--<link rel="import" href="./vui-input-styles.html">-->
 
 <!--
 An element providing a solution to no problem in particular.
 
 Example:
 
-    <d2l-html-editor></d2l-html-editor>
+		<d2l-html-editor></d2l-html-editor>
 
 @demo
 -->
 <dom-module id="d2l-html-editor">
 
-  <style>
-    :host {
-    }
-  </style>
+	<template>
+		<style>
+			:host {
+				display: block;
+				position: relative;
+			}
 
-  <template>
-    <content></content>
-  </template>
+			.toolbar {
+				display: none;
+				position: absolute;
+				top: -3.8rem;
+				z-index: 1001;
+				display: inline-block;
+				right: 0rem;
+			}
+			/*
+			:host[dir="ltr"] .toolbar {
+				right: -1rem;
+			}
+			*/
+
+			:host-context([dir='rtl']) .toolbar {
+				left: 0rem;
+				right: inherit;
+			}
+
+			.toolbar-visible {
+				display: inline-block;
+			}
+
+			:host ::content div > p:first-child {
+				margin-top: 0
+			}
+
+			:host ::content div > p:last-child {
+				margin-bottom: 0;
+			}
+
+		</style>
+
+		<div id$="[[toolbarId]]" class="toolbar"></div>
+		<content></content>
+
+	</template>
 
 </dom-module>
 
 <script>
+	Polymer({
 
-  Polymer({
+		is: 'd2l-html-editor',
 
-    is: 'd2l-html-editor',
+		listeners: {
+			'focus': 'toolbarVisible',
+			'blur': 'toolbarHidden'
+		},
+		/**
+		 * @see tinymce config
+		 */
+		properties: {
+			minRows: {
+				type: Number,
+				value: 1
+			},
+			maxRows: {
+				type: Number,
+				value: 3
+			},
+			totalPadding: {
+				type: Number,
+				value: 0.9
+			},
+			lineHeight: {
+				type: Number,
+				value: 1.2
+			},
+			minHeight: {
+				type: String,
+				computed: 'computeHeight(totalPadding, minRows, lineHeight)'
+			},
+			maxHeight: {
+				type: String,
+				computed: 'computeHeight(totalPadding, maxRows, lineHeight)'
+			},
+			editorId: String,
+			toolbarId: {
+				type: String,
+				computed: 'computeToolbarId(editorId)'
+			},
+			content: String,
+			baseUrl: {
+				type: String,
+				value: null
+			}
+		},
 
-    /**
-     * @see tinymce config
-     */
-    properties: {
-        content_css: {
-            type: String,
-            value: null
-        },
-        baseUrl: {
-            type: String,
-            value: null
-        },
-        plugins: {
-            type: String,
-            value: ''
-        },
-        menubar: {
-            type: String,
-            value: ''
-        },
-        toolbar: {
-            type: Array,
-            value: ['bold italic title']
-        }
-    },
+		/**
+		 * Textarea where tinymce is instantiate
+		 * @return {HTMLElement}
+		 */
+		element: null,
 
+		// Element Lifecycle
 
-    /**
-     * Textarea where tinymce is instantiate
-     * @return {HTMLElement}
-     */
-    element: null,
+		ready: function() {
+			// `ready` is called after all elements have been configured, but
+			// propagates bottom-up. This element's children are ready, but parents
+			// are not.
+			//
+			// This is the point where you should make modifications to the DOM (when
+			// necessary), or kick off any processes the element wants to perform.
+		},
 
-    // Element Lifecycle
+		attached: function() {
+			// `attached` fires once the element and its parents have been inserted
+			// into a document.
+			//
+			// This is a good place to perform any work related to your element's
+			// visual state or active behavior (measuring sizes, beginning animations,
+			// loading resources, etc).
+			if (null !== this.baseUrl) {
+				tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
+			}
 
-    ready: function() {
-      // `ready` is called after all elements have been configured, but
-      // propagates bottom-up. This element's children are ready, but parents
-      // are not.
-      //
-      // This is the point where you should make modifications to the DOM (when
-      // necessary), or kick off any processes the element wants to perform.
-    },
+			this.element = Polymer.dom(this).querySelector('#' + this.editorId);
+			this.element.style.overflowY = 'auto';
+			this.element.style.minHeight = this.minHeight;
+			this.element.style.maxHeight = this.maxHeight;
 
-    attached: function() {
-      console.log('attached');
-      // `attached` fires once the element and its parents have been inserted
-      // into a document.
-      //
-      // This is a good place to perform any work related to your element's
-      // visual state or active behavior (measuring sizes, beginning animations,
-      // loading resources, etc).
-      if (null !== this.baseUrl)
-        tinyMCE.baseURL = this.baseUrl;
+			this._initTinyMCE();
+		},
 
-        this.element = Polymer.dom(this).querySelector('div');
-        this._initTinyMCE();
-    },
+		detached: function() {
+			// The analog to `attached`, `detached` fires when the element has been
+			// removed from a document.
+			//
+			// Use this to clean up anything you did in `attached`.
+			tinymce.EditorManager.execCommand('mceRemoveEditor', true, this.editorId); // eslint-disable-line no-undef
+		},
 
-    detached: function() {
-      // The analog to `attached`, `detached` fires when the element has been
-      // removed from a document.
-      //
-      // Use this to clean up anything you did in `attached`.
-      console.log('detached');
-      tinymce.EditorManager.execCommand('mceRemoveEditor', true, this.element.id); // eslint-disable-line no-undef
-    },
+		/**
+		 * Init tinyMCE
+		 * @private
+		 */
+		_initTinyMCE: function() {
+			var that = this;
+			var config = {
+				selector: '#' + this.editorId,
+				plugins: 'code image media fullscreen',
+				menubar: false,
+				toolbar: 'bold italic underline image media code fullscreen',
+				fixed_toolbar_container: '#' + this.toolbarId,
+				inline: true,
+				theme_url: 'bower_components/d2l-html-editor/theme.js',
+				theme: 'd2l',
+				setup: function(editor) {
+					editor.on('change', function() {
+						that.fire('change', {content: editor.getContent()});
+					});
+					editor.on('focusin', function(e) {
+						that.fire('focus', e);
+					});
+					editor.on('focusout', function(e) {
+						that.fire('blur', e);
+					});
 
-    /**
-     * Init tinyMCE
-     * @private
-     */
-    _initTinyMCE: function () {
-        var that = this;
-        var config = {
-            selector: '#' + this.element.id,
-            // plugins: this.plugins,
-            menubar: false,
-            toolbar: false,
-            inline: true,
-            skin_url: '/css/mytinymceskin',
+					editor.on('keyup', function() {
+						that.element.value = editor.getContent();
+					});
+				}
+			};
 
-            setup: function(editor) {
-                editor.on('change', function(e) {
-                    that.fire('change', {content: editor.getContent()});
-                    that.element.value = editor.getContent();
-                    console.log('change', that.element.value);
-                });
+			if (this.content_css) {
+				config.content_css = this.content_css;
+			}
 
-                editor.on('keyup', function(e) {
-                    that.element.value = editor.getContent();
-                    console.log('keyup', that.element.value);
-                });
-            }
-        };
+			tinymce.init(config); // eslint-disable-line no-undef
+		},
 
-        if (this.content_css) {
-            config.content_css = this.content_css;
-        }
+		toolbarVisible: function() {
+			this.toggleClass('toolbar-visible', true, this.$.toolbar);
+		},
 
-        tinymce.init(config);
-    }
+		toolbarHidden: function() {
+			this.toggleClass('toolbar-visible', false, this.$.toolbar);
+		},
 
-  });
+		computeToolbarId: function(editorId) {
+			return editorId + '-toolbar';
+		},
+
+		computeHeight: function(totalPadding, rows, lineHeight) {
+			return totalPadding + (lineHeight * rows) + 'rem';
+		}
+
+	});
 
 </script>

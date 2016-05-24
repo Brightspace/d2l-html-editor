@@ -1,7 +1,9 @@
+
 # d2l-html-editor
 
-An element providing a starting point for your own reusable Polymer elements.
+[![Build Status](https://travis-ci.com/Brightspace/d2l-html-editor.svg?token=z1N1ibLo45u7EF4sGt3Y&branch=master)](https://travis-ci.com/Brightspace/d2l-html-editor)
 
+An element wrapping TinyMCE.
 
 ## Dependencies
 
