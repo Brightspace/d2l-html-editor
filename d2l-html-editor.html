@@ -52,6 +52,10 @@ Example:
 				margin-bottom: 0;
 			}
 
+			:host ::content img {
+				max-width: 100%;
+			}
+
 		</style>
 
 		<div id$="[[toolbarId]]" class="toolbar"></div>
@@ -143,7 +147,7 @@ Example:
 			this.element.style.minHeight = this.minHeight;
 			this.element.style.maxHeight = this.maxHeight;
 
-			this._initTinyMCE();
+			//this._initTinyMCE();
 		},
 
 		detached: function() {
@@ -162,9 +166,9 @@ Example:
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: 'code image media fullscreen',
+				plugins: 'code media fullscreen ' + this.imagePluginId(),
 				menubar: false,
-				toolbar: 'bold italic underline image media code fullscreen',
+				toolbar: 'bold italic underline ' + this.imagePluginId() + ' media code fullscreen',
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: true,
 				theme_url: 'bower_components/d2l-html-editor/theme.js',
@@ -207,6 +211,53 @@ Example:
 
 		computeHeight: function(totalPadding, rows, lineHeight) {
 			return totalPadding + (lineHeight * rows) + 'rem';
+		},
+
+		configureLmsClient: function(client) {
+			this.client = client;
+			const that = this;
+			const imagePluginId = this.imagePluginId();
+			tinymce.PluginManager.add(imagePluginId, function(editor, url) {
+				editor.addButton(imagePluginId, {
+					text: 'Add Image',
+					icon: false,
+					onclick: function() {
+						that.click();
+					}
+				});
+			}); // eslint-disable-line
+			this._initTinyMCE();
+		},
+
+		imagePluginId: function() {
+			var id= 'lmsimage_' + this.editorId;
+			return id.replace(new RegExp('-', 'g'), '_');
+		},
+
+		click: function() {
+			const that = this;
+			this.callHtmlEditor(function(editor) {
+				editor.click().then(function(response) {
+					tinymce.get(that.editorId).execCommand('mceInsertContent', false, response);
+				});
+			});
+		},
+
+		callHtmlEditor: function(fn) {
+			this.client.getService('html-editor', '0.1').then(function(editor) {
+				fn.call(null, editor);
+			});
+		},
+
+		addLmsImageButton: function(editor, url) {
+			const that = this;
+			editor.addButton('lmsimage', {
+				text: 'Add Image',
+				icon: false,
+				onclick: function() {
+					that.click();
+				}
+			});
 		}
 
 	});
