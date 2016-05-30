@@ -236,29 +236,18 @@ Example:
 
 		click: function() {
 			const that = this;
-			this.callHtmlEditor(function(editor) {
-				editor.click().then(function(response) {
+			this.callHtmlEditor(function(service) {
+				service.click().then(function(response) {
 					tinymce.get(that.editorId).execCommand('mceInsertContent', false, response);
 				});
 			});
 		},
 
-		callHtmlEditor: function(fn) {
-			this.client.getService('html-editor', '0.1').then(function(editor) {
-				fn.call(null, editor);
+		callHtmlEditor: function(fn) {	
+			this.client.getService('html-editor', '0.1').then(function(service) {
+				fn.call(null, service);
 			});
 		},
-
-		addLmsImageButton: function(editor, url) {
-			const that = this;
-			editor.addButton('lmsimage', {
-				text: 'Add Image',
-				icon: false,
-				onclick: function() {
-					that.click();
-				}
-			});
-		}
 
 	});
 
