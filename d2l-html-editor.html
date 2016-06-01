@@ -111,6 +111,10 @@ Example:
 			baseUrl: {
 				type: String,
 				value: null
+			},
+			documentBaseUrl: {
+				type: String,
+				value: null
 			}
 		},
 
@@ -123,6 +127,7 @@ Example:
 		// Element Lifecycle
 
 		ready: function() {
+			console.log("P:READY")
 			// `ready` is called after all elements have been configured, but
 			// propagates bottom-up. This element's children are ready, but parents
 			// are not.
@@ -132,6 +137,7 @@ Example:
 		},
 
 		attached: function() {
+			console.log("P:ATTACHED", this.editorId);
 			// `attached` fires once the element and its parents have been inserted
 			// into a document.
 			//
@@ -147,32 +153,35 @@ Example:
 			this.element.style.minHeight = this.minHeight;
 			this.element.style.maxHeight = this.maxHeight;
 
-			//this._initTinyMCE();
+			this.fire('d2l-html-editor-attached');
 		},
 
 		detached: function() {
+			console.log("P:DETACHED", this.editorId);
 			// The analog to `attached`, `detached` fires when the element has been
 			// removed from a document.
 			//
 			// Use this to clean up anything you did in `attached`.
 			tinymce.EditorManager.execCommand('mceRemoveEditor', true, this.editorId); // eslint-disable-line no-undef
+			this.client = null;
 		},
 
 		/**
 		 * Init tinyMCE
 		 * @private
 		 */
-		_initTinyMCE: function() {
+		_initTinyMCE: function(plugins, buttons) {
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: 'code media fullscreen ' + this.imagePluginId(),
+				plugins: plugins,
+				toolbar: buttons,
+				// plugins: 'code media fullscreen ' + this.imagePluginId(),
+				// toolbar: 'bold italic underline ' + this.imagePluginId() + ' media code fullscreen',
 				menubar: false,
-				toolbar: 'bold italic underline ' + this.imagePluginId() + ' media code fullscreen',
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: true,
-				theme_url: 'bower_components/d2l-html-editor/theme.js',
-				theme: 'd2l',
+				document_base_url: this.documentBaseUrl + '/',
 				setup: function(editor) {
 					editor.on('change', function() {
 						that.fire('change', {content: editor.getContent()});
@@ -213,20 +222,111 @@ Example:
 			return totalPadding + (lineHeight * rows) + 'rem';
 		},
 
-		configureLmsClient: function(client) {
-			this.client = client;
-			const that = this;
-			const imagePluginId = this.imagePluginId();
-			tinymce.PluginManager.add(imagePluginId, function(editor, url) {
-				editor.addButton(imagePluginId, {
-					text: 'Add Image',
-					icon: false,
-					onclick: function() {
-						that.click();
-					}
+		_buttonDefinitions: function() {
+			var buttons = [];
+
+			buttons.push({
+				id: 'bold'
+			});
+
+			buttons.push({
+				id: 'italic'
+			});
+
+			buttons.push({
+				id: 'underline'
+			});
+
+			buttons.push({
+				id: 'd2l_image',
+				label: 'Add Image',
+				serviceId: 'fra-html-editor-image',
+				handler: function(editorId, service) {
+					service.click().then(function(response) {
+						tinymce.get(editorId).execCommand('mceInsertContent', false, response);
+					});
+				}
+			});
+
+			return buttons;
+		},
+
+		_configureButtons: function(client, editorId) {
+			var buttonDefinitions = this._buttonDefinitions();
+			var buttons = [];
+			buttonDefinitions.forEach(function(button) {
+				if (button.serviceId) {
+					buttons.push(this._resolveButton(client, editorId, button));
+				} else {
+					buttons.push(button);
+				}
+			}, this);
+			return buttons;
+		},
+
+		_resolveButton: function(client, editorId, button) {
+			return client.getService(button.serviceId, '0.1').then(function(service) {
+				return service.enabled();
+			}).then(function() {
+				var d2lEditor = this;
+				var pluginId = d2lEditor._pluginId(editorId, button.id);
+				tinymce.PluginManager.add(pluginId, function(editor, url) {
+					editor.addButton(pluginId, {
+						text: button.label,
+						icon: false,
+						onclick: function() {
+							d2lEditor._callService(client, button.serviceId, editorId, button.handler);
+						}
+					});
+				}); // eslint-disable-line
+				return {
+					id: pluginId,
+					isPlugin: true
+				};
+
+			}.bind(this))
+			.catch(function() {
+				return {};
+			})
+		},
+
+		_resolveButtonOld: function(client, editorId, button) {
+			return client.getService(button.serviceId, '0.1').then(function(service) {
+				service.enabled().then(function() {
 				});
-			}); // eslint-disable-line
-			this._initTinyMCE();
+			}.bind(this)
+			).catch(function() {
+				return {};
+			});
+		},
+
+		configureLmsClient: function(client) {
+			if (this.client) {
+				return;
+			}
+
+			this.client = client;
+			var buttons = this._configureButtons(client, this.editorId);
+			Promise.all(buttons).then(function(resolvedButtons) {
+				var resolvedToolbar = resolvedButtons.reduce(function(toolbar, item) {
+					if (item.isPlugin && item.id) {
+						toolbar.plugins.push(item.id);
+						toolbar.buttons.push(item.id);
+					} else if (item.id) {
+						toolbar.buttons.push(item.id)
+					}
+					return toolbar;
+				}, {
+					plugins: [],
+					buttons: []
+				});
+				this._initTinyMCE(resolvedToolbar.plugins.join(' '), resolvedToolbar.buttons.join(' '));
+			}.bind(this));
+		},
+
+		_pluginId: function(editorId, pluginId) {
+			var id = pluginId + '_' + editorId;
+			return id.replace(new RegExp('-', 'g'), '_');
 		},
 
 		imagePluginId: function() {
@@ -234,18 +334,9 @@ Example:
 			return id.replace(new RegExp('-', 'g'), '_');
 		},
 
-		click: function() {
-			const that = this;
-			this.callHtmlEditor(function(service) {
-				service.click().then(function(response) {
-					tinymce.get(that.editorId).execCommand('mceInsertContent', false, response);
-				});
-			});
-		},
-
-		callHtmlEditor: function(fn) {	
-			this.client.getService('html-editor', '0.1').then(function(service) {
-				fn.call(null, service);
+		_callService: function(client, serviceId, editorId, fn) {
+			client.getService(serviceId, '0.1').then(function(service) {
+				fn.call(null, editorId, service);
 			});
 		},
 
