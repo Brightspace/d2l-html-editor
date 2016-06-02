@@ -78,6 +78,10 @@ Example:
 		 * @see tinymce config
 		 */
 		properties: {
+			autoFocus: {
+				type: Number,
+				value: 0
+			},
 			minRows: {
 				type: Number,
 				value: 1
@@ -176,8 +180,7 @@ Example:
 				selector: '#' + this.editorId,
 				plugins: plugins,
 				toolbar: buttons,
-				// plugins: 'code media fullscreen ' + this.imagePluginId(),
-				// toolbar: 'bold italic underline ' + this.imagePluginId() + ' media code fullscreen',
+				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: true,
@@ -206,6 +209,9 @@ Example:
 			}
 
 			tinymce.init(config); // eslint-disable-line no-undef
+
+			// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
+			this.autoFocus = 0;
 		},
 
 		toolbarVisible: function() {
@@ -238,7 +244,7 @@ Example:
 			buttons.push({
 				id: 'underline'
 			});
-			
+
 			buttons.push({
 				id: 'd2l_image',
 				label: 'Add Image',
@@ -327,6 +333,10 @@ Example:
 				fn.call(null, editorId, service);
 			});
 		},
+
+		focus: function() {
+			tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
+		}
 
 	});
 
