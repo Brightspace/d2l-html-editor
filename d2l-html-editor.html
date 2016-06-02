@@ -24,7 +24,7 @@ Example:
 			.toolbar {
 				display: none;
 				position: absolute;
-				top: -3.8rem;
+				top: -3.2rem;
 				z-index: 1001;
 				display: inline-block;
 				right: 0rem;
@@ -182,6 +182,8 @@ Example:
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: true,
 				document_base_url: this.documentBaseUrl + '/',
+				convert_urls: false,
+				relative_urls: false,
 				setup: function(editor) {
 					editor.on('change', function() {
 						that.fire('change', {content: editor.getContent()});
@@ -236,12 +238,13 @@ Example:
 			buttons.push({
 				id: 'underline'
 			});
-
+			
 			buttons.push({
 				id: 'd2l_image',
 				label: 'Add Image',
+				icon: 'd2l_image',
 				serviceId: 'fra-html-editor-image',
-				handler: function(editorId, service) {
+				cmd: function(editorId, service) {
 					service.click().then(function(response) {
 						tinymce.get(editorId).execCommand('mceInsertContent', false, response);
 					});
@@ -256,7 +259,7 @@ Example:
 			var buttons = [];
 			buttonDefinitions.forEach(function(button) {
 				if (button.serviceId) {
-					buttons.push(this._resolveButton(client, editorId, button));
+					buttons.push(this._addPlugin(client, editorId, button));
 				} else {
 					buttons.push(button);
 				}
@@ -264,7 +267,7 @@ Example:
 			return buttons;
 		},
 
-		_resolveButton: function(client, editorId, button) {
+		_addPlugin: function(client, editorId, button) {
 			return client.getService(button.serviceId, '0.1').then(function(service) {
 				return service.enabled();
 			}).then(function() {
@@ -272,10 +275,10 @@ Example:
 				var pluginId = d2lEditor._pluginId(editorId, button.id);
 				tinymce.PluginManager.add(pluginId, function(editor, url) {
 					editor.addButton(pluginId, {
-						text: button.label,
-						icon: false,
+						tooltip: button.label,
+						icon: button.icon,
 						onclick: function() {
-							d2lEditor._callService(client, button.serviceId, editorId, button.handler);
+							d2lEditor._callService(client, button.serviceId, editorId, button.cmd);
 						}
 					});
 				}); // eslint-disable-line
@@ -288,16 +291,6 @@ Example:
 			.catch(function() {
 				return {};
 			})
-		},
-
-		_resolveButtonOld: function(client, editorId, button) {
-			return client.getService(button.serviceId, '0.1').then(function(service) {
-				service.enabled().then(function() {
-				});
-			}.bind(this)
-			).catch(function() {
-				return {};
-			});
 		},
 
 		configureLmsClient: function(client) {
@@ -326,11 +319,6 @@ Example:
 
 		_pluginId: function(editorId, pluginId) {
 			var id = pluginId + '_' + editorId;
-			return id.replace(new RegExp('-', 'g'), '_');
-		},
-
-		imagePluginId: function() {
-			var id= 'lmsimage_' + this.editorId;
 			return id.replace(new RegExp('-', 'g'), '_');
 		},
 
