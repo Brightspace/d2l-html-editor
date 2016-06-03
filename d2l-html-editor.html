@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <script type="text/javascript" src="../tinymce/tinymce.js"></script>
+<script type="text/javascript" src="https://s.brightspace.com/lib/ifrau/0.13.1/ifrau/client.js"></script>
 
 <!--<link rel="import" href="./vui-input-styles.html">-->
 
@@ -147,6 +148,7 @@ Example:
 			// visual state or active behavior (measuring sizes, beginning animations,
 			// loading resources, etc).
 
+			this.initialize();
 			this.fire('d2l-html-editor-attached');
 		},
 
@@ -155,15 +157,21 @@ Example:
 			// removed from a document.
 			//
 			// Use this to clean up anything you did in `attached`.
+			this.cleanup();
 		},
 
 		initialize: function(client) {
+
 			if (this.client) {
 				return;
 			}
 
-			this._init(client);
-			this._configureTinyMce(client);
+			var client2 = window.ifrauclient();
+			client2.connect().then(function() {
+				this._init(client2);
+				this._configureTinyMce(client2);
+			}.bind(this));
+
 		},
 
 		// We cannot cleanup in detached because React seems to cause the web component
@@ -197,8 +205,8 @@ Example:
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: plugins,
-				toolbar: buttons,
+				plugins: plugins + ' image',
+				toolbar: buttons + ' image',
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				fixed_toolbar_container: '#' + this.toolbarId,
@@ -270,8 +278,13 @@ Example:
 				icon: 'd2l_image',
 				serviceId: 'fra-html-editor-image',
 				cmd: function(editorId, service) {
+					var editor = tinymce.get(editorId);   // eslint-disable-line no-undef
+					var bookmark = editor.selection.getBookmark();
 					service.click().then(function(response) {
-						tinymce.get(editorId).execCommand('mceInsertContent', false, response);  // eslint-disable-line no-undef
+						editor.focus();
+						editor.selection.moveToBookmark(bookmark);
+						editor.execCommand('mceInsertContent', false, response);
+						/// editor.selection.setContent(response);
 					});
 				}
 			});
