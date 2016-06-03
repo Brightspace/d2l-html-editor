@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
-<script type="text/javascript" src="../tinymce/tinymce.js"></script>
+<link rel="import" href="ifrau-client-import.html">
+<link rel="import" href="tinymce-import.html">
 
 <!--<link rel="import" href="./vui-input-styles.html">-->
 
@@ -24,7 +25,7 @@ Example:
 			.toolbar {
 				display: none;
 				position: absolute;
-				top: -3.8rem;
+				top: -3.2rem;
 				z-index: 1001;
 				display: inline-block;
 				right: 0rem;
@@ -50,6 +51,10 @@ Example:
 
 			:host ::content div > p:last-child {
 				margin-bottom: 0;
+			}
+
+			:host ::content img {
+				max-width: 100%;
 			}
 
 		</style>
@@ -111,6 +116,10 @@ Example:
 			baseUrl: {
 				type: String,
 				value: null
+			},
+			documentBaseUrl: {
+				type: String,
+				value: null
 			}
 		},
 
@@ -138,16 +147,9 @@ Example:
 			// This is a good place to perform any work related to your element's
 			// visual state or active behavior (measuring sizes, beginning animations,
 			// loading resources, etc).
-			if (null !== this.baseUrl) {
-				tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
-			}
 
-			this.element = Polymer.dom(this).querySelector('#' + this.editorId);
-			this.element.style.overflowY = 'auto';
-			this.element.style.minHeight = this.minHeight;
-			this.element.style.maxHeight = this.maxHeight;
-
-			this._initTinyMCE();
+			this.initialize();
+			this.fire('d2l-html-editor-attached');
 		},
 
 		detached: function() {
@@ -155,25 +157,63 @@ Example:
 			// removed from a document.
 			//
 			// Use this to clean up anything you did in `attached`.
+			this.cleanup();
+		},
+
+		initialize: function() {
+
+			if (this.client) {
+				return;
+			}
+
+			var client2 = window.ifrauclient();
+			client2.connect().then(function() {
+				this._init(client2);
+				this._configureTinyMce(client2);
+			}.bind(this));
+
+		},
+
+		// We cannot cleanup in detached because React seems to cause the web component
+		// to detach/attach during move operations
+		cleanup: function() {
 			tinymce.EditorManager.execCommand('mceRemoveEditor', true, this.editorId); // eslint-disable-line no-undef
+			this.client = null;
+		},
+
+		focus: function() {
+			tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
+		},
+
+		_init: function(client) {
+			if (null !== this.baseUrl) {
+				tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
+			}
+
+			this.client = client;
+			this.element = Polymer.dom(this).querySelector('#' + this.editorId);
+			this.element.style.overflowY = 'auto';
+			this.element.style.minHeight = this.minHeight;
+			this.element.style.maxHeight = this.maxHeight;
 		},
 
 		/**
 		 * Init tinyMCE
 		 * @private
 		 */
-		_initTinyMCE: function() {
+		_initTinyMCE: function(plugins, buttons) {
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: 'code image media fullscreen',
+				plugins: plugins + ' image',
+				toolbar: buttons + ' image',
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
-				toolbar: 'bold italic underline image media code fullscreen',
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: true,
-				theme_url: 'bower_components/d2l-html-editor/theme.js',
-				theme: 'd2l',
+				document_base_url: this.documentBaseUrl + '/',
+				convert_urls: false,
+				relative_urls: false,
 				setup: function(editor) {
 					editor.on('change', function() {
 						that.fire('change', {content: editor.getContent()});
@@ -217,8 +257,108 @@ Example:
 			return totalPadding + (lineHeight * rows) + 'rem';
 		},
 
-		focus: function() {
-			tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
+		_buttonDefinitions: function() {
+			var buttons = [];
+
+			buttons.push({
+				id: 'bold'
+			});
+
+			buttons.push({
+				id: 'italic'
+			});
+
+			buttons.push({
+				id: 'underline'
+			});
+
+			buttons.push({
+				id: 'd2l_image',
+				label: 'Add Image',
+				icon: 'd2l_image',
+				serviceId: 'fra-html-editor-image',
+				cmd: function(editorId, service) {
+					var editor = tinymce.get(editorId);   // eslint-disable-line no-undef
+					var bookmark = editor.selection.getBookmark();
+					service.click().then(function(response) {
+						editor.focus();
+						editor.selection.moveToBookmark(bookmark);
+						editor.execCommand('mceInsertContent', false, response);
+						/// editor.selection.setContent(response);
+					});
+				}
+			});
+
+			return buttons;
+		},
+
+		_configureButtons: function(client, editorId) {
+			var buttonDefinitions = this._buttonDefinitions();
+			var buttons = [];
+			buttonDefinitions.forEach(function(button) {
+				if (button.serviceId) {
+					buttons.push(this._addPlugin(client, editorId, button));
+				} else {
+					buttons.push(button);
+				}
+			}, this);
+			return buttons;
+		},
+
+		_addPlugin: function(client, editorId, button) {
+			return client.getService(button.serviceId, '0.1').then(function(service) {
+				return service.enabled();
+			}).then(function() {
+				var d2lEditor = this;
+				var pluginId = d2lEditor._pluginId(editorId, button.id);
+				tinymce.PluginManager.add(pluginId, function(editor) {   // eslint-disable-line no-undef
+					editor.addButton(pluginId, {
+						tooltip: button.label,
+						icon: button.icon,
+						onclick: function() {
+							d2lEditor._callService(client, button.serviceId, editorId, button.cmd);
+						}
+					});
+				});
+				return {
+					id: pluginId,
+					isPlugin: true
+				};
+
+			}.bind(this))
+			.catch(function() {
+				return {};
+			});
+		},
+
+		_configureTinyMce: function(client) {
+			var buttons = this._configureButtons(client, this.editorId);
+			Promise.all(buttons).then(function(resolvedButtons) {   // eslint-disable-line no-undef
+				var resolvedToolbar = resolvedButtons.reduce(function(toolbar, item) {
+					if (item.isPlugin && item.id) {
+						toolbar.plugins.push(item.id);
+						toolbar.buttons.push(item.id);
+					} else if (item.id) {
+						toolbar.buttons.push(item.id);
+					}
+					return toolbar;
+				}, {
+					plugins: [],
+					buttons: []
+				});
+				this._initTinyMCE(resolvedToolbar.plugins.join(' '), resolvedToolbar.buttons.join(' '));
+			}.bind(this));
+		},
+
+		_pluginId: function(editorId, pluginId) {
+			var id = pluginId + '_' + editorId;
+			return id.replace(new RegExp('-', 'g'), '_');
+		},
+
+		_callService: function(client, serviceId, editorId, fn) {
+			client.getService(serviceId, '0.1').then(function(service) {
+				fn.call(null, editorId, service);
+			});
 		}
 
 	});
