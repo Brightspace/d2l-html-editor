@@ -131,7 +131,6 @@ Example:
 		// Element Lifecycle
 
 		ready: function() {
-			console.log("P:READY")
 			// `ready` is called after all elements have been configured, but
 			// propagates bottom-up. This element's children are ready, but parents
 			// are not.
@@ -141,33 +140,53 @@ Example:
 		},
 
 		attached: function() {
-			console.log("P:ATTACHED", this.editorId);
 			// `attached` fires once the element and its parents have been inserted
 			// into a document.
 			//
 			// This is a good place to perform any work related to your element's
 			// visual state or active behavior (measuring sizes, beginning animations,
 			// loading resources, etc).
-			if (null !== this.baseUrl) {
-				tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
-			}
-
-			this.element = Polymer.dom(this).querySelector('#' + this.editorId);
-			this.element.style.overflowY = 'auto';
-			this.element.style.minHeight = this.minHeight;
-			this.element.style.maxHeight = this.maxHeight;
 
 			this.fire('d2l-html-editor-attached');
 		},
 
 		detached: function() {
-			console.log("P:DETACHED", this.editorId);
 			// The analog to `attached`, `detached` fires when the element has been
 			// removed from a document.
 			//
 			// Use this to clean up anything you did in `attached`.
+		},
+
+		initialize: function(client) {
+			if (this.client) {
+				return;
+			}
+
+			this._init(client);
+			this._configureTinyMce(client);
+		},
+
+		// We cannot cleanup in detached because React seems to cause the web component
+		// to detach/attach during move operations
+		cleanup: function() {
 			tinymce.EditorManager.execCommand('mceRemoveEditor', true, this.editorId); // eslint-disable-line no-undef
 			this.client = null;
+		},
+
+		focus: function() {
+			tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
+		},
+
+		_init: function(client) {
+			if (null !== this.baseUrl) {
+				tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
+			}
+
+			this.client = client;
+			this.element = Polymer.dom(this).querySelector('#' + this.editorId);
+			this.element.style.overflowY = 'auto';
+			this.element.style.minHeight = this.minHeight;
+			this.element.style.maxHeight = this.maxHeight;
 		},
 
 		/**
@@ -299,12 +318,7 @@ Example:
 			})
 		},
 
-		configureLmsClient: function(client) {
-			if (this.client) {
-				return;
-			}
-
-			this.client = client;
+		_configureTinyMce: function(client) {
 			var buttons = this._configureButtons(client, this.editorId);
 			Promise.all(buttons).then(function(resolvedButtons) {
 				var resolvedToolbar = resolvedButtons.reduce(function(toolbar, item) {
@@ -332,10 +346,6 @@ Example:
 			client.getService(serviceId, '0.1').then(function(service) {
 				fn.call(null, editorId, service);
 			});
-		},
-
-		focus: function() {
-			tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
 		}
 
 	});
