@@ -271,7 +271,7 @@ Example:
 				serviceId: 'fra-html-editor-image',
 				cmd: function(editorId, service) {
 					service.click().then(function(response) {
-						tinymce.get(editorId).execCommand('mceInsertContent', false, response);
+						tinymce.get(editorId).execCommand('mceInsertContent', false, response);  // eslint-disable-line no-undef
 					});
 				}
 			});
@@ -298,7 +298,7 @@ Example:
 			}).then(function() {
 				var d2lEditor = this;
 				var pluginId = d2lEditor._pluginId(editorId, button.id);
-				tinymce.PluginManager.add(pluginId, function(editor, url) {
+				tinymce.PluginManager.add(pluginId, function(editor) {   // eslint-disable-line no-undef
 					editor.addButton(pluginId, {
 						tooltip: button.label,
 						icon: button.icon,
@@ -306,7 +306,7 @@ Example:
 							d2lEditor._callService(client, button.serviceId, editorId, button.cmd);
 						}
 					});
-				}); // eslint-disable-line
+				});
 				return {
 					id: pluginId,
 					isPlugin: true
@@ -315,18 +315,18 @@ Example:
 			}.bind(this))
 			.catch(function() {
 				return {};
-			})
+			});
 		},
 
 		_configureTinyMce: function(client) {
 			var buttons = this._configureButtons(client, this.editorId);
-			Promise.all(buttons).then(function(resolvedButtons) {
+			Promise.all(buttons).then(function(resolvedButtons) {   // eslint-disable-line no-undef
 				var resolvedToolbar = resolvedButtons.reduce(function(toolbar, item) {
 					if (item.isPlugin && item.id) {
 						toolbar.plugins.push(item.id);
 						toolbar.buttons.push(item.id);
 					} else if (item.id) {
-						toolbar.buttons.push(item.id)
+						toolbar.buttons.push(item.id);
 					}
 					return toolbar;
 				}, {
