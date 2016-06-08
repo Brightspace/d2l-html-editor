@@ -79,6 +79,10 @@ Example:
 		 * @see tinymce config
 		 */
 		properties: {
+			inline: {
+				type: Number,
+				value: 0
+			},
 			autoFocus: {
 				type: Number,
 				value: 0
@@ -161,7 +165,6 @@ Example:
 		},
 
 		initialize: function() {
-
 			if (this.client) {
 				return;
 			}
@@ -205,12 +208,12 @@ Example:
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: plugins + ' image',
-				toolbar: buttons + ' image',
+				plugins: plugins + ' image' + ' fullscreen',
+				toolbar: buttons + ' image' + (this.inline ? ' max' : ' restore'),
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				fixed_toolbar_container: '#' + this.toolbarId,
-				inline: true,
+				inline: this.inline ? true : false,
 				document_base_url: this.documentBaseUrl + '/',
 				convert_urls: false,
 				relative_urls: false,
@@ -218,9 +221,11 @@ Example:
 					editor.on('change', function() {
 						that.fire('change', {content: editor.getContent()});
 					});
+
 					editor.on('focusin', function(e) {
 						that.fire('focus', e);
 					});
+
 					editor.on('focusout', function(e) {
 						that.fire('blur', e);
 					});
@@ -228,6 +233,35 @@ Example:
 					editor.on('keyup', function() {
 						that.element.value = editor.getContent();
 					});
+
+					editor.addButton('max', {
+						text: 'Maximize',
+						icon: false,
+						onclick: function() {
+							console.log('current url: ' + window.location.href);
+							//window.location = '/d2l/le/qed/6609/app/fullScreenHtmlEditor';
+							that.fire('redirect', '/d2l/le/qed/6609/app/fullScreenHtmlEditor');
+						}
+					});
+
+					editor.addButton('restore', {
+						text: 'Restore',
+						icon: false,
+						onclick: function() {
+							console.log('current url: ' + window.location.href);
+							//window.location = '/d2l/le/qed/6609/app';
+							that.fire('redirect', '/d2l/le/qed/6609/app');
+						}
+					});
+
+					if (!this.inline) {
+						console.log('full screen');
+						editor.on('init', function(e) {
+							console.log('exec full screen');
+							editor.execCommand('mceFullScreen');
+						});
+					}
+
 				}
 			};
 
