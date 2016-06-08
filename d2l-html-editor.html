@@ -209,7 +209,7 @@ Example:
 			var config = {
 				selector: '#' + this.editorId,
 				plugins: plugins + ' image' + ' fullscreen',
-				toolbar: buttons + ' image' + (this.inline ? ' max' : ' restore'),
+				toolbar: buttons + ' image' + (this.inline ? ' fullscreen' : ' restore'),
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				fixed_toolbar_container: '#' + this.toolbarId,
@@ -234,13 +234,11 @@ Example:
 						that.element.value = editor.getContent();
 					});
 
-					editor.addButton('max', {
-						text: 'Maximize',
+					editor.addButton('fullscreen', {
+						text: 'Full Screen',
 						icon: false,
 						onclick: function() {
-							console.log('current url: ' + window.location.href);
-							//window.location = '/d2l/le/qed/6609/app/fullScreenHtmlEditor';
-							that.fire('redirect', '/d2l/le/qed/6609/app/fullScreenHtmlEditor');
+							that.fire('fullscreen');
 						}
 					});
 
@@ -248,16 +246,12 @@ Example:
 						text: 'Restore',
 						icon: false,
 						onclick: function() {
-							console.log('current url: ' + window.location.href);
-							//window.location = '/d2l/le/qed/6609/app';
-							that.fire('redirect', '/d2l/le/qed/6609/app');
+							that.fire('restore');
 						}
 					});
 
 					if (!this.inline) {
-						console.log('full screen');
 						editor.on('init', function(e) {
-							console.log('exec full screen');
 							editor.execCommand('mceFullScreen');
 						});
 					}
