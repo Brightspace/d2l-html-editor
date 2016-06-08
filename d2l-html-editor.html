@@ -1,6 +1,9 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="ifrau-client-import.html">
 <link rel="import" href="tinymce-import.html">
+<link rel="import" href="d2l-insertstuff-plugin.html">
+<link rel="import" href="d2l-insertstuff-styles.html">
+<link rel="import" href="d2l-image-plugin.html">
 
 <!--<link rel="import" href="./vui-input-styles.html">-->
 
@@ -16,6 +19,9 @@ Example:
 <dom-module id="d2l-html-editor">
 
 	<template>
+
+		<style include="d2l-insertstuff-styles"></style>
+
 		<style>
 			:host {
 				display: block;
@@ -45,11 +51,11 @@ Example:
 				display: inline-block;
 			}
 
-			:host ::content div > p:first-child {
+			:host ::content div > p:first-of-type {
 				margin-top: 0
 			}
 
-			:host ::content div > p:last-child {
+			:host ::content div > p:last-of-type {
 				margin-bottom: 0;
 			}
 
@@ -70,6 +76,11 @@ Example:
 	Polymer({
 
 		is: 'd2l-html-editor',
+
+		behaviors: [
+			window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
+			window.D2LHtmlEditor.PolymerBehaviors.Image
+		],
 
 		listeners: {
 			'focus': 'toolbarVisible',
@@ -131,11 +142,10 @@ Example:
 
 		// Element Lifecycle
 		registered: function() {
-				console.log("d2l-html-editor REGISTERED");
-				var client = window.ifrauclient();
-				this.editorReady = client.connect().then(function() {
-					return this._configureTinyMce(client);
-				}.bind(this));
+			var client = window.ifrauclient();
+			this.editorReady = client.connect().then(function() {
+				return this._configureTinyMce(client);
+			}.bind(this));
 		},
 
 		ready: function() {
@@ -167,50 +177,6 @@ Example:
 			this.cleanup();
 		},
 
-		_pluginDefinitions: function() {
-			var plugins = [];
-
-			plugins.push({
-				id: 'd2l_image',
-				label: 'Add Image',
-				icon: 'd2l_image',
-				serviceId: 'fra-html-editor-image',
-				cmd: function(service, editor) {
-					var bookmark = editor.selection.getBookmark();
-					service.click().then(function(response) {
-						editor.focus();
-						editor.selection.moveToBookmark(bookmark);
-						editor.execCommand('mceInsertContent', false, response);
-						/// editor.selection.setContent(response);
-					});
-				},
-				init: function() {}
-			});
-
-			plugins.push({
-				id: 'd2l_isf',
-				label: 'Insert Stuff',
-				icon: 'd2l_isf',
-				serviceId: 'fra-html-editor-isf',
-				cmd: function(service, editor) {
-					var bookmark = editor.selection.getBookmark();
-					service.click().then(function(response) {
-						editor.focus();
-						editor.selection.moveToBookmark(bookmark);
-						editor.execCommand('mceInsertContent', false, response);
-						/// editor.selection.setContent(response);
-					});
-				},
-				init: function(editor, config) {
-					editor.on('BeforeSetContent', function(e) {
-						// e.content = 'Zingle!' + e.content + '!Waga';
-					})
-				}
-			});
-
-			return plugins;
-		},
-
 		_addPlugin: function(client, plugin) {
 			var d2lEditor = this;
 			return client.getService(plugin.serviceId, '0.1').then(function(service) {
@@ -234,14 +200,15 @@ Example:
 						plugin.init(editor, config);
 					});
 				}
-
-
 			}).catch(function() {
 			});
 		},
 
 		_configurePlugins: function(client) {
-			var pluginDefinitions = this._pluginDefinitions();
+			var pluginDefinitions = this.behaviors.map(function(behavior) {
+				return behavior.plugin;
+			});
+
 			var plugins = [];
 			pluginDefinitions.forEach(function(plugin) {
 				plugins.push(this._addPlugin(client, plugin));
@@ -251,7 +218,7 @@ Example:
 
 		_configureTinyMce: function(client) {
 			var plugins = this._configurePlugins(client);
-			return Promise.all(plugins);
+			return Promise.all(plugins);  // eslint-disable-line no-undef
 		},
 
 		_callService: function(client, serviceId, editor, fn) {
@@ -298,7 +265,7 @@ Example:
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: ' d2l_isf d2l_image paste autolink table',
+				plugins: 'd2l_image d2l_isf paste autolink table',
 				toolbar: 'bold italic underline d2l_image d2l_isf',
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
@@ -319,7 +286,7 @@ Example:
 					});
 
 					editor.on('keyup', function() {
-						that.element.value = editor.getContent();
+						// that.element.value = editor.getContent();
 					});
 				}
 			};
