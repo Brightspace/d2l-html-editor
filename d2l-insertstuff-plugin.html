@@ -361,7 +361,6 @@ Check that file periodically for changes...
 		editor.on('PostProcess', function(e) {
 			if (e.get) {
 				convertToElements(e);
-				console.log('POST PROCESS', e.content);
 			}
 		});
 	}
