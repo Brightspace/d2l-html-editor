@@ -1,6 +1,9 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="ifrau-client-import.html">
 <link rel="import" href="tinymce-import.html">
+<link rel="import" href="d2l-insertstuff-plugin.html">
+<link rel="import" href="d2l-insertstuff-styles.html">
+<link rel="import" href="d2l-image-plugin.html">
 
 <!--<link rel="import" href="./vui-input-styles.html">-->
 
@@ -16,6 +19,9 @@ Example:
 <dom-module id="d2l-html-editor">
 
 	<template>
+
+		<style include="d2l-insertstuff-styles"></style>
+
 		<style>
 			:host {
 				display: block;
@@ -45,16 +51,12 @@ Example:
 				display: inline-block;
 			}
 
-			:host ::content div > p:first-child {
+			:host ::content div > p:first-of-type {
 				margin-top: 0
 			}
 
-			:host ::content div > p:last-child {
+			:host ::content div > p:last-of-type {
 				margin-bottom: 0;
-			}
-
-			:host ::content img {
-				max-width: 100%;
 			}
 
 		</style>
@@ -70,6 +72,11 @@ Example:
 	Polymer({
 
 		is: 'd2l-html-editor',
+
+		behaviors: [
+			window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
+			window.D2LHtmlEditor.PolymerBehaviors.Image
+		],
 
 		listeners: {
 			'focus': 'toolbarVisible',
@@ -130,6 +137,12 @@ Example:
 		element: null,
 
 		// Element Lifecycle
+		registered: function() {
+			var client = window.ifrauclient();
+			this.editorReady = client.connect().then(function() {
+				return this._configureTinyMce(client);
+			}.bind(this));
+		},
 
 		ready: function() {
 			// `ready` is called after all elements have been configured, but
@@ -160,18 +173,60 @@ Example:
 			this.cleanup();
 		},
 
+		_addPlugin: function(client, plugin) {
+			var d2lEditor = this;
+			return client.getService(plugin.serviceId, '0.1').then(function(service) {
+				return service.config();
+			}).then(function(config) {
+
+				if (!config.isEnabled) {
+					// Add empty plugin so that we don't have to conditionally set the plugin list - maybe fix later
+					tinymce.PluginManager.add(plugin.id, function() {   // eslint-disable-line no-undef
+					});
+				} else {
+					tinymce.PluginManager.add(plugin.id, function(editor) {   // eslint-disable-line no-undef
+						editor.addButton(plugin.id, {
+							tooltip: plugin.label,
+							icon: plugin.icon,
+							onclick: function() {
+								d2lEditor._callService(client, plugin.serviceId, editor, plugin.cmd);
+							}
+						});
+
+						plugin.init(editor, config);
+					});
+				}
+			}).catch(function() {
+			});
+		},
+
+		_configurePlugins: function(client) {
+			var pluginDefinitions = this.behaviors.map(function(behavior) {
+				return behavior.plugin;
+			});
+
+			var plugins = [];
+			pluginDefinitions.forEach(function(plugin) {
+				plugins.push(this._addPlugin(client, plugin));
+			}, this);
+			return plugins;
+		},
+
+		_configureTinyMce: function(client) {
+			var plugins = this._configurePlugins(client);
+			return Promise.all(plugins);  // eslint-disable-line no-undef
+		},
+
+		_callService: function(client, serviceId, editor, fn) {
+			client.getService(serviceId, '0.1').then(function(service) {
+				fn.call(null, service, editor);
+			});
+		},
+
 		initialize: function() {
-
-			if (this.client) {
-				return;
-			}
-
-			var client2 = window.ifrauclient();
-			client2.connect().then(function() {
-				this._init(client2);
-				this._configureTinyMce(client2);
+			this.editorReady.then(function() {
+				this._init();
 			}.bind(this));
-
 		},
 
 		// We cannot cleanup in detached because React seems to cause the web component
@@ -185,28 +240,29 @@ Example:
 			tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
 		},
 
-		_init: function(client) {
+		_init: function() {
 			if (null !== this.baseUrl) {
 				tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
 			}
 
-			this.client = client;
 			this.element = Polymer.dom(this).querySelector('#' + this.editorId);
 			this.element.style.overflowY = 'auto';
 			this.element.style.minHeight = this.minHeight;
 			this.element.style.maxHeight = this.maxHeight;
+
+			this._initTinyMCE();
 		},
 
 		/**
 		 * Init tinyMCE
 		 * @private
 		 */
-		_initTinyMCE: function(plugins, buttons) {
+		_initTinyMCE: function() {
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: plugins + ' image',
-				toolbar: buttons + ' image',
+				plugins: 'd2l_image d2l_isf paste autolink table',
+				toolbar: 'bold italic underline d2l_image d2l_isf',
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				fixed_toolbar_container: '#' + this.toolbarId,
@@ -215,6 +271,21 @@ Example:
 				convert_urls: false,
 				relative_urls: false,
 				setup: function(editor) {
+
+					editor.on('init', function() {
+						if (that.content) {
+							editor.setContent(decodeURIComponent(that.content));
+							// After initial initialization, clear content. The web component may become
+							// detached due to React reordering.  This will cause a re-init, but we want
+							// it to re-init from the current content.  We will look at preventing
+							// initialization on attach/detach in future.  However, detach is currently
+							// the simplest place to clean up the TinyMCE editor.  Probably should include
+							// a property to auto clean up, otherwise would need to explicitly call a clean
+							// up method from React componentWillUnmount.
+							that.content = null;
+						}
+					});
+
 					editor.on('change', function() {
 						that.fire('change', {content: editor.getContent()});
 					});
@@ -226,7 +297,7 @@ Example:
 					});
 
 					editor.on('keyup', function() {
-						that.element.value = editor.getContent();
+						// that.element.value = editor.getContent();
 					});
 				}
 			};
@@ -255,112 +326,7 @@ Example:
 
 		computeHeight: function(totalPadding, rows, lineHeight) {
 			return totalPadding + (lineHeight * rows) + 'rem';
-		},
-
-		_buttonDefinitions: function() {
-			var buttons = [];
-
-			buttons.push({
-				id: 'bold'
-			});
-
-			buttons.push({
-				id: 'italic'
-			});
-
-			buttons.push({
-				id: 'underline'
-			});
-
-			buttons.push({
-				id: 'd2l_image',
-				label: 'Add Image',
-				icon: 'd2l_image',
-				serviceId: 'fra-html-editor-image',
-				cmd: function(editorId, service) {
-					var editor = tinymce.get(editorId);   // eslint-disable-line no-undef
-					var bookmark = editor.selection.getBookmark();
-					service.click().then(function(response) {
-						editor.focus();
-						editor.selection.moveToBookmark(bookmark);
-						editor.execCommand('mceInsertContent', false, response);
-						/// editor.selection.setContent(response);
-					});
-				}
-			});
-
-			return buttons;
-		},
-
-		_configureButtons: function(client, editorId) {
-			var buttonDefinitions = this._buttonDefinitions();
-			var buttons = [];
-			buttonDefinitions.forEach(function(button) {
-				if (button.serviceId) {
-					buttons.push(this._addPlugin(client, editorId, button));
-				} else {
-					buttons.push(button);
-				}
-			}, this);
-			return buttons;
-		},
-
-		_addPlugin: function(client, editorId, button) {
-			return client.getService(button.serviceId, '0.1').then(function(service) {
-				return service.enabled();
-			}).then(function() {
-				var d2lEditor = this;
-				var pluginId = d2lEditor._pluginId(editorId, button.id);
-				tinymce.PluginManager.add(pluginId, function(editor) {   // eslint-disable-line no-undef
-					editor.addButton(pluginId, {
-						tooltip: button.label,
-						icon: button.icon,
-						onclick: function() {
-							d2lEditor._callService(client, button.serviceId, editorId, button.cmd);
-						}
-					});
-				});
-				return {
-					id: pluginId,
-					isPlugin: true
-				};
-
-			}.bind(this))
-			.catch(function() {
-				return {};
-			});
-		},
-
-		_configureTinyMce: function(client) {
-			var buttons = this._configureButtons(client, this.editorId);
-			Promise.all(buttons).then(function(resolvedButtons) {   // eslint-disable-line no-undef
-				var resolvedToolbar = resolvedButtons.reduce(function(toolbar, item) {
-					if (item.isPlugin && item.id) {
-						toolbar.plugins.push(item.id);
-						toolbar.buttons.push(item.id);
-					} else if (item.id) {
-						toolbar.buttons.push(item.id);
-					}
-					return toolbar;
-				}, {
-					plugins: [],
-					buttons: []
-				});
-				this._initTinyMCE(resolvedToolbar.plugins.join(' '), resolvedToolbar.buttons.join(' '));
-			}.bind(this));
-		},
-
-		_pluginId: function(editorId, pluginId) {
-			var id = pluginId + '_' + editorId;
-			return id.replace(new RegExp('-', 'g'), '_');
-		},
-
-		_callService: function(client, serviceId, editorId, fn) {
-			client.getService(serviceId, '0.1').then(function(service) {
-				fn.call(null, editorId, service);
-			});
 		}
-
 	});
 
 </script>
