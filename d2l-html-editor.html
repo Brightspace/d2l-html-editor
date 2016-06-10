@@ -29,7 +29,6 @@ Example:
 			}
 
 			.toolbar {
-				display: none;
 				position: absolute;
 				top: -3.2rem;
 				z-index: 1001;
@@ -45,10 +44,6 @@ Example:
 			:host-context([dir='rtl']) .toolbar {
 				left: 0rem;
 				right: inherit;
-			}
-
-			.toolbar-visible {
-				display: inline-block;
 			}
 
 			:host ::content div > p:first-of-type {
@@ -78,10 +73,6 @@ Example:
 			window.D2LHtmlEditor.PolymerBehaviors.Image
 		],
 
-		listeners: {
-			'focus': 'toolbarVisible',
-			'blur': 'toolbarHidden'
-		},
 		/**
 		 * @see tinymce config
 		 */
@@ -243,6 +234,10 @@ Example:
 			tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
 		},
 
+		getContent: function() {
+			return tinymce.EditorManager.get(this.editorId).getContent(); // eslint-disable-line no-undef
+		},
+
 		_init: function() {
 			if (null !== this.baseUrl) {
 				tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
@@ -317,12 +312,13 @@ Example:
 						text: 'Restore',
 						icon: false,
 						onclick: function() {
+							editor.execCommand('mceFullScreen');
 							that.fire('restore');
 						}
 					});
 
 					if (!this.inline) {
-						editor.on('init', function(e) {
+						editor.on('init', function() {
 							editor.execCommand('mceFullScreen');
 						});
 					}
@@ -338,14 +334,6 @@ Example:
 
 			// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
 			this.autoFocus = 0;
-		},
-
-		toolbarVisible: function() {
-			this.toggleClass('toolbar-visible', true, this.$.toolbar);
-		},
-
-		toolbarHidden: function() {
-			this.toggleClass('toolbar-visible', false, this.$.toolbar);
 		},
 
 		computeToolbarId: function(editorId) {
