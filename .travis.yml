@@ -3,17 +3,16 @@ node_js: stable
 dist: trusty
 sudo: required
 addons:
-  firefox: latest
+  firefox: "39.0"
   apt:
     sources:
     - google-chrome
     packages:
     - google-chrome-stable
 before_script:
-- npm install -g bower polylint web-component-tester
+- npm install -g web-component-tester
 - bower install
-- polylint
-script: xvfb-run wct
+script: npm run test:travis
 env:
   global:
     - secure: ffgeN5pIXvqRSXDLBUG+DXEUDTlR5njE6ZBEOGROwLyILWZRQNNLOc0srmRL6Z15VO5sJeYEacMrF5PagnHWxlfSs6ztsiHH7T181nilvYhOZoVv0AkGxMNBiE7XQysKPwDyBBrrZk+5VfigGslocWPh1zd2D88X2Urok3c281ecVmwlNpapHBaWf0jOpF2YOAOZsg0AScBAWgnvJ3FqpOKwgu51TiNOVt1cB4YI+LoTPddgyHTr1xYouiO8M1HvFJNPmSfb9X1VvpBkTRFS8GPasuesMS69cDoeUuw1axGUmA7hoTB5+G9KS5PX9KaizgDwpIieCmD+uAH/fO8Gik5X1i6KpwmDoGoGxAS5FyKrMdjxnnuDrP+SlUJSz1DznbzN7nJeRLb8a9mDssOucKu5Z49fF88omivE0Z9z9HK6CgHMjnGgByN4bLnVfzWrx15ANRDRH6GgjR/iWLLZTOtCDFpKRJGmllt7oW8xE9/5Rl0Bbz3OymImHSvIl2OvMyzbo1W8z665+NhTlBDwZ/vc1S9L64QPi+SzinkaBy/774cuuZG33IZrktXN5LpLjhpQqKy8UYamdBWTmS6SIswBRay8Qn1u60o21k5OMYjtGr0MapQ95FiywbOWlMKWtPbVe02lrCysfDB1MvYzkTR0ceAwzzOjKzZiNrLrwcw=
