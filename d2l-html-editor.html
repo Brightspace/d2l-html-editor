@@ -4,6 +4,7 @@
 <link rel="import" href="d2l-insertstuff-plugin.html">
 <link rel="import" href="d2l-insertstuff-styles.html">
 <link rel="import" href="d2l-image-plugin.html">
+<link rel="import" href="d2l-link-plugin.html">
 
 <!--<link rel="import" href="./vui-input-styles.html">-->
 
@@ -75,7 +76,8 @@ Example:
 
 		behaviors: [
 			window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
-			window.D2LHtmlEditor.PolymerBehaviors.Image
+			window.D2LHtmlEditor.PolymerBehaviors.Image,
+			window.D2LHtmlEditor.PolymerBehaviors.Link
 		],
 
 		listeners: {
@@ -261,8 +263,8 @@ Example:
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: 'd2l_image d2l_isf paste autolink table',
-				toolbar: 'bold italic underline d2l_image d2l_isf',
+				plugins: 'd2l_image d2l_isf d2l_link paste autolink table',
+				toolbar: 'bold italic underline d2l_image d2l_isf d2l_link',
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				fixed_toolbar_container: '#' + this.toolbarId,

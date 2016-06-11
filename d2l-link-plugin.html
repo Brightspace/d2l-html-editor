@@ -1,0 +1,80 @@
+<script>
+(function() {
+	'use strict';
+
+	function getSelectedNode(editor) {
+		var node = null;
+		if (editor && editor.selection) {
+			node = editor.selection.getNode();
+		}
+
+		return node;
+	}
+
+	function getSelectionContent(editor) {
+		var content = '';
+		if (editor && editor.selection) {
+			content = tinymce.DOM.decode(editor.selection.getContent());  // eslint-disable-line no-undef
+		}
+		return content;
+	}
+
+	function getQuickLinkSelectedText(editor) {
+
+		var text;
+
+		var selectedNode = getSelectedNode(editor);
+		if (selectedNode && selectedNode.nodeName === 'A') {
+			text = Polymer.dom(selectedNode).textContent;
+		} else {
+			text = getSelectionContent(editor);
+		}
+
+		if (text === undefined || text === null) {
+			text = '';
+		}
+
+		return text;
+	}
+
+	function getQuickLinkData(editor) {
+		return {
+			selectedText: getQuickLinkSelectedText(editor),
+			itemData: null
+		};
+	}
+
+	function command(service, editor) {
+		var bookmark = editor.selection.getBookmark();
+		service.click(getQuickLinkData(editor)).then(function(response) {
+			// setTimeout 10 required for IE to get focus back
+			// document.activeELement.blur() required for Chrome to get focus back
+			// moveToBookmark required by IE
+			setTimeout(function() {
+				document.activeElement.blur();
+				editor.focus();
+				editor.selection.moveToBookmark(bookmark);
+				editor.execCommand('mceInsertContent', false, response);
+			}, 10);
+		});
+	}
+
+	/** @polymerBehavior */
+	var LinkBehavior = {
+		plugin: {
+			id: 'd2l_link',
+			label: 'Add Link',
+			icon: 'd2l_link',
+			serviceId: 'fra-html-editor-link',
+			cmd: command,
+			init: function() {}
+		}
+	};
+
+	window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+	window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+	/** @polymerBehavior */
+	window.D2LHtmlEditor.PolymerBehaviors.Link = LinkBehavior;
+
+})();
+</script>
