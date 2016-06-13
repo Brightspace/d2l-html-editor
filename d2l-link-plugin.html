@@ -38,15 +38,51 @@
 	}
 
 	function getQuickLinkData(editor) {
+
+		var node = getSelectedNode(editor);
+
+		if ( node === null || node.nodeName !== 'A' ) {
+			return null;
+		}
+
+		var href = node.getAttribute( 'href' );
+
+		var title = Polymer.dom(node).textContent;
+
+		var target = node.getAttribute('target');
+		if (target == '_top') {
+			target = 'WholeWindow';
+		} else if (target == '_blank') {
+			target = 'NewWindow';
+		} else {
+			target = 'SameFrame';
+		}
+
+		var properties = [];
+		properties.push({
+			name: 'target',
+			value: target
+		});
+
+		return {
+			href: href,
+			title: title,
+			properties: properties,
+			outputFormat: 'html'
+		};
+	}
+
+	function getQuickLink(editor) {
 		return {
 			selectedText: getQuickLinkSelectedText(editor),
-			itemData: null
+			itemData: getQuickLinkData(editor)
 		};
 	}
 
 	function command(service, editor) {
+		var quickLinkData = getQuickLink(editor);
 		var bookmark = editor.selection.getBookmark();
-		service.click(getQuickLinkData(editor)).then(function(response) {
+		service.click(quickLinkData).then(function(response) {
 			// setTimeout 10 required for IE to get focus back
 			// document.activeELement.blur() required for Chrome to get focus back
 			// moveToBookmark required by IE
@@ -56,6 +92,20 @@
 				editor.selection.moveToBookmark(bookmark);
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
+		}, function() {
+			var selectedNode = getSelectedNode(editor);
+			var parentNode = Polymer.dom(selectedNode).parentNode;
+			var nodeStart = Polymer.dom(parentNode).querySelector('#' + bookmark.id + '_start');
+			if (nodeStart) {
+				var nodeStartParent = Polymer.dom(nodeStart).parentNode;
+				Polymer.dom(nodeStartParent).removeChild(nodeStart);
+			}
+			var nodeEnd = Polymer.dom(parentNode).querySelector('#' + bookmark.id + '_end');
+			if (nodeEnd) {
+				var nodeEndParent = Polymer.dom(nodeEnd).parentNode;
+				Polymer.dom(nodeEndParent).removeChild(nodeEnd);
+			}
+
 		});
 	}
 
