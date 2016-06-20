@@ -122,6 +122,10 @@ Example:
 			documentBaseUrl: {
 				type: String,
 				value: null
+			},
+			cssUrl: {
+				type: String,
+				value: null
 			}
 		},
 
@@ -263,12 +267,13 @@ Example:
 			var config = {
 				selector: '#' + this.editorId,
 				plugins: 'd2l_image d2l_isf paste autolink table fullscreen',
-				toolbar: 'bold italic underline d2l_image d2l_isf' + (this.inline ? ' fullscreen' : ' restore'),
+				toolbar: 'bold italic underline d2l_image d2l_isf' + (this.inline ? ' fullscreen' : ' smallscreen'),
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: this.inline ? true : false,
 				document_base_url: this.documentBaseUrl + '/',
+				content_css: this.cssUrl,
 				convert_urls: false,
 				relative_urls: false,
 				setup: function(editor) {
@@ -304,16 +309,14 @@ Example:
 					});
 
 					editor.addButton('fullscreen', {
-						text: 'Full Screen',
-						icon: false,
+						icon: 'full-screen-icon',
 						onclick: function() {
 							that.fire('fullscreen');
 						}
 					});
 
-					editor.addButton('restore', {
-						text: 'Restore',
-						icon: false,
+					editor.addButton('smallscreen', {
+						icon: 'small-screen-icon',
 						onclick: function() {
 							editor.execCommand('mceFullScreen');
 							that.fire('restore');
@@ -328,10 +331,6 @@ Example:
 
 				}
 			};
-
-			if (this.content_css) {
-				config.content_css = this.content_css;
-			}
 
 			tinymce.init(config); // eslint-disable-line no-undef
 
