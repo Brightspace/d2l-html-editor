@@ -1,0 +1,51 @@
+<script>
+(function() {
+	'use strict';
+
+	function getSelectedNode(editor) {
+		var node = null;
+		if (editor && editor.selection) {
+			node = editor.selection.getNode();
+		}
+
+		return node;
+	}
+
+	function getSelectionContent(editor) {
+		var content = '';
+		if (editor && editor.selection) {
+			content = tinymce.DOM.decode(editor.selection.getContent());  // eslint-disable-line no-undef
+		}
+		return content;
+	}
+
+	function clearBookmark(editor, bookmark) {
+		var selectedNode = getSelectedNode(editor);
+		var parentNode = Polymer.dom(selectedNode).parentNode;
+		var nodeStart = Polymer.dom(parentNode).querySelector('#' + bookmark.id + '_start');
+		if (nodeStart) {
+			var nodeStartParent = Polymer.dom(nodeStart).parentNode;
+			Polymer.dom(nodeStartParent).removeChild(nodeStart);
+		}
+		var nodeEnd = Polymer.dom(parentNode).querySelector('#' + bookmark.id + '_end');
+		if (nodeEnd) {
+			var nodeEndParent = Polymer.dom(nodeEnd).parentNode;
+			Polymer.dom(nodeEndParent).removeChild(nodeEnd);
+		}
+
+	}
+
+	/** @polymerBehavior */
+	var PluginBehavior = {
+		getSelectedNode: getSelectedNode,
+		getSelectionContent: getSelectionContent,
+		clearBookmark: clearBookmark
+	};
+
+	window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+	window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+	/** @polymerBehavior */
+	window.D2LHtmlEditor.PolymerBehaviors.Plugin = PluginBehavior;
+
+})();
+</script>

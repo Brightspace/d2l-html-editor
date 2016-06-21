@@ -1,33 +1,18 @@
+<link rel="import" href="d2l-html-editor-plugin.html">
+
 <script>
 (function() {
 	'use strict';
-
-	function getSelectedNode(editor) {
-		var node = null;
-		if (editor && editor.selection) {
-			node = editor.selection.getNode();
-		}
-
-		return node;
-	}
-
-	function getSelectionContent(editor) {
-		var content = '';
-		if (editor && editor.selection) {
-			content = tinymce.DOM.decode(editor.selection.getContent());  // eslint-disable-line no-undef
-		}
-		return content;
-	}
 
 	function getQuickLinkSelectedText(editor) {
 
 		var text;
 
-		var selectedNode = getSelectedNode(editor);
+		var selectedNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
 		if (selectedNode && selectedNode.nodeName === 'A') {
 			text = Polymer.dom(selectedNode).textContent;
 		} else {
-			text = getSelectionContent(editor);
+			text = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectionContent(editor);
 		}
 
 		if (text === undefined || text === null) {
@@ -39,7 +24,7 @@
 
 	function getQuickLinkData(editor) {
 
-		var node = getSelectedNode(editor);
+		var node = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
 
 		if ( node === null || node.nodeName !== 'A' ) {
 			return null;
@@ -90,22 +75,15 @@
 				document.activeElement.blur();
 				editor.focus();
 				editor.selection.moveToBookmark(bookmark);
+				var selectedNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+				if (selectedNode !== null && selectedNode.nodeName === 'A' ) {
+					// replace current link (i.e. if caret is inside of anchor)
+					editor.selection.select(selectedNode);
+				}
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
 		}, function() {
-			var selectedNode = getSelectedNode(editor);
-			var parentNode = Polymer.dom(selectedNode).parentNode;
-			var nodeStart = Polymer.dom(parentNode).querySelector('#' + bookmark.id + '_start');
-			if (nodeStart) {
-				var nodeStartParent = Polymer.dom(nodeStart).parentNode;
-				Polymer.dom(nodeStartParent).removeChild(nodeStart);
-			}
-			var nodeEnd = Polymer.dom(parentNode).querySelector('#' + bookmark.id + '_end');
-			if (nodeEnd) {
-				var nodeEndParent = Polymer.dom(nodeEnd).parentNode;
-				Polymer.dom(nodeEndParent).removeChild(nodeEnd);
-			}
-
+			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
 	}
 

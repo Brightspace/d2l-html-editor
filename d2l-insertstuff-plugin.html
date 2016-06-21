@@ -1,3 +1,5 @@
+<link rel="import" href="d2l-html-editor-plugin.html">
+
 <script>
 /*
 
@@ -350,6 +352,8 @@ Check that file periodically for changes...
 				editor.selection.moveToBookmark(bookmark);
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
+		}, function() {
+			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
 	}
 

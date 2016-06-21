@@ -203,7 +203,9 @@ Example:
 
 			var plugins = [];
 			pluginDefinitions.forEach(function(plugin) {
-				plugins.push(this._addPlugin(client, plugin));
+				if (plugin) {
+					plugins.push(this._addPlugin(client, plugin));
+				}
 			}, this);
 			return plugins;
 		},
