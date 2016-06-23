@@ -267,7 +267,7 @@ Example:
 			var config = {
 				selector: '#' + this.editorId,
 				plugins: 'd2l_image d2l_isf d2l_link paste autolink table fullscreen',
-				toolbar: 'bold italic underline d2l_image d2l_isf d2l_link' + (this.inline ? ' fullscreen' : ' restore'),
+				toolbar: 'bold italic underline d2l_image d2l_isf' + (this.inline ? ' fullscreen' : ' d2l_link restore'),
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				fixed_toolbar_container: '#' + this.toolbarId,
