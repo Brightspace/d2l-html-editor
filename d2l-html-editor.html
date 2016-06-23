@@ -124,6 +124,10 @@ Example:
 			documentBaseUrl: {
 				type: String,
 				value: null
+			},
+			cssUrl: {
+				type: String,
+				value: null
 			}
 		},
 
@@ -266,13 +270,14 @@ Example:
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: 'd2l_image d2l_isf d2l_link paste autolink table fullscreen',
-				toolbar: 'bold italic underline d2l_image d2l_isf' + (this.inline ? ' fullscreen' : ' d2l_link restore'),
+				plugins: 'd2l_image d2l_isf paste autolink table fullscreen',
+				toolbar: 'bold italic underline d2l_image d2l_isf' + (this.inline ? ' fullscreen' : ' d2l_link smallscreen'),
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: this.inline ? true : false,
 				document_base_url: this.documentBaseUrl + '/',
+				content_css: this.cssUrl,
 				convert_urls: false,
 				relative_urls: false,
 				setup: function(editor) {
@@ -308,16 +313,14 @@ Example:
 					});
 
 					editor.addButton('fullscreen', {
-						text: 'Full Screen',
-						icon: false,
+						icon: 'd2l_fullscreen',
 						onclick: function() {
 							that.fire('fullscreen');
 						}
 					});
 
-					editor.addButton('restore', {
-						text: 'Restore',
-						icon: false,
+					editor.addButton('smallscreen', {
+						icon: 'd2l_smallscreen',
 						onclick: function() {
 							editor.execCommand('mceFullScreen');
 							that.fire('restore');
@@ -332,10 +335,6 @@ Example:
 
 				}
 			};
-
-			if (this.content_css) {
-				config.content_css = this.content_css;
-			}
 
 			tinymce.init(config); // eslint-disable-line no-undef
 
