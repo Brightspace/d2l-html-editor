@@ -35,9 +35,9 @@
 		var title = Polymer.dom(node).textContent;
 
 		var target = node.getAttribute('target');
-		if (target == '_top') {
+		if (target === '_top') {
 			target = 'WholeWindow';
-		} else if (target == '_blank') {
+		} else if (target === '_blank') {
 			target = 'NewWindow';
 		} else {
 			target = 'SameFrame';
