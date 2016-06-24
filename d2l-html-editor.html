@@ -270,6 +270,7 @@ Example:
 				toolbar: 'bold italic underline d2l_image d2l_isf' + (this.inline ? ' fullscreen' : ' smallscreen'),
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
+				statusbar: false,
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: this.inline ? true : false,
 				document_base_url: this.documentBaseUrl + '/',
@@ -309,6 +310,7 @@ Example:
 					});
 
 					editor.addButton('fullscreen', {
+						title: 'full screen',
 						icon: 'd2l_fullscreen',
 						onclick: function() {
 							that.fire('fullscreen');
@@ -316,6 +318,7 @@ Example:
 					});
 
 					editor.addButton('smallscreen', {
+						title: 'small screen',
 						icon: 'd2l_smallscreen',
 						onclick: function() {
 							editor.execCommand('mceFullScreen');
@@ -328,7 +331,6 @@ Example:
 							editor.execCommand('mceFullScreen');
 						});
 					}
-
 				}
 			};
 
