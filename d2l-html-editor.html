@@ -126,6 +126,10 @@ Example:
 			cssUrl: {
 				type: String,
 				value: null
+			},
+			appRoot: {
+				type: String,
+				vale: null
 			}
 		},
 
@@ -274,7 +278,7 @@ Example:
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: this.inline ? true : false,
 				document_base_url: this.documentBaseUrl + '/',
-				content_css: this.cssUrl,
+				content_css: this.cssUrl + ',' + this.appRoot + 'bower_components/d2l-html-editor/d2l-insertstuff.css',
 				convert_urls: false,
 				relative_urls: false,
 				setup: function(editor) {
