@@ -1,3 +1,5 @@
+<link rel="import" href="d2l-html-editor-plugin.html">
+
 <script>
 /*
 
@@ -84,12 +86,12 @@ Check that file periodically for changes...
 	function createImage(html) {
 		var width = getAttributeValue( 'width', html );
 		if ( width === null ) {
-			width = '100px';
+			width = '150px';
 		}
 
 		var height = getAttributeValue( 'height', html );
 		if ( height === null ) {
-			height = '100px';
+			height = '150px';
 		}
 
 		var classId = getAttributeValue( 'classid', html );
@@ -350,6 +352,8 @@ Check that file periodically for changes...
 				editor.selection.moveToBookmark(bookmark);
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
+		}, function() {
+			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
 	}
 

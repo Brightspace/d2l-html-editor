@@ -4,6 +4,7 @@
 <link rel="import" href="d2l-insertstuff-plugin.html">
 <link rel="import" href="d2l-insertstuff-styles.html">
 <link rel="import" href="d2l-image-plugin.html">
+<link rel="import" href="d2l-link-plugin.html">
 
 <!--<link rel="import" href="./vui-input-styles.html">-->
 
@@ -70,7 +71,8 @@ Example:
 
 		behaviors: [
 			window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
-			window.D2LHtmlEditor.PolymerBehaviors.Image
+			window.D2LHtmlEditor.PolymerBehaviors.Image,
+			window.D2LHtmlEditor.PolymerBehaviors.Link
 		],
 
 		/**
@@ -209,7 +211,9 @@ Example:
 
 			var plugins = [];
 			pluginDefinitions.forEach(function(plugin) {
-				plugins.push(this._addPlugin(client, plugin));
+				if (plugin) {
+					plugins.push(this._addPlugin(client, plugin));
+				}
 			}, this);
 			return plugins;
 		},
@@ -270,8 +274,8 @@ Example:
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: 'd2l_image d2l_isf paste autolink table fullscreen',
-				toolbar: 'bold italic underline d2l_image d2l_isf' + (this.inline ? ' fullscreen' : ' smallscreen'),
+				plugins: 'd2l_image d2l_isf d2l_link paste autolink table fullscreen',
+				toolbar: 'bold italic underline d2l_image d2l_isf' + (this.inline ? ' fullscreen' : ' d2l_link smallscreen'),
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				statusbar: false,
