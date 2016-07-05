@@ -144,9 +144,9 @@ Example:
 		// Element Lifecycle
 		registered: function() {
 			var client = window.ifrauclient({
-			syncFont: false,
-			syncLang: false,
-			resizeFrame: false
+				syncFont: false,
+				syncLang: false,
+				resizeFrame: false
 			});
 			this.editorReady = client.connect().then(function() {
 				return this._configureTinyMce(client);
