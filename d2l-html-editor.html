@@ -143,7 +143,11 @@ Example:
 
 		// Element Lifecycle
 		registered: function() {
-			var client = window.ifrauclient();
+			var client = window.ifrauclient({
+				syncFont: false,
+				syncLang: false,
+				resizeFrame: false
+			});
 			this.editorReady = client.connect().then(function() {
 				return this._configureTinyMce(client);
 			}.bind(this));
@@ -318,7 +322,7 @@ Example:
 					});
 
 					editor.addButton('fullscreen', {
-						title: 'full screen',
+						title: 'Open in Full Screen Editor',
 						icon: 'd2l_fullscreen',
 						onclick: function() {
 							that.fire('fullscreen');
@@ -326,7 +330,7 @@ Example:
 					});
 
 					editor.addButton('smallscreen', {
-						title: 'small screen',
+						title: 'Close Full Screen Editor',
 						icon: 'd2l_smallscreen',
 						onclick: function() {
 							editor.execCommand('mceFullScreen');
