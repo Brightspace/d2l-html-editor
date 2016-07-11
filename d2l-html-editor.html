@@ -278,8 +278,9 @@ Example:
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: 'd2l_image d2l_isf d2l_link paste autolink table fullscreen',
-				toolbar: 'bold italic underline d2l_image d2l_isf' + (this.inline ? ' fullscreen' : ' d2l_link smallscreen'),
+				plugins: 'd2l_image d2l_isf d2l_link paste autolink table fullscreen directionality hr textcolor colorpicker code table charmap preview',
+				toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf fullscreen' : 'bold italic underline strikethrough subscript superscript | d2l_isf d2l_image d2l_link | bullist numlist | table | forecolor backcolor | alignleft aligncenter alignright alignjustify indent outdent hr charmap ltr rtl | fontselect fontsizeselect | undo redo | cut copy | preview | code | smallscreen',
+				fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				statusbar: false,
