@@ -279,7 +279,7 @@ Example:
 			var config = {
 				selector: '#' + this.editorId,
 				plugins: 'd2l_image d2l_isf d2l_link paste autolink table fullscreen',
-				toolbar: 'bold italic underline d2l_image d2l_isf' + (this.inline ? ' fullscreen' : ' d2l_link smallscreen'),
+				toolbar: 'bold italic underline d2l_image d2l_isf equation' + (this.inline ? ' fullscreen' : ' d2l_link smallscreen'),
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
 				statusbar: false,
@@ -319,6 +319,38 @@ Example:
 
 					editor.on('keyup', function() {
 						// that.element.value = editor.getContent();
+					});
+					
+					editor.addMenuItem('graph_editor', {
+						icon: '',
+						text: 'Graphical Equation',
+						onclick: function (){
+						}
+					});
+					
+					editor.addMenuItem('mml_editor', {
+						icon: '',
+						text: 'MathML Equation',
+						onclick: function (){
+						}
+					});
+					
+					editor.addMenuItem('lt_editor', {
+						icon: '',
+						text: 'LaTex Equation',
+						onclick: function (){
+						}
+					});
+					
+					editor.addButton('equation', {
+						title: 'Equation',
+						type: 'MenuButton',
+						menu: [editor.menuItems['graph_editor'],
+						editor.menuItems['mml_editor'],
+						editor.menuItems['lt_editor']],
+						onclick: function() {
+							
+						}
 					});
 
 					editor.addButton('fullscreen', {
