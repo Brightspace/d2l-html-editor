@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "web-component-tester": "*"
+    "web-component-tester": "*",
+    "d2l-icons": "git+ssh://github.com/Brightspace/d2l-icons-ui.git#^v2.1.0"
   }
 }
