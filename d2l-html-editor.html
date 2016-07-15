@@ -4,6 +4,9 @@
 <link rel="import" href="d2l-insertstuff-plugin.html">
 <link rel="import" href="d2l-insertstuff-styles.html">
 <link rel="import" href="d2l-image-plugin.html">
+<link rel="import" href="d2l-textstylerollup-plugin.html">
+<link rel="import" href="d2l-formatrollup-plugin.html">
+<link rel="import" href="d2l-insertrollup-plugin.html">
 <link rel="import" href="d2l-link-plugin.html">
 
 <!-- this does not seem to work if it is inside the polymer component below -->
@@ -148,7 +151,10 @@ Example:
 		behaviors: [
 			window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
 			window.D2LHtmlEditor.PolymerBehaviors.Image,
-			window.D2LHtmlEditor.PolymerBehaviors.Link
+			window.D2LHtmlEditor.PolymerBehaviors.Link,
+			window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup,
+			window.D2LHtmlEditor.PolymerBehaviors.FormatRollup,
+			window.D2LHtmlEditor.PolymerBehaviors.InsertRollup
 		],
 
 		/**
@@ -260,6 +266,10 @@ Example:
 
 		_addPlugin: function(client, plugin) {
 			var d2lEditor = this;
+			if (plugin.simpleInit) {
+				plugin.init();
+				return;
+			}
 			return client.getService(plugin.serviceId, '0.1').then(function(service) {
 				return service.config();
 			}).then(function(config) {
