@@ -54,7 +54,7 @@ Example:
 			:host ::content div > p:last-of-type {
 				margin-bottom: 0;
 			}
-			
+
 		</style>
 
 		<div id$="[[toolbarId]]" class="toolbar"></div>
@@ -67,15 +67,15 @@ Example:
 <!-- Source of toolbar icons from D2L-icons project -->
 <style>
 			.mce-i-d2l_graphical_equation:before {
-				content: url('../d2l-icons/images/html-editor/equation-graphical.svg'); 
+				content: url('../d2l-icons/images/html-editor/equation-graphical.svg');
 			}
-			
+
 			.mce-i-d2l_mml:before {
-				content: url('../d2l-icons/images/html-editor/equation-mathml.svg'); 
+				content: url('../d2l-icons/images/html-editor/equation-mathml.svg');
 			}
-			
+
 			.mce-i-d2l_latex:before {
-				content: url('../d2l-icons/images/html-editor/equation-latex.svg'); 
+				content: url('../d2l-icons/images/html-editor/equation-latex.svg');
 			}
 </style>
 <script>
@@ -306,7 +306,6 @@ Example:
 				setup: function(editor) {
 					var equationSetting = 1;
 					var equationButton;
-					
 					editor.on('init', function() {
 						if (that.content) {
 							editor.setContent(decodeURIComponent(that.content));
@@ -336,40 +335,40 @@ Example:
 					editor.on('keyup', function() {
 						// that.element.value = editor.getContent();
 					});
-					
+
 					editor.addMenuItem('graphical_editor', {
 						icon: 'd2l_graphical_equation',
 						text: 'Graphical Equation',
-						onclick: function (){
-							if (equationSetting != 1){
+						onclick: function() {
+							if (equationSetting !== 1) {
 								equationSetting = 1;
 								equationButton.icon('d2l_graphical_equation');
 							}
 						}
 					});
-					
+
 					editor.addMenuItem('mml_editor', {
 						icon: 'd2l_mml',
 						text: 'MathML Equation',
-						onclick: function (){
-							if (equationSetting != 2){
+						onclick: function() {
+							if (equationSetting !== 2) {
 								equationSetting = 2;
 								equationButton.icon('d2l_mml');
-							}	
+							}
 						}
 					});
-					
+
 					editor.addMenuItem('latex_editor', {
 						icon: 'd2l_latex',
 						text: 'LaTex Equation',
-						onclick: function (){
-							if (equationSetting != 3){
+						onclick: function() {
+							if (equationSetting !== 3) {
 								equationSetting = 3;
 								equationButton.icon('d2l_latex');
 							}
 						}
 					});
-					
+
 					editor.addButton('equation', {
 						title: 'Equation Editor',
 						icon: 'd2l_graphical_equation',
@@ -381,7 +380,6 @@ Example:
 							equationButton = this;
 						},
 						onclick: function() {
-							
 						}
 					});
 
