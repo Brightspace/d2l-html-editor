@@ -23,7 +23,7 @@
     "polymer": "Polymer/polymer#^1.0.0",
     "tinymce": "git+ssh://git@github.com/mdgbayly/tinymce-dist.git#0.0.9",
     "ifrau": "https://s.brightspace.com/lib/ifrau/0.13.1/ifrau/client.js",
-    "d2l-icons": "~2.1.0"
+    "d2l-icons": "git+ssh://git@github.com/Brightspace/d2l-icons-ui.git#^v2.1.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
