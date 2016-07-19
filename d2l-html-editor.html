@@ -68,11 +68,9 @@
 			.mce-i-undo:before {
 				content: url('../d2l-icons/images/tier1/undo.svg') !important;
 			}
-			/* FIXME TYLER GJERNES REDO SVG SEEMS TO NOT EXIST
 			.mce-i-redo:before {
 				content: url('../d2l-icons/images/tier1/redo.svg') !important;
 			}
-			*/
 			.mce-i-cut:before {
 				content: url('../d2l-icons/images/html-editor/cut.svg') !important;
 			}
@@ -82,7 +80,16 @@
 			.mce-i-code:before {
 				content: url('../d2l-icons/images/html-editor/source-editor.svg') !important;
 			}
-			
+			.mce-i-d2l_graphical_equation:before {
+				content: url('../d2l-icons/images/html-editor/equation-graphical.svg') !important;
+			}
+			.mce-i-d2l_mml:before {
+				content: url('../d2l-icons/images/html-editor/equation-mathml.svg') !important;
+			}
+			.mce-i-d2l_latex:before {
+				content: url('../d2l-icons/images/html-editor/equation-latex.svg') !important;
+			}
+
 </style>
 
 <!--<link rel="import" href="./vui-input-styles.html">-->
@@ -142,7 +149,6 @@ Example:
 	</template>
 
 </dom-module>
-
 <script>
 	Polymer({
 
@@ -365,7 +371,7 @@ Example:
 			var config = {
 				selector: '#' + this.editorId,
 				plugins: 'd2l_image d2l_isf d2l_link paste autolink table fullscreen directionality hr textcolor colorpicker code charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup',
-				toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_isf d2l_image d2l_link d2l_insertrollup | bullist d2l_formatrollup | table | forecolor | fontselect fontsizeselect | undo redo | cut copy | code | smallscreen',
+				toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_isf d2l_image d2l_link d2l_insertrollup | equation | bullist d2l_formatrollup | table | forecolor | fontselect fontsizeselect | undo redo | cut copy | code | smallscreen',
 				fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
@@ -377,7 +383,8 @@ Example:
 				convert_urls: false,
 				relative_urls: false,
 				setup: function(editor) {
-
+					var equationSetting = 1;
+					var equationButton;
 					editor.on('init', function() {
 						if (that.content) {
 							editor.setContent(decodeURIComponent(that.content));
@@ -406,6 +413,56 @@ Example:
 
 					editor.on('keyup', function() {
 						// that.element.value = editor.getContent();
+					});
+
+					editor.addMenuItem('graphical_editor', {
+						icon: 'd2l_graphical_equation',
+						text: 'Graphical equation',
+						onclick: function() {
+							if (equationSetting !== 1) {
+								equationSetting = 1;
+								equationButton.icon('d2l_graphical_equation');
+								equationButton.aria('label', 'Graphical Equation Selected - Equation Editor');
+							}
+						}
+					});
+
+					editor.addMenuItem('mml_editor', {
+						icon: 'd2l_mml',
+						text: 'MathML equation',
+						onclick: function() {
+							if (equationSetting !== 2) {
+								equationSetting = 2;
+								equationButton.icon('d2l_mml');
+								equationButton.aria('label', 'MathML Equation Selected - Equation Editor');
+							}
+						}
+					});
+
+					editor.addMenuItem('latex_editor', {
+						icon: 'd2l_latex',
+						text: 'LaTex equation',
+						onclick: function() {
+							if (equationSetting !== 3) {
+								equationSetting = 3;
+								equationButton.icon('d2l_latex');
+								equationButton.aria('label', 'Latex Equation Selected - Equation Editor');
+							}
+						}
+					});
+
+					editor.addButton('equation', {
+						title: 'Graphical Equation Selected - Equation Editor',
+						icon: 'd2l_graphical_equation',
+						type: 'splitbutton',
+						menu: [editor.menuItems['graphical_editor'],
+						editor.menuItems['mml_editor'],
+						editor.menuItems['latex_editor']],
+						onPostRender: function() {
+							equationButton = this;
+						},
+						onclick: function() {
+						}
 					});
 
 					editor.addButton('fullscreen', {
