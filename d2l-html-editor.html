@@ -45,7 +45,7 @@
 				content: url('../d2l-icons/images/html-editor/indent-increase.svg') !important;
 			}
 			.mce-i-outdent:before {
-				content: url('../d2l-icons/images/html-editor/indent-increase.svg') !important;
+				content: url('../d2l-icons/images/html-editor/indent-decrease.svg') !important;
 			}
 			.mce-i-alignleft:before {
 				content: url('../d2l-icons/images/html-editor/align-left.svg') !important;
@@ -74,8 +74,8 @@
 			.mce-i-cut:before {
 				content: url('../d2l-icons/images/html-editor/cut.svg') !important;
 			}
-			.mce-i-copy:before {
-				content: url('../d2l-icons/images/tier1/copy.svg') !important;
+			.mce-i-paste:before {
+				content: url('../d2l-icons/images/html-editor/paste.svg') !important;
 			}
 			.mce-i-code:before {
 				content: url('../d2l-icons/images/html-editor/source-editor.svg') !important;
@@ -371,7 +371,7 @@ Example:
 			var config = {
 				selector: '#' + this.editorId,
 				plugins: 'd2l_image d2l_isf d2l_link paste autolink table fullscreen directionality hr textcolor colorpicker code charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup',
-				toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_isf d2l_image d2l_link d2l_insertrollup | equation | bullist d2l_formatrollup | table | forecolor | fontselect fontsizeselect | undo redo | cut copy | code | smallscreen',
+				toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_isf d2l_image d2l_link d2l_insertrollup | equation | bullist d2l_formatrollup | table | forecolor | fontselect fontsizeselect | undo redo | cut paste | code | smallscreen',
 				fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 				auto_focus: this.autoFocus ? this.editorId : null,
 				menubar: false,
