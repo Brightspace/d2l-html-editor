@@ -1,6 +1,6 @@
 {
   "name": "d2l-html-editor",
-  "version": "0.0.17",
+  "version": "0.0.20",
   "authors": [
     "Anonymous <anonymous@example.com>"
   ],
@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
-    "tinymce": "git+ssh://git@github.com/mdgbayly/tinymce-dist.git#0.0.10",
+    "tinymce": "git+ssh://git@github.com/mdgbayly/tinymce-dist.git#0.0.11",
     "ifrau": "https://s.brightspace.com/lib/ifrau/0.13.1/ifrau/client.js",
     "d2l-icons": "git+ssh://git@github.com/Brightspace/d2l-icons-ui.git#^v2.2.0"
   },
