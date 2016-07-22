@@ -1,0 +1,112 @@
+<link rel="import" href="d2l-html-editor-plugin.html">
+
+<script>
+(function() {
+	'use strict';
+
+	function command(service, editor) {
+		console.log('command');
+		var bookmark = editor.selection.getBookmark();
+		service.click().then(function(response) {
+			// setTimeout 10 required for IE to get focus back
+			// document.activeELement.blur() required for Chrome to get focus back
+			// moveToBookmark required by IE
+			setTimeout(function() {
+				document.activeElement.blur();
+				editor.focus();
+				editor.selection.moveToBookmark(bookmark);
+				editor.execCommand('mceInsertContent', false, response);
+			}, 10);
+		}, function() {
+			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+		});
+	}
+	/*global tinymce:true */
+	/** @polymerBehavior */
+	var EquationEditorBehavior = {
+		plugin: {
+			id: 'd2l_equation',
+			simpleInit: false,
+			serviceId: 'fra-html-editor-image', // probably dont need this
+			init: function(editor, config, client, d2lEditor) {
+				console.log ('This is a triumph!');
+        var equationSetting = 1;
+        var equationButton;
+				tinymce.PluginManager.add('d2l_equation', function(editor) {
+          editor.addMenuItem('graphical_editor', {
+						icon: 'd2l_graphical_equation',
+						text: 'Graphical equation',
+            serviceId: 'fra-html-editor-graphical-equation',
+						onclick: function() {
+							console.log("GE!!!")
+							if (equationSetting !== 1) {
+								equationSetting = 1;
+								equationButton.icon('d2l_graphical_equation');
+								equationButton.aria('label', 'Graphical Equation Selected - Equation Editor');
+							}
+              //d2lEditor._callService(client, serviceId, editor, cmd);
+						}
+					});
+
+					editor.addMenuItem('mml_editor', {
+						icon: 'd2l_mml',
+						text: 'MathML equation',
+            serviceId: 'fra-html-editor-mml-equation',
+						onclick: function() {
+							console.log("MML!!!")
+							if (equationSetting !== 2) {
+								equationSetting = 2;
+								equationButton.icon('d2l_mml');
+								equationButton.aria('label', 'MathML Equation Selected - Equation Editor');
+							}
+              //d2lEditor._callService(client, serviceId, editor, cmd);
+						}
+					});
+
+					editor.addMenuItem('latex_editor', {
+						icon: 'd2l_latex',
+						text: 'LaTex equation',
+            serviceId: 'fra-html-editor-latex-equation',
+						onclick: function() {
+							console.log("LATEX!!!")
+							if (equationSetting !== 3) {
+								equationSetting = 3;
+								equationButton.icon('d2l_latex');
+								equationButton.aria('label', 'Latex Equation Selected - Equation Editor');
+							}
+              //d2lEditor._callService(client, serviceId, editor, cmd);
+						}
+					});
+
+					editor.addButton('d2l_equation', {
+						title: 'Graphical Equation Selected - Equation Editor',
+						icon: 'd2l_graphical_equation',
+						type: 'splitbutton',
+						serviceId: 'fra-html-editor-image',
+						menu: [editor.menuItems['graphical_editor'],
+						editor.menuItems['mml_editor'],
+						editor.menuItems['latex_editor']],
+						onPostRender: function() {
+							equationButton = this;
+						},
+						onclick: function() {
+							console.log("BUTTON!!!");
+							//console.log(serviceId);
+							console.log(this.settings.serviceId);
+							//console.log(this);
+              d2lEditor._callService(client, this.settings.serviceId, editor, command);
+							//console.log(d2leditor);
+						}
+					});
+				});
+			}
+		}
+	};
+
+	window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+	window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+	/** @polymerBehavior */
+	window.D2LHtmlEditor.PolymerBehaviors.EquationEditor = EquationEditorBehavior;
+
+})();
+</script>
