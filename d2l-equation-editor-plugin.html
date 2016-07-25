@@ -27,7 +27,7 @@
 		plugin: {
 			id: 'd2l_equation',
 			simpleInit: false,
-			serviceId: 'fra-html-editor-image', // probably dont need this
+			serviceId: 'fra-html-editor-graphical-equation', // probably dont need this
 			init: function(editor, config, client, d2lEditor) {
 				console.log ('This is a triumph!');
         var equationSetting = 1;
@@ -44,7 +44,7 @@
 								equationButton.icon('d2l_graphical_equation');
 								equationButton.aria('label', 'Graphical Equation Selected - Equation Editor');
 							}
-              //d2lEditor._callService(client, serviceId, editor, cmd);
+              d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
 
@@ -82,7 +82,7 @@
 						title: 'Graphical Equation Selected - Equation Editor',
 						icon: 'd2l_graphical_equation',
 						type: 'splitbutton',
-						serviceId: 'fra-html-editor-image',
+						serviceId: 'fra-html-editor-graphical-equation',
 						menu: [editor.menuItems['graphical_editor'],
 						editor.menuItems['mml_editor'],
 						editor.menuItems['latex_editor']],
