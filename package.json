@@ -8,8 +8,8 @@
   },
   "scripts": {
     "postinstall": "bower install",
-    "test:travis": "npm run test:lint:js && npm run test:lint:wc && npm run test:unit:travis",
-    "test": "npm run test:lint:js && npm run test:lint:wc",
+    "test:travis": "npm run test:lint:js && npm run test:unit:travis",
+    "test": "npm run test:lint:js",
     "test:lint:js": "eslint *.html",
     "test:lint:wc": "polylint --input d2l-html-editor.html",
     "test:unit:travis": "xvfb-run wct",
