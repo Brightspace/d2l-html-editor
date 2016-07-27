@@ -1,4 +1,5 @@
 <link rel="import" href="d2l-html-editor-plugin.html">
+<link rel="import" href="d2l-html-editor-plugin.html">
 
 <script>
 (function() {
@@ -21,9 +22,6 @@
 			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
 	}
-
-
-
 
 	function convertToMath(obj) {
 				var func = function(match, sub1, sub2) {
@@ -143,7 +141,6 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 
 	}
 
-
 	/*global tinymce:true */
 	/** @polymerBehavior */
 	var EquationEditorBehavior = {
@@ -223,23 +220,23 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 							//console.log(d2leditor);
 						}
 					});
-				});
 
-				editor.on('NodeChange', function (e){
-					// Figure out later
-					console.log("node change");
-				});
+					editor.on('NodeChange', function (e){
+						// Figure out later
+						console.log("node change");
+					});
 
-				editor.on('BeforeSetContent', function(e) {
-						console.log("before set con");
-					convertToImages(e);
-				});
+					editor.on('BeforeSetContent', function(e) {
+							console.log("before set con");
+						convertToImages(e);
+					});
 
-				editor.on('PostProcess', function(e) {
-						console.log("post process");
-					if (e.get) {
-						convertToMath(e);
-					}
+					editor.on('PostProcess', function(e) {
+							console.log("post process");
+						if (e.get) {
+							convertToMath(e);
+						}
+					});
 				});
 			}
 		}
