@@ -1,0 +1,78 @@
+.mce-i-bold:before {
+	content: url('../d2l-icons/images/html-editor/bold.svg') !important;
+}
+.mce-i-italic:before {
+	content: url('../d2l-icons/images/html-editor/italic.svg') !important;
+}
+.mce-i-underline:before {
+	content: url('../d2l-icons/images/html-editor/underline.svg') !important;
+}
+.mce-i-arrowdown:before {
+	content: url('../d2l-icons/images/tier1/chevron-down.svg') !important;
+}
+.mce-i-strikethrough:before {
+	content: url('../d2l-icons/images/html-editor/strikethrough.svg') !important;
+}
+.mce-i-superscript:before {
+	content: url('../d2l-icons/images/html-editor/superscript.svg') !important;
+}
+.mce-i-subscript:before {
+	content: url('../d2l-icons/images/html-editor/subscript.svg') !important;
+}
+.mce-i-charmap:before {
+	content: url('../d2l-icons/images/html-editor/symbol.svg') !important;
+}
+.mce-i-bullist:before {
+	content: url('../d2l-icons/images/html-editor/list-bullet.svg') !important;
+}
+.mce-i-numlist:before {
+	content: url('../d2l-icons/images/html-editor/list-ordered.svg') !important;
+}
+.mce-i-indent:before {
+	content: url('../d2l-icons/images/html-editor/indent-increase.svg') !important;
+}
+.mce-i-outdent:before {
+	content: url('../d2l-icons/images/html-editor/indent-decrease.svg') !important;
+}
+.mce-i-alignleft:before {
+	content: url('../d2l-icons/images/html-editor/align-left.svg') !important;
+}
+.mce-i-alignright:before {
+	content: url('../d2l-icons/images/html-editor/align-right.svg') !important;
+}
+.mce-i-aligncenter:before {
+	content: url('../d2l-icons/images/html-editor/align-center.svg') !important;
+}
+.mce-i-alignjustify:before {
+	content: url('../d2l-icons/images/html-editor/align-full.svg') !important;
+}
+.mce-i-ltr:before {
+	content: url('../d2l-icons/images/html-editor/direction-ltr.svg') !important;
+}
+.mce-i-rtl:before {
+	content: url('../d2l-icons/images/html-editor/direction-rtl.svg') !important;
+}
+.mce-i-undo:before {
+	content: url('../d2l-icons/images/tier1/undo.svg') !important;
+}
+.mce-i-redo:before {
+	content: url('../d2l-icons/images/tier1/redo.svg') !important;
+}
+.mce-i-cut:before {
+	content: url('../d2l-icons/images/html-editor/cut.svg') !important;
+}
+.mce-i-paste:before {
+	content: url('../d2l-icons/images/html-editor/paste.svg') !important;
+}
+.mce-i-code:before {
+	content: url('../d2l-icons/images/html-editor/source-editor.svg') !important;
+}
+.mce-i-d2l_graphical_equation:before {
+	content: url('../d2l-icons/images/html-editor/equation-graphical.svg') !important;
+}
+.mce-i-d2l_mml:before {
+	content: url('../d2l-icons/images/html-editor/equation-mathml.svg') !important;
+}
+.mce-i-d2l_latex:before {
+	content: url('../d2l-icons/images/html-editor/equation-latex.svg') !important;
+}
