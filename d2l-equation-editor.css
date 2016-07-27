@@ -1,0 +1,4 @@
+img.latexequation { background-image: url(/d2l/img/0/Framework.HtmlEditor.latexequationplaceholder.png?v=10.6.4.0-1689679); }
+img.graphicalequation { background-image: url('../d2l-icons/images/html-editor/equation-graphical.svg'); background-size: 36px 36px; }
+img.mathmlequation { background-image: url(/d2l/img/0/Framework.HtmlEditor.mathmlequationplaceholder.png?v=10.6.4.0-1689679); }
+img.equation { border:1px solid #333399; background-position:center; background-repeat:no-repeat; background-color:#ffffcc;  }
