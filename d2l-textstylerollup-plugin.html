@@ -9,8 +9,7 @@
 	var TextStyleRollupBehavior = {
 		plugin: {
 			id: 'd2l_textstylerollup',
-			simpleInit: true,
-			init: function() {
+			initPlugin: function() {
 				tinymce.PluginManager.add('d2l_textstylerollup', function(editor) {
 					editor.addButton('d2l_textstylerollup', {
 						type   : 'MenuButton',
