@@ -5,7 +5,6 @@
 	'use strict';
 
 	function command(service, editor) {
-		console.log('command');
 		var bookmark = editor.selection.getBookmark();
 		service.click().then(function(response) {
 			// setTimeout 10 required for IE to get focus back
@@ -23,41 +22,41 @@
 	}
 
 	function convertToMath(obj) {
-				var func = function(match, sub1, sub2) {
+		var func = function(match, sub1, sub2) {
 					// find the MathML
-					var hackRegEx = /^<img[^>]*\s+data-d2l-mathml=\"([^\"]*)\"(.|\n|\r)*/i;
-					var hackResult = hackRegEx.exec(match);
-					var hack = decodeURIComponent(hackResult[1]);
-					return hack;
-				};
+			var hackRegEx = /^<img[^>]*\s+data-d2l-mathml=\"([^\"]*)\"(.|\n|\r)*/i;
+			var hackResult = hackRegEx.exec(match);
+			var hack = decodeURIComponent(hackResult[1]);
+			return hack;
+		};
 
-				obj.content = obj.content.replace(/<img[^>]*\s+data-d2l-mathml=\"[^\"]*\"[^>]*>/gi, func);
+		obj.content = obj.content.replace(/<img[^>]*\s+data-d2l-mathml=\"[^\"]*\"[^>]*>/gi, func);
 	}
 
 	function convertToImages(obj) {
 		var func = function(match) {
 			var height = 80,
-			    width = 80;
+				width = 80;
 
 			// get the title of the equation
 			var title = match.match(/title=(\"|\')([^\"]*)(\"|\')/i);
-			if ((title != null) && (title.length == 4) && (title[2] != null)) {
+			if ((title !== null) && (title.length === 4) && (title[2] !== null)) {
 				title = title[2];
 			} else {
-				title = "";
+				title = '';
 			}
 			var annotationRegex = /<annotation encoding="([^"]*)">/gi;
 			var annotationMatch = annotationRegex.exec(match);
-			var classString = "equation";
-			if (annotationMatch == null) {
-				classString += " mathmlequation";
+			var classString = 'equation';
+			if (annotationMatch === null) {
+				classString += ' mathmlequation';
 			} else {
-				if (annotationMatch[1] == "wiris") {
-					classString += " graphicalequation";
-				} else if (annotationMatch[1] == "latex") {
-					classString += " latexequation";
+				if (annotationMatch[1] === 'wiris') {
+					classString += ' graphicalequation';
+				} else if (annotationMatch[1] === 'latex') {
+					classString += ' latexequation';
 				} else {
-					classString += " mathmlequation";
+					classString += ' mathmlequation';
 				}
 			}
 			return '<img class="' + classString + '" title="' + title + '" alt="' + title + '" src="/d2l/img/LP/htmlEditor/eq_trans.gif" width="' + width + '" height="' + height + '" style="vertical-align:middle;" hspace="5" vspace="5" data-d2l-mathml="' + encodeURIComponent(match) + '" \/>';
@@ -65,7 +64,7 @@
 
 		var appletFunc = function(match) {
 			var math = match.match(/<math[^>]*>(.|\n|\r)*<\/math>/gi);
-			if (math != null && math.length > 0) {
+			if (math !== null && math.length > 0) {
 				math = math[0];
 			}
 			return func(annotateMathML('wiris', '', math, math));
@@ -77,30 +76,30 @@
 
 	function htmlEncode( value ) {
 
-		if( value == undefined || value == null ) {
+		if ( value === undefined || value === null ) {
 			return value;
 		}
 
-		if( value.indexOf('&') != -1 ) {
+		if ( value.indexOf('&') !== -1 ) {
 			value = value.replace( /&/g, '&amp;' );
 		}
-		if( value.indexOf('<') != -1 ) {
+		if ( value.indexOf('<') !== -1 ) {
 			value = value.replace( /</g, '&lt;' );
 		}
-		if( value.indexOf('>') != -1 ) {
+		if ( value.indexOf('>') !== -1 ) {
 			value = value.replace( />/g, '&gt;' );
 		}
-		if( value.indexOf('"') != -1 ) {
+		if ( value.indexOf('"') !== -1 ) {
 			value = value.replace( /"/g, '&quot;' );
 		}
 
 		return value;
 
-}
+	}
 
-function annotateMathML ( encoding, title, originalMath, mathML ) {
+	function annotateMathML( encoding, title, originalMath, mathML ) {
 		if ( title === undefined ) {
-			title = "";
+			title = '';
 		}
 
 		var mathStartRegEx = /<math[^>]*>/i;
@@ -116,7 +115,7 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 			mathDisplayStyle = ' display="inline"';
 		}
 
-		if (encoding === "latex" && latexInlineRegEx.test(originalMath)) {
+		if (encoding === 'latex' && latexInlineRegEx.test(originalMath)) {
 			mathDisplayStyle = ' display="inline"';
 		}
 
@@ -124,7 +123,7 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 		var style = '';
 		var encode = htmlEncode;
 
-		if (mathStyleMatch != null) {
+		if (mathStyleMatch !== null) {
 			style = mathStyleMatch[1];
 		}
 
@@ -150,38 +149,41 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 			init: function(editor, config, client, d2lEditor) {
 
 				tinymce.PluginManager.add('d2l_equation', function(editor) {
-          editor.addMenuItem('graphical_editor', {
+					editor.addMenuItem('graphical_editor', {
 						icon: 'd2l_graphical_equation',
 						text: 'Graphical equation',
-            serviceId: 'fra-html-editor-graphical-equation',
+						serviceId: 'fra-html-editor-graphical-equation',
 						onclick: function() {
 							if (editor.buttons.d2l_equation.setting !== 1) {
 								editor.buttons.d2l_equation.setting = 1;
+								editor.buttons.d2l_equation.button_object.title('Graphical equation');
 								editor.buttons.d2l_equation.button_object.icon('d2l_graphical_equation');
-								editor.buttons.d2l_equation.button_object.aria('label', 'Graphical Equation Selected - Equation Editor');
+								editor.buttons.d2l_equation.button_object.aria('label', 'Graphical equation');
 							}
-              d2lEditor._callService(client, this.settings.serviceId, editor, command);
+							d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
 
 					editor.addMenuItem('mml_editor', {
 						icon: 'd2l_mml',
 						text: 'MathML equation',
-            serviceId: 'fra-html-editor-mml-equation',
+						serviceId: 'fra-html-editor-mml-equation',
 						onclick: function() {
 							if (editor.buttons.d2l_equation.setting !== 2) {
 								editor.buttons.d2l_equation.setting = 2;
+								editor.buttons.d2l_equation.button_object.title('MathML equation');
 								editor.buttons.d2l_equation.button_object.icon('d2l_mml');
-								editor.buttons.d2l_equation.button_object.aria('label', 'MathML Equation Selected - Equation Editor');
+								editor.buttons.d2l_equation.button_object.aria('label', 'MathML equation');
 							}
               //d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
 
-					editor.addMenuItem('latex_editor', {
+					//This will be added in a later story
+					/*editor.addMenuItem('latex_editor', {
 						icon: 'd2l_latex',
-						text: 'LaTex equation',
-            serviceId: 'fra-html-editor-latex-equation',
+						text: 'LaTeX equation',
+						serviceId: 'fra-html-editor-latex-equation',
 						onclick: function() {
 							if (editor.buttons.d2l_equation.setting !== 3) {
 								editor.buttons.d2l_equation.setting = 3;
@@ -190,27 +192,27 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 							}
               //d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
-					});
+					});*/
 
 					editor.addButton('d2l_equation', {
-						title: 'Graphical Equation Selected - Equation Editor',
+						title: 'Graphical equation',
 						icon: 'd2l_graphical_equation',
 						type: 'splitbutton',
 						setting: 1,
 						button_object: {},
 						serviceId: 'fra-html-editor-graphical-equation',
 						menu: [editor.menuItems['graphical_editor'],
-						editor.menuItems['mml_editor'],
-						editor.menuItems['latex_editor']],
+						editor.menuItems['mml_editor']],
+						//editor.menuItems['latex_editor']],
 						onPostRender: function() {
 							editor.buttons.d2l_equation.button_object = this;
 						},
 						onclick: function() {
-              d2lEditor._callService(client, this.settings.serviceId, editor, command);
+							d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
 
-					editor.on('NodeChange', function (e){
+					editor.on('NodeChange', function(e) {
 						// Figure out later
 					});
 

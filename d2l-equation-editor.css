@@ -1,4 +1,21 @@
 img.latexequation { background-image: url(/d2l/img/0/Framework.HtmlEditor.latexequationplaceholder.png?v=10.6.4.0-1689679); }
-img.graphicalequation { background-image: url('../d2l-icons/images/html-editor/equation-graphical.svg'); background-size: 36px 36px; }
 img.mathmlequation { background-image: url(/d2l/img/0/Framework.HtmlEditor.mathmlequationplaceholder.png?v=10.6.4.0-1689679); }
-img.equation { border:1px solid #333399; background-position:center; background-repeat:no-repeat; background-color:#ffffcc;  }
+
+img.graphicalequation {
+  content: url('../d2l-icons/images/html-editor/equation-graphical.svg');
+  padding: 60px;
+  object-fit: contain;
+}
+
+img.equation {
+  width: 150px;
+  height: 150px;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  border: solid 1px #d3d9e3;
+}
+
+img.equation:hover {
+  background-color: #f2f8fc;
+  border: solid 1px #006fbf;
+}
