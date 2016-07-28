@@ -1,0 +1,43 @@
+
+<!--
+ * Released under LGPL License.
+ * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
+ *
+ * License: http://www.tinymce.com/license
+ * Contributing: http://www.tinymce.com/contributing
+ *-->
+<link rel="import" href="d2l-html-editor-plugin.html">
+
+
+<script>
+/* eslint "no-console": 0 */
+(function() {
+	'use strict';
+	/*global tinymce:true */
+	/** @polymerBehavior */
+	var ReplaceStringBehavior = {
+		plugin: {
+			id: 'd2l_replacestring',
+			initPlugin: function(client) {
+				client.request('orgUnit').then(function(orgUnit) {
+					tinymce.PluginManager.add('d2l_replacestring', function(editor) {
+						editor.on('BeforeSetContent', function(e) {
+							alert('this is the beforesetcontent function of the replacestring plugin - does it get called in addition to the insertstuff one?' + orgUnit.OrgUnitId + ' ' + e);
+						});
+
+						editor.on('PostProcess', function(e) {
+							alert('this is the postprocess function of the replacestring plugin - does it get called in addition to the insertstuff one?' + orgUnit.OrgUnitId + ' ' + e);
+						});
+					});
+				});
+
+			}
+		}
+	};
+	window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+	window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+	/** @polymerBehavior */
+	window.D2LHtmlEditor.PolymerBehaviors.ReplaceString = ReplaceStringBehavior;
+
+})();
+</script>
