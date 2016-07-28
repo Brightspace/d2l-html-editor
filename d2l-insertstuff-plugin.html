@@ -359,11 +359,13 @@ Check that file periodically for changes...
 
 	function init(editor, config) {
 		editor.on('BeforeSetContent', function(e) {
+			alert('this is the beforesetcontent function from insertstuff plugin');
 			convertToImages(e, config.isWindowModeOpaque);
 		});
 
 		editor.on('PostProcess', function(e) {
 			if (e.get) {
+				alert('this is the postprocess functdion of insertstuff plugin');
 				convertToElements(e);
 			}
 		});

@@ -13,6 +13,94 @@
 /* eslint "no-console": 0 */
 (function() {
 	'use strict';
+	function encodeReplaceStrings( context, replacementToken, replacementValue ) {
+		var obj = context;
+		var html = obj.content;
+
+		if (html !== null && html.length > 0) {
+
+			var func = function(match) {
+				var tempNode = document.createElement('div');
+
+				// setting the innerHTML automatically closes any opening tags. The regex
+				// only matches the opening tag, so this will cause a duplicate closing tag
+				// when we replace later.
+				console.log('match is:');
+				console.log(match);
+				tempNode.innerHTML = match;
+				var img = tempNode.firstChild;
+				console.log('img is:');
+				console.log(img);
+
+				var src = img.getAttribute('data-mce-src'); //plugin.Attributes.Data);
+
+				if (!src) {
+					src = img.getAttribute('src');
+				}
+				var originalSrc = src;
+
+				// loop through possible replace strings and replace them
+				var key = replacementToken;
+				var regEx = new RegExp('{' + key + '}', 'i');
+				src = src.replace(regEx, replacementValue);
+
+				if (src !== originalSrc) {
+					img.setAttribute('src', src);
+					img.setAttribute('data-d2l-src', encodeURIComponent(originalSrc));
+
+					var temp = tempNode.innerHTML;
+					temp = temp.replace( /<\/iframe>/gi, '' );
+
+					return temp;
+				} else {
+					// no change
+					return match;
+				}
+			};
+
+			// find all occurrences of <img src="something" /> and call func
+			html = html.replace(/<(img|iframe)[^>]*\ssrc[\s]*=[\s]*(\'([^\']*)\'|\"([^\"]*)\"|([^>^\s^\/]*))[^>]*>/gi, func);
+			obj.content = html;
+		}
+	}
+
+	function decodeReplaceStrings(obj) {
+		var html = obj.content;
+
+		if (html !== null && html.length > 0) {
+
+			var func = function(match) {
+				var tempNode = document.createElement('div');
+
+				// setting the innerHTML automatically closes any opening tags. The regex
+				// only matches the opening tag, so this will cause a duplicate closing tag
+				// when we replace later.
+				tempNode.innerHTML = match;
+
+				var img = tempNode.firstChild;
+				var d2l_src = img.getAttribute('data-d2l-src');
+
+				if (d2l_src !== '') {
+
+					img.setAttribute('src', decodeURIComponent(d2l_src));
+					img.removeAttribute('data-d2l-src');
+
+					var temp = tempNode.innerHTML;
+					temp = temp.replace( /<\/iframe>/gi, '' );
+
+					return temp;
+				} else {
+					return match;
+				}
+			};
+
+			// find all occurrences of <img data-d2l-src="something" /> and call func
+			html = html.replace(/<(img|iframe)[^>]*\sdata-d2l-src[\s]*=[\s]*(\'([^\']*)\'|\"([^\"]*)\"|([^>^\s^\/]*))[^>]*>/gi, func);
+			// convert %7Bstuff%7D to {stuff} -> Mozilla based browsers
+			obj.content = html.replace(/(%7B(orgId|orgName|orgUnitId|OrgUnitName|OrgUnitCode|OrgUnitPath|UserId|UserName|OrgDefinedId|FirstName|LastName|ExternalEmail|InternalEmail|RoleId)%7D)/gi, '{$2}');
+		}
+	}
+
 	/*global tinymce:true */
 	/** @polymerBehavior */
 	var ReplaceStringBehavior = {
@@ -23,10 +111,14 @@
 					tinymce.PluginManager.add('d2l_replacestring', function(editor) {
 						editor.on('BeforeSetContent', function(e) {
 							alert('this is the beforesetcontent function of the replacestring plugin - does it get called in addition to the insertstuff one?' + orgUnit.OrgUnitId + ' ' + e);
+							encodeReplaceStrings(e, 'orgUnitId', orgUnit.OrgUnitId);
 						});
 
 						editor.on('PostProcess', function(e) {
-							alert('this is the postprocess function of the replacestring plugin - does it get called in addition to the insertstuff one?' + orgUnit.OrgUnitId + ' ' + e);
+							if (e.get) {
+								alert('this is the postprocess function of the replacestring plugin');
+								decodeReplaceStrings(e);
+							}
 						});
 					});
 				});
