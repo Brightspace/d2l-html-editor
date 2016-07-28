@@ -202,29 +202,22 @@ Example:
 			if (plugin.id === 'd2l_equation') {
 				// loop thru all services before calling init
 				return client.getService(plugin.serviceId, '0.1').then(function(service) {
-					console.log('client.getService');
 					return service.config();
 				}).then(function(config) {
-					console.log('_addPlugin: d2l_equation' + plugin.id);
 					plugin.init(editor, config, client, d2lEditor);
 				}).catch(function() {
 				});
 			}
 			else {
-				console.log('serviceID = ' + plugin.serviceId);
 				return client.getService(plugin.serviceId, '0.1').then(function(service) {
-					console.log('client.getService');
 					return service.config();
 				}).then(function(config) {
-					console.log('we are here');
 					if (!config.isEnabled) {
-						console.log('config is:' + config.isEnabled + ' '+ plugin.id);
 						// Add empty plugin so that we don't have to conditionally set the plugin list - maybe fix later
 						tinymce.PluginManager.add(plugin.id, function() {   // eslint-disable-line no-undef
 						});
 					} else {
 						tinymce.PluginManager.add(plugin.id, function(editor) {   // eslint-disable-line no-undef
-							console.log('ELSE!!!!!' + plugin.id);
 							editor.addButton(plugin.id, {
 								tooltip: plugin.label,
 								icon: plugin.icon,
@@ -331,7 +324,7 @@ Example:
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: this.inline ? true : false,
 				document_base_url: this.documentBaseUrl + '/',
-				content_css: this.cssUrl + ',' + this.appRoot + '../d2l-html-editor/d2l-insertstuff.css',
+				content_css: this.cssUrl + ',' + this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css',
 				skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
 				convert_urls: false,
 				relative_urls: false,

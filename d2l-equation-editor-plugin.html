@@ -1,5 +1,4 @@
 <link rel="import" href="d2l-html-editor-plugin.html">
-<link rel="import" href="d2l-html-editor-plugin.html">
 
 <script>
 (function() {
@@ -149,10 +148,6 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 			simpleInit: false,
 			serviceId: 'fra-html-editor-graphical-equation', // probably dont need this
 			init: function(editor, config, client, d2lEditor) {
-				console.log ('This is a triumph!');
-
-				var equationSetting = 1;
-        var equationButton;
 
 				tinymce.PluginManager.add('d2l_equation', function(editor) {
           editor.addMenuItem('graphical_editor', {
@@ -160,11 +155,10 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 						text: 'Graphical equation',
             serviceId: 'fra-html-editor-graphical-equation',
 						onclick: function() {
-							console.log("GE!!!")
-							if (equationSetting !== 1) {
-								equationSetting = 1;
-								equationButton.icon('d2l_graphical_equation');
-								equationButton.aria('label', 'Graphical Equation Selected - Equation Editor');
+							if (editor.buttons.d2l_equation.setting !== 1) {
+								editor.buttons.d2l_equation.setting = 1;
+								editor.buttons.d2l_equation.button_object.icon('d2l_graphical_equation');
+								editor.buttons.d2l_equation.button_object.aria('label', 'Graphical Equation Selected - Equation Editor');
 							}
               d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
@@ -175,13 +169,12 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 						text: 'MathML equation',
             serviceId: 'fra-html-editor-mml-equation',
 						onclick: function() {
-							console.log("MML!!!")
-							if (equationSetting !== 2) {
-								equationSetting = 2;
-								equationButton.icon('d2l_mml');
-								equationButton.aria('label', 'MathML Equation Selected - Equation Editor');
+							if (editor.buttons.d2l_equation.setting !== 2) {
+								editor.buttons.d2l_equation.setting = 2;
+								editor.buttons.d2l_equation.button_object.icon('d2l_mml');
+								editor.buttons.d2l_equation.button_object.aria('label', 'MathML Equation Selected - Equation Editor');
 							}
-              //d2lEditor._callService(client, serviceId, editor, cmd);
+              //d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
 
@@ -190,13 +183,12 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 						text: 'LaTex equation',
             serviceId: 'fra-html-editor-latex-equation',
 						onclick: function() {
-							console.log("LATEX!!!")
-							if (equationSetting !== 3) {
-								equationSetting = 3;
-								equationButton.icon('d2l_latex');
-								equationButton.aria('label', 'Latex Equation Selected - Equation Editor');
+							if (editor.buttons.d2l_equation.setting !== 3) {
+								editor.buttons.d2l_equation.setting = 3;
+								editor.buttons.d2l_equation.button_object.icon('d2l_latex');
+								editor.buttons.d2l_equation.button_object.aria('label', 'Latex Equation Selected - Equation Editor');
 							}
-              //d2lEditor._callService(client, serviceId, editor, cmd);
+              //d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
 
@@ -204,35 +196,29 @@ function annotateMathML ( encoding, title, originalMath, mathML ) {
 						title: 'Graphical Equation Selected - Equation Editor',
 						icon: 'd2l_graphical_equation',
 						type: 'splitbutton',
+						setting: 1,
+						button_object: {},
 						serviceId: 'fra-html-editor-graphical-equation',
 						menu: [editor.menuItems['graphical_editor'],
 						editor.menuItems['mml_editor'],
 						editor.menuItems['latex_editor']],
 						onPostRender: function() {
-							equationButton = this;
+							editor.buttons.d2l_equation.button_object = this;
 						},
 						onclick: function() {
-							console.log("BUTTON!!!");
-							//console.log(serviceId);
-							console.log(this.settings.serviceId);
-							//console.log(this);
               d2lEditor._callService(client, this.settings.serviceId, editor, command);
-							//console.log(d2leditor);
 						}
 					});
 
 					editor.on('NodeChange', function (e){
 						// Figure out later
-						console.log("node change");
 					});
 
 					editor.on('BeforeSetContent', function(e) {
-							console.log("before set con");
 						convertToImages(e);
 					});
 
 					editor.on('PostProcess', function(e) {
-							console.log("post process");
 						if (e.get) {
 							convertToMath(e);
 						}
