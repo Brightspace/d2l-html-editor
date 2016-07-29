@@ -9,6 +9,7 @@
 <link rel="import" href="d2l-insertrollup-plugin.html">
 <link rel="import" href="d2l-link-plugin.html">
 <link rel="import" href="d2l-code-plugin.html">
+<link rel="import" href="d2l-replacestring-plugin.html">
 <link rel="stylesheet" href="d2l-icons.css">
 
 <!--<link rel="import" href="./vui-input-styles.html">-->
@@ -80,7 +81,8 @@ Example:
 			window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup,
 			window.D2LHtmlEditor.PolymerBehaviors.FormatRollup,
 			window.D2LHtmlEditor.PolymerBehaviors.InsertRollup,
-			window.D2LHtmlEditor.PolymerBehaviors.Code
+			window.D2LHtmlEditor.PolymerBehaviors.Code,
+			window.D2LHtmlEditor.PolymerBehaviors.ReplaceString
 		],
 
 		/**
@@ -290,7 +292,7 @@ Example:
 			var that = this;
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: 'd2l_image d2l_isf d2l_link paste autolink table fullscreen directionality hr textcolor colorpicker d2l_code charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup',
+				plugins: 'd2l_image d2l_isf d2l_link paste autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup',
 				toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | cut paste | d2l_code | smallscreen',
 				fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 				style_formats: [
