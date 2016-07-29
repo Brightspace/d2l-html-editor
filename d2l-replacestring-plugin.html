@@ -110,13 +110,11 @@
 				client.request('orgUnit').then(function(orgUnit) {
 					tinymce.PluginManager.add('d2l_replacestring', function(editor) {
 						editor.on('BeforeSetContent', function(e) {
-							alert('this is the beforesetcontent function of the replacestring plugin - does it get called in addition to the insertstuff one?' + orgUnit.OrgUnitId + ' ' + e);
 							encodeReplaceStrings(e, 'orgUnitId', orgUnit.OrgUnitId);
 						});
 
 						editor.on('PostProcess', function(e) {
 							if (e.get) {
-								alert('this is the postprocess function of the replacestring plugin');
 								decodeReplaceStrings(e);
 							}
 						});
