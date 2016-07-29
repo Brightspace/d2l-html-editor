@@ -10,6 +10,9 @@
 .mce-i-arrowdown:before {
 	content: url('../d2l-icons/images/tier1/chevron-down.svg') !important;
 }
+i.mce-caret:before {
+	content: url('../d2l-icons/images/tier1/chevron-down.svg') !important;
+}
 .mce-i-strikethrough:before {
 	content: url('../d2l-icons/images/html-editor/strikethrough.svg') !important;
 }
