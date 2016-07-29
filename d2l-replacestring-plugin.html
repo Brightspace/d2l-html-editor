@@ -10,7 +10,14 @@
 
 
 <script>
-/* eslint "no-console": 0 */
+/*
+
+Code based on the LMS file:
+/LSOne/lp/framework/web/D2L.LP.Web.UI/Desktop/Controls/HtmlEditor/Components/Scripts/ReplaceString/ReplaceString.js commit version b6e80554112
+https://git.dev.d2l/projects/CORE/repos/lp/commits/b6e80554112a8034f548df7f4539e6b3840aecfd
+Check that file periodically for changes.
+
+*/
 (function() {
 	'use strict';
 	function encodeReplaceStrings( context, replacementToken, replacementValue ) {
@@ -25,13 +32,8 @@
 				// setting the innerHTML automatically closes any opening tags. The regex
 				// only matches the opening tag, so this will cause a duplicate closing tag
 				// when we replace later.
-				console.log('match is:');
-				console.log(match);
 				tempNode.innerHTML = match;
 				var img = tempNode.firstChild;
-				console.log('img is:');
-				console.log(img);
-
 				var src = img.getAttribute('data-mce-src'); //plugin.Attributes.Data);
 
 				if (!src) {
