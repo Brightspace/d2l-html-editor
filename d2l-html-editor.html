@@ -207,6 +207,7 @@ Example:
 				return client.getService(plugin.serviceId, '0.1').then(function(service) {
 					return service.config();
 				}).then(function(config) {
+					var editor = editor;
 					plugin.init(editor, config, client, d2lEditor);
 				}).catch(function() {
 				});

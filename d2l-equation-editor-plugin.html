@@ -1,6 +1,14 @@
 <link rel="import" href="d2l-html-editor-plugin.html">
 
 <script>
+/*
+
+Code based on the LMS file:
+https://git.dev.d2l/projects/CORE/repos/lp/commits/0dd8854f78a5b9ff4c8c85e28ccd6fc258d49d95
+Check that file periodically for changes...
+
+*/
+
 (function() {
 	'use strict';
 
@@ -16,13 +24,13 @@
 				editor.selection.moveToBookmark(bookmark);
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
-		}, function(error) {
+		}, function() {
 			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
 	}
 
 	function convertToMath(obj) {
-		var func = function(match, sub1, sub2) {
+		var func = function(match) {
 					// find the MathML
 			var hackRegEx = /^<img[^>]*\s+data-d2l-mathml=\"([^\"]*)\"(.|\n|\r)*/i;
 			var hackResult = hackRegEx.exec(match);
@@ -215,7 +223,7 @@
 						}
 					});
 
-					editor.on('NodeChange', function(e) {
+					editor.on('NodeChange', function() {
 						// Figure out later
 					});
 
