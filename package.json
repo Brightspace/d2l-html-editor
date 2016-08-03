@@ -9,7 +9,7 @@
   "scripts": {
     "postinstall": "bower install",
     "test:travis": "npm run test:lint:js && npm run test:unit:travis",
-    "test": "npm run test:lint:js",
+    "test": "npm run test:lint:js && vulcanize d2l-html-editor.html > d2l-html-editor-dist.html",
     "test:lint:js": "eslint *.html",
     "test:lint:wc": "polylint --input d2l-html-editor.html",
     "test:unit:travis": "xvfb-run wct",
