@@ -159,6 +159,7 @@
 								editor.buttons.d2l_equation.button_object.title('Graphical equation');
 								editor.buttons.d2l_equation.button_object.icon('d2l_graphical_equation');
 								editor.buttons.d2l_equation.button_object.aria('label', 'Graphical equation');
+								editor.buttons.d2l_equation.button_object.settings.serviceId = this.settings.serviceId;
 							}
 							d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
@@ -174,7 +175,9 @@
 								editor.buttons.d2l_equation.button_object.title('MathML equation');
 								editor.buttons.d2l_equation.button_object.icon('d2l_mml');
 								editor.buttons.d2l_equation.button_object.aria('label', 'MathML equation');
+								editor.buttons.d2l_equation.button_object.settings.serviceId = this.settings.serviceId;
 							}
+
               //d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
