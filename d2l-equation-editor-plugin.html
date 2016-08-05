@@ -19,7 +19,10 @@ Check that file periodically for changes...
 			// document.activeELement.blur() required for Chrome to get focus back
 			// moveToBookmark required by IE
 			setTimeout(function() {
-				document.activeElement.blur();
+				//Added because IE11 sometimes has undefined or null document.activeElement
+				if (document.activeElement) {
+					document.activeElement.blur();
+				}
 				editor.focus();
 				editor.selection.moveToBookmark(bookmark);
 				editor.execCommand('mceInsertContent', false, response);
