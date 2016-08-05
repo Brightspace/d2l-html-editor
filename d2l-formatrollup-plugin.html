@@ -8,8 +8,7 @@
 	/** @polymerBehavior */
 	var FormatRollupBehavior = {
 		plugin: {
-			id: 'd2l_formatrollup',
-			initPlugin: function() {
+			addPlugin: function() {
 				tinymce.PluginManager.add('d2l_formatrollup', function(editor) {
 					editor.addMenuItem('custom_numlist', {
 						text: 'Ordered List',

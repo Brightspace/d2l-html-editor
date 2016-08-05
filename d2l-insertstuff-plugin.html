@@ -369,15 +369,23 @@ Check that file periodically for changes...
 		});
 	}
 
+	function addPlugin(client) {
+		return D2LHtmlEditor.PolymerBehaviors.Plugin.configureSimpleService(
+			client, {
+				id: 'd2l_isf',
+				label: 'Insert Stuff',
+				icon: 'd2l_isf',
+				serviceId: 'fra-html-editor-isf',
+				cmd: command,
+				init: init
+			});
+	}
+
+
 	/** @polymerBehavior */
 	var InsertStuffBehavior = {
 		plugin: {
-			id: 'd2l_isf',
-			label: 'Insert Stuff',
-			icon: 'd2l_isf',
-			serviceId: 'fra-html-editor-isf',
-			cmd: command,
-			init: init
+			addPlugin: addPlugin
 		}
 	};
 

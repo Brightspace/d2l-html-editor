@@ -25,7 +25,7 @@ Check that file periodically for changes...
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
 		}, function() {
-			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+			D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
 	}
 
@@ -151,10 +151,7 @@ Check that file periodically for changes...
 	/** @polymerBehavior */
 	var EquationEditorBehavior = {
 		plugin: {
-			id: 'd2l_equation',
-			simpleInit: false,
-			serviceId: 'fra-html-editor-graphical-equation', // probably dont need this
-			init: function(editor, config, client, d2lEditor) {
+			addPlugin: function(client) {
 
 				tinymce.PluginManager.add('d2l_equation', function(editor) {
 					editor.addMenuItem('graphical_editor', {
@@ -169,7 +166,7 @@ Check that file periodically for changes...
 								editor.buttons.d2l_equation.button_object.aria('label', 'Graphical equation');
 								editor.buttons.d2l_equation.button_object.settings.serviceId = this.settings.serviceId;
 							}
-							d2lEditor._callService(client, this.settings.serviceId, editor, command);
+							D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
 						}
 					});
 
@@ -219,7 +216,7 @@ Check that file periodically for changes...
 							editor.buttons.d2l_equation.button_object = this;
 						},
 						onclick: function() {
-							d2lEditor._callService(client, this.settings.serviceId, editor, command);
+							D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
 						}
 					});
 

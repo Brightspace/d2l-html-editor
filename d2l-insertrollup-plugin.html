@@ -8,8 +8,7 @@
 	/** @polymerBehavior */
 	var InsertRollupBehavior = {
 		plugin: {
-			id: 'd2l_insertrollup',
-			initPlugin: function() {
+			addPlugin: function() {
 				tinymce.PluginManager.add('d2l_insertrollup', function(editor) {
 					editor.addButton('d2l_insertrollup', {
 						type   : 'MenuButton',

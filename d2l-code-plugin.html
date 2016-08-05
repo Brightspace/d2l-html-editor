@@ -6,8 +6,6 @@
  * License: http://www.tinymce.com/license
  * Contributing: http://www.tinymce.com/contributing
  *-->
-<link rel="import" href="d2l-html-editor-plugin.html">
-
 <script>
 (function() {
 	'use strict';
@@ -15,8 +13,7 @@
 	/** @polymerBehavior */
 	var CodeBehavior = {
 		plugin: {
-			id: 'd2l_code',
-			initPlugin: function(client) {
+			addPlugin: function(client) {
 				tinymce.PluginManager.add('d2l_code', function(editor) {
 
 					function showDialog() {

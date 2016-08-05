@@ -107,9 +107,8 @@ Check that file periodically for changes.
 	/** @polymerBehavior */
 	var ReplaceStringBehavior = {
 		plugin: {
-			id: 'd2l_replacestring',
-			initPlugin: function(client) {
-				client.request('orgUnit').then(function(orgUnit) {
+			addPlugin: function(client) {
+				return client.request('orgUnit').then(function(orgUnit) {
 					tinymce.PluginManager.add('d2l_replacestring', function(editor) {
 						editor.on('BeforeSetContent', function(e) {
 							encodeReplaceStrings(e, 'orgUnitId', orgUnit.OrgUnitId);
@@ -122,7 +121,6 @@ Check that file periodically for changes.
 						});
 					});
 				});
-
 			}
 		}
 	};

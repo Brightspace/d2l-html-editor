@@ -17,19 +17,26 @@
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
 		}, function() {
-			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+			D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
+	}
+
+	function addPlugin(client) {
+		return D2LHtmlEditor.PolymerBehaviors.Plugin.configureSimpleService(
+			client, {
+				id: 'd2l_image',
+				label: 'Add Image',
+				icon: 'd2l_image',
+				serviceId: 'fra-html-editor-image',
+				cmd: command,
+				init: function() {},
+			});
 	}
 
 	/** @polymerBehavior */
 	var ImageBehavior = {
 		plugin: {
-			id: 'd2l_image',
-			label: 'Add Image',
-			icon: 'd2l_image',
-			serviceId: 'fra-html-editor-image',
-			cmd: command,
-			init: function() {}
+			addPlugin: addPlugin
 		}
 	};
 
