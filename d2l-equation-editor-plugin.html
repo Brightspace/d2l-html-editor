@@ -14,7 +14,8 @@ Check that file periodically for changes...
 
 	function command(service, editor) {
 		var bookmark = editor.selection.getBookmark();
-		service.click().then(function(response) {
+		var mathMl = getSelectedMathMl(editor);
+		service.click(mathMl).then(function(response) {
 			// setTimeout 10 required for IE to get focus back
 			// document.activeELement.blur() required for Chrome to get focus back
 			// moveToBookmark required by IE
@@ -30,6 +31,18 @@ Check that file periodically for changes...
 		}, function() {
 			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
+	}
+
+	function getSelectedMathMl(editor) {
+		var mathML = '';
+		var node = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+		if (node && node.nodeName === 'IMG' && node.className.indexOf( 'equation' ) > -1) {
+			if (node.attributes.getNamedItem( 'data-d2l-mathml' ) !== null) {
+				mathML = node.attributes.getNamedItem( 'data-d2l-mathml' ).value;
+				mathML = decodeURIComponent( mathML );
+			}
+		}
+		return mathML;
 	}
 
 	function convertToMath(obj) {
