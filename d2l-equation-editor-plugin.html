@@ -163,6 +163,81 @@ Check that file periodically for changes...
 
 	}
 
+	function changeSetting(editor, setting) {
+		if (setting === 1) {
+			if (editor.buttons.d2l_equation.setting !== 1) {
+				editor.buttons.d2l_equation.setting = 1;
+				editor.buttons.d2l_equation.button_object.title('Graphical equation');
+				editor.buttons.d2l_equation.button_object.icon('d2l_graphical_equation');
+				editor.buttons.d2l_equation.button_object.aria('label', 'Graphical equation');
+				editor.buttons.d2l_equation.button_object.settings.serviceId = editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.serviceId;
+			}
+		} else if (setting === 2) {
+			if (editor.buttons.d2l_equation.setting !== 2) {
+				editor.buttons.d2l_equation.setting = 2;
+				editor.buttons.d2l_equation.button_object.title('MathML equation');
+				editor.buttons.d2l_equation.button_object.icon('d2l_mml');
+				editor.buttons.d2l_equation.button_object.aria('label', 'MathML equation');
+				editor.buttons.d2l_equation.button_object.settings.serviceId = editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.serviceId;
+			}
+		}
+	}
+
+	function setIsEnabledByNode(editor, isEnabled, setting) {
+		if (isEnabled) {
+			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].disabled(false);
+		} else {
+			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].disabled(true);
+		}
+	}
+
+	function setIsActiveByNode(editor, isActive, setting) {
+		if (isActive) {
+			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].active(true);
+		} else {
+			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].active(false);
+		}
+	}
+
+	function nodeChange(e, editor) {
+		var isEnabled,
+			isActive,
+			setting,
+			i;
+
+		for (i = 1; i <= 2; i++) {
+			isEnabled = true;
+			isActive = false;
+			setting = i;
+			if (!e.node && e.element) e.node = e.element;
+
+			if (!e.isCollapsed && e.node.nodeName === 'IMG' && (e.node.className.indexOf('equation') > -1)) {
+				if (setting === 1 && e.node.getAttribute('data-d2l-mathml').indexOf('wiris') > -1) {
+					isEnabled = true;
+					isActive = isEnabled;
+					if (isEnabled) {
+						changeSetting(editor, setting);
+						editor.buttons.d2l_equation.button_object.active(true);
+					}
+				} else if (setting === 2 && e.node.getAttribute('data-d2l-mathml').indexOf('mathml') > -1) {
+					isEnabled = true;
+					isActive = isEnabled;
+					if (isEnabled) {
+						changeSetting(editor, setting);
+						editor.buttons.d2l_equation.button_object.active(true);
+					}
+				} else {
+					isEnabled = false;
+				}
+			} else {
+				editor.buttons.d2l_equation.button_object.active(false);
+			}
+
+			setIsEnabledByNode(editor, isEnabled, setting);
+			setIsActiveByNode(editor, isActive, setting);
+		}
+	}
+
 	/*global tinymce:true */
 	/** @polymerBehavior */
 	var EquationEditorBehavior = {
@@ -178,13 +253,8 @@ Check that file periodically for changes...
 						text: 'Graphical equation',
 						serviceId: 'fra-html-editor-graphical-equation',
 						onclick: function() {
-							if (editor.buttons.d2l_equation.setting !== 1) {
-								editor.buttons.d2l_equation.setting = 1;
-								editor.buttons.d2l_equation.button_object.title('Graphical equation');
-								editor.buttons.d2l_equation.button_object.icon('d2l_graphical_equation');
-								editor.buttons.d2l_equation.button_object.aria('label', 'Graphical equation');
-								editor.buttons.d2l_equation.button_object.settings.serviceId = this.settings.serviceId;
-							}
+							var setting = 1;
+							changeSetting(editor, setting);
 							d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
@@ -194,14 +264,8 @@ Check that file periodically for changes...
 						text: 'MathML equation',
 						serviceId: 'fra-html-editor-mml-equation',
 						onclick: function() {
-							if (editor.buttons.d2l_equation.setting !== 2) {
-								editor.buttons.d2l_equation.setting = 2;
-								editor.buttons.d2l_equation.button_object.title('MathML equation');
-								editor.buttons.d2l_equation.button_object.icon('d2l_mml');
-								editor.buttons.d2l_equation.button_object.aria('label', 'MathML equation');
-								editor.buttons.d2l_equation.button_object.settings.serviceId = this.settings.serviceId;
-							}
-
+							var setting = 2;
+							changeSetting(editor, setting);
               //d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
@@ -239,8 +303,8 @@ Check that file periodically for changes...
 						}
 					});
 
-					editor.on('NodeChange', function() {
-						// Figure out later
+					editor.on('NodeChange', function(e) {
+						nodeChange(e, editor);
 					});
 
 					editor.on('BeforeSetContent', function(e) {
