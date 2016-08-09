@@ -15,94 +15,134 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../sinon-stub-promise/index.js"></script>
 
     <!-- Step 1: import the element to test -->
+    <link rel="import" href="../tinymce-import.html">
     <link rel="import" href="../d2l-insertstuff-plugin.html">
   </head>
   <body>
 
     <!-- You can use the document as a place to set up your fixtures. -->
     <!--<d2l-html-editor></d2l-html-editor>-->
+    <div id="html-editor"></div>
 
     <script>
-      suite('Insert Stuff Plugin', function() {
+      describe('Insert Stuff Plugin', function() {
 
-        var editor, config;
+        var editor, config, client, service;
 
-        setup(function() {
-          editor = {
-            on: function(name, handler) {
-              this[name] = handler;
-            }
-          };
+        beforeEach(function(done) {
 
           config = {
+            isEnabled: true,
             isWindowModeOpaque: true
           };
+
+          client = {
+            connect: function() {},
+            getService: function() {}
+          }
+
+          service = {
+            config: function() {},
+            click: function() {}
+          }
+
+          var servicePromise = sinon.stub(client, 'getService').returnsPromise();
+          servicePromise.resolves(service);
+          var configPromise = sinon.stub(service, 'config').returnsPromise();
+          configPromise.resolves(config);
 
           event = {
             content: '<iframe width="560" height="315" src="https://www.youtube.com/embed/e9-xwhA9XVE" frameborder="0" allowfullscreen></iframe>'
           }
 
-          window.D2LHtmlEditor.PolymerBehaviors.InsertStuff.plugin.init(editor, config);
+          window.D2LHtmlEditor.PolymerBehaviors.InsertStuff.plugin.addPlugin(client).then(function() {
+            tinymce.init({
+              inline: true,
+              convert_urls: false,
+      				relative_urls: false,
+              forced_root_block: '',
+              selector: '#html-editor',
+              plugins: 'd2l_isf',
+              toolbar: 'd2l_isf',
+              init_instance_callback: function(ed) {
+                editor = ed;
+                done();
+              }
+            }); // eslint-disable-line no-undef
+          });
         });
 
-        suite('YouTube processing', function() {
+        afterEach(function() {
+          editor.setContent('');
+          tinymce.EditorManager.execCommand('mceRemoveEditor', true, 'html-editor'); // eslint-disable-line no-undef
+        })
 
-          var event;
+        describe('YouTube processing', function() {
 
-          setup(function() {
+          var content;
 
-            event = {
-              content: '<iframe width="560" height="315" src="https://www.youtube.com/embed/e9-xwhA9XVE" frameborder="0" allowfullscreen></iframe>'
-            }
-
+          beforeEach(function() {
+            content = '<iframe width="560" height="315" src="https://www.youtube.com/embed/e9-xwhA9XVE" frameborder="0" allowfullscreen></iframe>';
           });
 
-          test('adds opaque if windowModeOpaque', function() {
+          it('adds opaque if windowModeOpaque', function() {
+              editor.setContent(content);
 
-            editor.BeforeSetContent(event);
-
-            assert.equal(event.content, '<iframe width="560" height="315" src="https://www.youtube.com/embed/e9-xwhA9XVE?wmode=opaque" frameborder="0" allowfullscreen></iframe>')
-
+              assert.equal(document.getElementById('html-editor').innerHTML,
+                '<iframe width="560" height="315" src="https://www.youtube.com/embed/e9-xwhA9XVE?wmode=opaque" frameborder="0" allowfullscreen="" data-mce-src="https://www.youtube.com/embed/e9-xwhA9XVE?wmode=opaque"></iframe>')
           });
 
-          test('does not add opaque if window mode not opaque', function() {
+          it('does not add opaque if window mode not opaque', function() {
 
             config.isWindowModeOpaque = false;
 
-            editor.BeforeSetContent(event);
+            editor.setContent(content);
 
-            assert.equal(event.content, '<iframe width="560" height="315" src="https://www.youtube.com/embed/e9-xwhA9XVE" frameborder="0" allowfullscreen></iframe>')
+            assert.equal(document.getElementById('html-editor').innerHTML,
+              '<iframe width="560" height="315" src="https://www.youtube.com/embed/e9-xwhA9XVE" frameborder="0" allowfullscreen="" data-mce-src="https://www.youtube.com/embed/e9-xwhA9XVE"></iframe>')
 
           });
 
         });
 
-        suite('object tag processing', function() {
+        describe('object tag processing', function() {
 
-          test('converts object to image', function() {
+          it('converts object to image', function() {
 
-            event = {
-              content: '<p><object width="320" height="200" id="undefined" name="undefined" data="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" type="application/x-shockwave-flash"><param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value=\'config={"clip":{"baseUrl":"http://stream.flowplayer.org","url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv"},"playlist":[{"url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv","baseUrl":"http://stream.flowplayer.org"},{"url":"http://stream.flowplayer.org/N8inpasadena-Flowers457.flv","baseUrl":"http://stream.flowplayer.org"}],"canvas":{"backgroundColor":"#112233"},"plugins":{"controls":{"time":false,"volume":false,"fullscreen":false},"content":{"url":"flowplayer.content-3.2.9.swf","html":"Flash plugins work too"}}}\' /></object></p>'
-            };
+            editor.setContent('<object width="320" height="200" id="undefined" name="undefined" data="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" type="application/x-shockwave-flash"><param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value=\'config={"clip":{"baseUrl":"http://stream.flowplayer.org","url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv"},"playlist":[{"url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv","baseUrl":"http://stream.flowplayer.org"},{"url":"http://stream.flowplayer.org/N8inpasadena-Flowers457.flv","baseUrl":"http://stream.flowplayer.org"}],"canvas":{"backgroundColor":"#112233"},"plugins":{"controls":{"time":false,"volume":false,"fullscreen":false},"content":{"url":"flowplayer.content-3.2.9.swf","html":"Flash plugins work too"}}}\'></object>');
 
-            editor.BeforeSetContent(event);
-
-            assert.equal(event.content, '<p><img src="/d2l/img/LP/htmlEditor/eq_trans.gif" width="320" height="200" class="disf_flash d2l-html-editor" data-isf-content="%3Cobject%20width%3D%22320%22%20height%3D%22200%22%20id%3D%22undefined%22%20name%3D%22undefined%22%20data%3D%22http%3A%2F%2Freleases.flowplayer.org%2Fswf%2Fflowplayer-3.2.18.swf%22%20type%3D%22application%2Fx-shockwave-flash%22%3E%3Cparam%20name%3D%22movie%22%20value%3D%22http%3A%2F%2Freleases.flowplayer.org%2Fswf%2Fflowplayer-3.2.18.swf%22%20%2F%3E%3Cparam%20name%3D%22allowfullscreen%22%20value%3D%22true%22%20%2F%3E%3Cparam%20name%3D%22allowscriptaccess%22%20value%3D%22always%22%20%2F%3E%3Cparam%20name%3D%22flashvars%22%20value%3D\'config%3D%7B%22clip%22%3A%7B%22baseUrl%22%3A%22http%3A%2F%2Fstream.flowplayer.org%22%2C%22url%22%3A%22http%3A%2F%2Fstream.flowplayer.org%2FKimAronson-TwentySeconds1318.flv%22%7D%2C%22playlist%22%3A%5B%7B%22url%22%3A%22http%3A%2F%2Fstream.flowplayer.org%2FKimAronson-TwentySeconds1318.flv%22%2C%22baseUrl%22%3A%22http%3A%2F%2Fstream.flowplayer.org%22%7D%2C%7B%22url%22%3A%22http%3A%2F%2Fstream.flowplayer.org%2FN8inpasadena-Flowers457.flv%22%2C%22baseUrl%22%3A%22http%3A%2F%2Fstream.flowplayer.org%22%7D%5D%2C%22canvas%22%3A%7B%22backgroundColor%22%3A%22%23112233%22%7D%2C%22plugins%22%3A%7B%22controls%22%3A%7B%22time%22%3Afalse%2C%22volume%22%3Afalse%2C%22fullscreen%22%3Afalse%7D%2C%22content%22%3A%7B%22url%22%3A%22flowplayer.content-3.2.9.swf%22%2C%22html%22%3A%22Flash%20plugins%20work%20too%22%7D%7D%7D\'%20%2F%3E%3C%2Fobject%3E" /></p>');
+            assert.equal(document.getElementById('html-editor').innerHTML,
+              '<img src="/d2l/img/LP/htmlEditor/eq_trans.gif" width="320" height="200" class="disf_flash d2l-html-editor" data-isf-content="%3Cobject%20width%3D%22320%22%20height%3D%22200%22%20id%3D%22undefined%22%20name%3D%22undefined%22%20data%3D%22http%3A%2F%2Freleases.flowplayer.org%2Fswf%2Fflowplayer-3.2.18.swf%22%20type%3D%22application%2Fx-shockwave-flash%22%3E%3Cparam%20name%3D%22movie%22%20value%3D%22http%3A%2F%2Freleases.flowplayer.org%2Fswf%2Fflowplayer-3.2.18.swf%22%20%2F%3E%3Cparam%20name%3D%22allowfullscreen%22%20value%3D%22true%22%20%2F%3E%3Cparam%20name%3D%22allowscriptaccess%22%20value%3D%22always%22%20%2F%3E%3Cparam%20name%3D%22flashvars%22%20value%3D\'config%3D%7B%22clip%22%3A%7B%22baseUrl%22%3A%22http%3A%2F%2Fstream.flowplayer.org%22%2C%22url%22%3A%22http%3A%2F%2Fstream.flowplayer.org%2FKimAronson-TwentySeconds1318.flv%22%7D%2C%22playlist%22%3A%5B%7B%22url%22%3A%22http%3A%2F%2Fstream.flowplayer.org%2FKimAronson-TwentySeconds1318.flv%22%2C%22baseUrl%22%3A%22http%3A%2F%2Fstream.flowplayer.org%22%7D%2C%7B%22url%22%3A%22http%3A%2F%2Fstream.flowplayer.org%2FN8inpasadena-Flowers457.flv%22%2C%22baseUrl%22%3A%22http%3A%2F%2Fstream.flowplayer.org%22%7D%5D%2C%22canvas%22%3A%7B%22backgroundColor%22%3A%22%23112233%22%7D%2C%22plugins%22%3A%7B%22controls%22%3A%7B%22time%22%3Afalse%2C%22volume%22%3Afalse%2C%22fullscreen%22%3Afalse%7D%2C%22content%22%3A%7B%22url%22%3A%22flowplayer.content-3.2.9.swf%22%2C%22html%22%3A%22Flash%20plugins%20work%20too%22%7D%7D%7D\'%3E%3C%2Fobject%3E" alt="" data-mce-src="/d2l/img/LP/htmlEditor/eq_trans.gif">')
 
           });
 
-          test('converts image to object', function() {
+          it('converts image to object', function() {
 
-            event = {
-              content: '<p><img src="/d2l/img/LP/htmlEditor/eq_trans.gif" width="320" height="200" class="disf_flash d2l-html-editor" data-isf-content="%3Cobject%20width%3D%22320%22%20height%3D%22200%22%20id%3D%22undefined%22%20name%3D%22undefined%22%20data%3D%22http%3A%2F%2Freleases.flowplayer.org%2Fswf%2Fflowplayer-3.2.18.swf%22%20type%3D%22application%2Fx-shockwave-flash%22%3E%3Cparam%20name%3D%22movie%22%20value%3D%22http%3A%2F%2Freleases.flowplayer.org%2Fswf%2Fflowplayer-3.2.18.swf%22%20%2F%3E%3Cparam%20name%3D%22allowfullscreen%22%20value%3D%22true%22%20%2F%3E%3Cparam%20name%3D%22allowscriptaccess%22%20value%3D%22always%22%20%2F%3E%3Cparam%20name%3D%22flashvars%22%20value%3D\'config%3D%7B%22clip%22%3A%7B%22baseUrl%22%3A%22http%3A%2F%2Fstream.flowplayer.org%22%2C%22url%22%3A%22http%3A%2F%2Fstream.flowplayer.org%2FKimAronson-TwentySeconds1318.flv%22%7D%2C%22playlist%22%3A%5B%7B%22url%22%3A%22http%3A%2F%2Fstream.flowplayer.org%2FKimAronson-TwentySeconds1318.flv%22%2C%22baseUrl%22%3A%22http%3A%2F%2Fstream.flowplayer.org%22%7D%2C%7B%22url%22%3A%22http%3A%2F%2Fstream.flowplayer.org%2FN8inpasadena-Flowers457.flv%22%2C%22baseUrl%22%3A%22http%3A%2F%2Fstream.flowplayer.org%22%7D%5D%2C%22canvas%22%3A%7B%22backgroundColor%22%3A%22%23112233%22%7D%2C%22plugins%22%3A%7B%22controls%22%3A%7B%22time%22%3Afalse%2C%22volume%22%3Afalse%2C%22fullscreen%22%3Afalse%7D%2C%22content%22%3A%7B%22url%22%3A%22flowplayer.content-3.2.9.swf%22%2C%22html%22%3A%22Flash%20plugins%20work%20too%22%7D%7D%7D\'%20%2F%3E%3C%2Fobject%3E" /></p>',
-              get: true
-            };
+            editor.setContent('<object width="320" height="200" id="undefined" name="undefined" data="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" type="application/x-shockwave-flash"><param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value=\'config={"clip":{"baseUrl":"http://stream.flowplayer.org","url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv"},"playlist":[{"url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv","baseUrl":"http://stream.flowplayer.org"},{"url":"http://stream.flowplayer.org/N8inpasadena-Flowers457.flv","baseUrl":"http://stream.flowplayer.org"}],"canvas":{"backgroundColor":"#112233"},"plugins":{"controls":{"time":false,"volume":false,"fullscreen":false},"content":{"url":"flowplayer.content-3.2.9.swf","html":"Flash plugins work too"}}}\'></object>');
 
-            editor.PostProcess(event);
+            assert.equal(editor.getContent(),
+              '<object width="320" height="200" id="undefined" name="undefined" data="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" type="application/x-shockwave-flash"><param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value=\'config={"clip":{"baseUrl":"http://stream.flowplayer.org","url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv"},"playlist":[{"url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv","baseUrl":"http://stream.flowplayer.org"},{"url":"http://stream.flowplayer.org/N8inpasadena-Flowers457.flv","baseUrl":"http://stream.flowplayer.org"}],"canvas":{"backgroundColor":"#112233"},"plugins":{"controls":{"time":false,"volume":false,"fullscreen":false},"content":{"url":"flowplayer.content-3.2.9.swf","html":"Flash plugins work too"}}}\'></object>')
+          });
 
-            assert.equal(event.content, '<p><object width="320" height="200" id="undefined" name="undefined" data="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" type="application/x-shockwave-flash"><param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value=\'config={"clip":{"baseUrl":"http://stream.flowplayer.org","url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv"},"playlist":[{"url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv","baseUrl":"http://stream.flowplayer.org"},{"url":"http://stream.flowplayer.org/N8inpasadena-Flowers457.flv","baseUrl":"http://stream.flowplayer.org"}],"canvas":{"backgroundColor":"#112233"},"plugins":{"controls":{"time":false,"volume":false,"fullscreen":false},"content":{"url":"flowplayer.content-3.2.9.swf","html":"Flash plugins work too"}}}\' /></object></p>');
+        })
+
+        describe('click handling', function(done) {
+
+          it('converts embed to image', function(done) {
+
+            var clickPromise = sinon.stub(service, 'click').returnsPromise();
+            clickPromise.resolves('<embed src="movie.mp4">Movie</embed>');
+
+            editor.buttons.d2l_isf.onclick();
+
+            setTimeout(function() {
+              assert.equal(editor.getContent(),
+                '<embed src="movie.mp4">Movie</embed>')
+              done();
+            }, 20);
 
           });
 
