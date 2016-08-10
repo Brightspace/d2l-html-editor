@@ -183,11 +183,31 @@ Check that file periodically for changes...
 		}
 	}
 
+	/*function disableMenuIcon(editor, setting) {
+		console.log(editor.buttons.d2l_equation.button_object.menu._items[setting - 1]);
+		if (setting === 1) {
+			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.icon = 'd2l_graphical_equation_disabled';
+		} else if (setting === 2) {
+			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.icon = 'd2l_mml_disabled';
+		}
+	}
+
+	function enableMenuIcon(editor, setting) {
+		console.log(editor.buttons.d2l_equation.button_object.menu._items[setting - 1]);
+		if (setting === 1) {
+			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.icon = 'd2l_graphical_equation';
+		} else if (setting === 2) {
+			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.icon = 'd2l_mml';
+		}
+	}*/
+
 	function setIsEnabledByNode(editor, isEnabled, setting) {
 		if (isEnabled) {
 			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].disabled(false);
+			//enableMenuIcon(editor, setting);
 		} else {
 			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].disabled(true);
+			//disableMenuIcon(editor, setting);
 		}
 	}
 
@@ -217,24 +237,32 @@ Check that file periodically for changes...
 					isActive = isEnabled;
 					if (isEnabled) {
 						changeSetting(editor, setting);
-						editor.buttons.d2l_equation.button_object.active(true);
+						if (editor.buttons.d2l_equation.button_object !== 'empty') {
+							editor.buttons.d2l_equation.button_object.active(true);
+						}
 					}
 				} else if (setting === 2 && e.node.getAttribute('data-d2l-mathml').indexOf('mathml') > -1) {
 					isEnabled = true;
 					isActive = isEnabled;
 					if (isEnabled) {
 						changeSetting(editor, setting);
-						editor.buttons.d2l_equation.button_object.active(true);
+						if (editor.buttons.d2l_equation.button_object !== 'empty') {
+							editor.buttons.d2l_equation.button_object.active(true);
+						}
 					}
 				} else {
 					isEnabled = false;
 				}
 			} else {
-				editor.buttons.d2l_equation.button_object.active(false);
+				if (editor.buttons.d2l_equation.button_object !== 'empty') {
+					editor.buttons.d2l_equation.button_object.active(false);
+				}
 			}
 
-			setIsEnabledByNode(editor, isEnabled, setting);
-			setIsActiveByNode(editor, isActive, setting);
+			if (editor.buttons.d2l_equation.button_object.menu) {
+				setIsEnabledByNode(editor, isEnabled, setting);
+				setIsActiveByNode(editor, isActive, setting);
+			}
 		}
 	}
 
@@ -290,7 +318,7 @@ Check that file periodically for changes...
 						icon: 'd2l_graphical_equation',
 						type: 'splitbutton',
 						setting: 1,
-						button_object: {},
+						button_object: 'empty',
 						serviceId: 'fra-html-editor-graphical-equation',
 						menu: [editor.menuItems['graphical_editor'],
 						editor.menuItems['mml_editor']],
