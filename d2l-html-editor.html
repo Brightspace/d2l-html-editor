@@ -263,6 +263,10 @@ Example:
 		 */
 		_initTinyMCE: function() {
 			var that = this;
+
+			var contentCss = this.inline ? '' : this.cssUrl + ',';
+			contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css';
+
 			var config = {
 				selector: '#' + this.editorId,
 				plugins: 'd2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation',
@@ -285,7 +289,7 @@ Example:
 				fixed_toolbar_container: '#' + this.toolbarId,
 				inline: this.inline ? true : false,
 				document_base_url: this.documentBaseUrl + '/',
-				content_css: this.cssUrl + ',' + this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css',
+				content_css: contentCss,
 				skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
 				convert_urls: false,
 				relative_urls: false,
