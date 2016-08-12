@@ -54,10 +54,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var configPromise = sinon.stub(service, 'config').returnsPromise();
           configPromise.resolves(config);
 
-          event = {
-            content: '<iframe width="560" height="315" src="https://www.youtube.com/embed/e9-xwhA9XVE" frameborder="0" allowfullscreen></iframe>'
-          }
-
           window.D2LHtmlEditor.PolymerBehaviors.InsertStuff.plugin.addPlugin(client).then(function() {
             tinymce.init({
               inline: true,
@@ -66,10 +62,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               forced_root_block: '',
               selector: '#html-editor',
               plugins: 'd2l_isf',
-              toolbar: 'd2l_isf',
+              toolbar: 'd2l_isf test',
+              setup: function(editor) {
+                editor.addButton('test', {
+                  onPostRender: function() {
+                    done();
+                  }
+                });
+              },
               init_instance_callback: function(ed) {
                 editor = ed;
-                done();
+                editor.focus();
               }
             }); // eslint-disable-line no-undef
           });
@@ -77,6 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         afterEach(function() {
           editor.setContent('');
+          document.getElementById('html-editor').blur();
           tinymce.EditorManager.execCommand('mceRemoveEditor', true, 'html-editor'); // eslint-disable-line no-undef
         })
 
@@ -127,7 +131,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               '<object width="320" height="200" id="undefined" name="undefined" data="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" type="application/x-shockwave-flash"><param name="movie" value="http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf" /><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="flashvars" value=\'config={"clip":{"baseUrl":"http://stream.flowplayer.org","url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv"},"playlist":[{"url":"http://stream.flowplayer.org/KimAronson-TwentySeconds1318.flv","baseUrl":"http://stream.flowplayer.org"},{"url":"http://stream.flowplayer.org/N8inpasadena-Flowers457.flv","baseUrl":"http://stream.flowplayer.org"}],"canvas":{"backgroundColor":"#112233"},"plugins":{"controls":{"time":false,"volume":false,"fullscreen":false},"content":{"url":"flowplayer.content-3.2.9.swf","html":"Flash plugins work too"}}}\'></object>')
           });
 
-        })
+        });
 
         describe('click handling', function(done) {
 
@@ -136,7 +140,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var clickPromise = sinon.stub(service, 'click').returnsPromise();
             clickPromise.resolves('<embed src="movie.mp4">Movie</embed>');
 
-            editor.buttons.d2l_isf.onclick();
+            var button = editor.theme.panel.find('toolbar *')[1];
+
+            button.fire('click');
 
             setTimeout(function() {
               assert.equal(editor.getContent(),
