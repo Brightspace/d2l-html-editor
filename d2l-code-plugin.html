@@ -22,7 +22,6 @@
 					function showDialog() {
 						var win = editor.windowManager.open({
 							title: 'HTML Source Editor',
-							style: 'padding: 1.5rem;',
 							body: {
 								type: 'textbox',
 								name: 'code',
@@ -56,21 +55,8 @@
 						var codeTextArea = win.getEl().getElementsByTagName('textarea')[0];
 						codeTextArea.style.left = '0px';
 						codeTextArea.style.width = '98%';
-						codeTextArea.style.height = '80%';
-
-						// more css mods - for temp demo purposes - will delete after
-						// alex adds in his changes. Moves the ok and cancel button to
-						// the bottom left of dialog;
-
-						var controlButtons = win.getEl().getElementsByClassName('mce-btn-has-text');
-
-						for (var i = 0; i < controlButtons.length; i++) {
-							controlButtons[i].style.removeProperty('top');
-							controlButtons[i].style.bottom = 0;
-						}
-
-						controlButtons[0].style.left = 0;
-						controlButtons[1].style.left = '10%';
+						codeTextArea.style.height = '88%';
+						codeTextArea.style.removeProperty('top');
 
 						// Gecko has a major performance issue with textarea
 						// contents so we need to set it when all reflows are done
