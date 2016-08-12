@@ -87,15 +87,22 @@
 		});
 	}
 
+	function addPlugin(client) {
+		return window.D2LHtmlEditor.PolymerBehaviors.Plugin.configureSimpleService(
+			client, {
+				id: 'd2l_link',
+				label: 'Add Link',
+				icon: 'd2l_link',
+				serviceId: 'fra-html-editor-link',
+				cmd: command,
+				init: function() {}
+			});
+	}
+
 	/** @polymerBehavior */
 	var LinkBehavior = {
 		plugin: {
-			id: 'd2l_link',
-			label: 'Add Link',
-			icon: 'd2l_link',
-			serviceId: 'fra-html-editor-link',
-			cmd: command,
-			init: function() {}
+			addPlugin: addPlugin
 		}
 	};
 

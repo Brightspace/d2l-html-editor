@@ -79,3 +79,15 @@ i.mce-caret:before {
 .mce-i-d2l_latex:before {
 	content: url('../d2l-icons/images/html-editor/equation-latex.svg') !important;
 }
+.mce-i-d2l_graphical_equation_disabled:before {
+	content: url('../d2l-icons/images/html-editor/equation-graphical.svg') !important;
+	opacity: 0.3;
+}
+.mce-i-d2l_mml_disabled:before {
+	content: url('../d2l-icons/images/html-editor/equation-mathml.svg') !important;
+	opacity: 0.3;
+}
+.mce-i-d2l_latex_disabled:before {
+	content: url('../d2l-icons/images/html-editor/equation-latex.svg') !important;
+	opacity: 0.3;
+}

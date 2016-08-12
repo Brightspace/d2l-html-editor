@@ -21,15 +21,22 @@
 		});
 	}
 
+	function addPlugin(client) {
+		return window.D2LHtmlEditor.PolymerBehaviors.Plugin.configureSimpleService(
+			client, {
+				id: 'd2l_image',
+				label: 'Add Image',
+				icon: 'd2l_image',
+				serviceId: 'fra-html-editor-image',
+				cmd: command,
+				init: function() {}
+			});
+	}
+
 	/** @polymerBehavior */
 	var ImageBehavior = {
 		plugin: {
-			id: 'd2l_image',
-			label: 'Add Image',
-			icon: 'd2l_image',
-			serviceId: 'fra-html-editor-image',
-			cmd: command,
-			init: function() {}
+			addPlugin: addPlugin
 		}
 	};
 

@@ -32,14 +32,46 @@
 			var nodeEndParent = Polymer.dom(nodeEnd).parentNode;
 			Polymer.dom(nodeEndParent).removeChild(nodeEnd);
 		}
+	}
 
+	function callIfrauService(client, serviceId, editor, fn) {
+		client.getService(serviceId, '0.1').then(function(service) {
+			fn.call(null, service, editor);
+		});
+	}
+
+	function configureSimpleService(client, plugin) {
+		return client.getService(plugin.serviceId, '0.1').then(function(service) {
+			return service.config();
+		}).then(function(config) {
+			if (!config.isEnabled) {
+				// Add empty plugin so that we don't have to conditionally set the plugin list - maybe fix later
+				tinymce.PluginManager.add(plugin.id, function() {   // eslint-disable-line no-undef
+				});
+			} else {
+				tinymce.PluginManager.add(plugin.id, function(editor) {   // eslint-disable-line no-undef
+					editor.addButton(plugin.id, {
+						tooltip: plugin.label,
+						icon: plugin.icon,
+						onclick: function() {
+							callIfrauService(client, plugin.serviceId, editor, plugin.cmd);
+						}
+					});
+
+					plugin.init(editor, config);
+				});
+			}
+		}).catch(function() {
+		});
 	}
 
 	/** @polymerBehavior */
 	var PluginBehavior = {
 		getSelectedNode: getSelectedNode,
 		getSelectionContent: getSelectionContent,
-		clearBookmark: clearBookmark
+		clearBookmark: clearBookmark,
+		configureSimpleService: configureSimpleService,
+		callIfrauService: callIfrauService
 	};
 
 	window.D2LHtmlEditor = window.D2LHtmlEditor || {};

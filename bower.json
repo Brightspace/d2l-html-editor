@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "sinon-stub-promise": "git+ssh://git@github.com/substantial/sinon-stub-promise#^v3.0.1",
     "web-component-tester": "*"
   }
 }
