@@ -3,7 +3,6 @@ node_js: stable
 dist: trusty
 sudo: required
 addons:
-  firefox: "39.0"
   apt:
     sources:
     - google-chrome
