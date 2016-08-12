@@ -353,7 +353,7 @@ Check that file periodically for changes...
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
 		}, function() {
-			D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
 	}
 
@@ -370,7 +370,7 @@ Check that file periodically for changes...
 	}
 
 	function addPlugin(client) {
-		return D2LHtmlEditor.PolymerBehaviors.Plugin.configureSimpleService(
+		return window.D2LHtmlEditor.PolymerBehaviors.Plugin.configureSimpleService(
 			client, {
 				id: 'd2l_isf',
 				label: 'Insert Stuff',
@@ -380,7 +380,6 @@ Check that file periodically for changes...
 				init: init
 			});
 	}
-
 
 	/** @polymerBehavior */
 	var InsertStuffBehavior = {

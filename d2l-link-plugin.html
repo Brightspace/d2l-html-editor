@@ -8,11 +8,11 @@
 
 		var text;
 
-		var selectedNode = D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+		var selectedNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
 		if (selectedNode && selectedNode.nodeName === 'A') {
 			text = Polymer.dom(selectedNode).textContent;
 		} else {
-			text = D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectionContent(editor);
+			text = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectionContent(editor);
 		}
 
 		if (text === undefined || text === null) {
@@ -24,7 +24,7 @@
 
 	function getQuickLinkData(editor) {
 
-		var node = D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+		var node = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
 
 		if ( node === null || node.nodeName !== 'A' ) {
 			return null;
@@ -75,7 +75,7 @@
 				document.activeElement.blur();
 				editor.focus();
 				editor.selection.moveToBookmark(bookmark);
-				var selectedNode = D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+				var selectedNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
 				if (selectedNode !== null && selectedNode.nodeName === 'A' ) {
 					// replace current link (i.e. if caret is inside of anchor)
 					editor.selection.select(selectedNode);
@@ -83,12 +83,12 @@
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
 		}, function() {
-			D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
 	}
 
 	function addPlugin(client) {
-		return D2LHtmlEditor.PolymerBehaviors.Plugin.configureSimpleService(
+		return window.D2LHtmlEditor.PolymerBehaviors.Plugin.configureSimpleService(
 			client, {
 				id: 'd2l_link',
 				label: 'Add Link',

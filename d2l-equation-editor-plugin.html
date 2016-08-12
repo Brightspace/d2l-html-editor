@@ -29,7 +29,7 @@ Check that file periodically for changes...
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
 		}, function() {
-			D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 		});
 	}
 
@@ -362,7 +362,7 @@ Check that file periodically for changes...
 							if (changeButtonState === true) {
 								changeButton(editor);
 							}
-							D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
+							window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
 						}
 					});
 
@@ -418,7 +418,7 @@ Check that file periodically for changes...
 							}
 						},
 						onclick: function() {
-							D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
+							window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
 						}
 					});
 
