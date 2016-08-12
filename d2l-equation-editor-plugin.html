@@ -163,59 +163,127 @@ Check that file periodically for changes...
 
 	}
 
-	function changeSetting(editor, setting) {
-		if (setting === 1) {
-			if (editor.buttons.d2l_equation.setting !== 1) {
-				editor.buttons.d2l_equation.setting = 1;
-				editor.buttons.d2l_equation.button_object.title('Graphical equation');
-				editor.buttons.d2l_equation.button_object.icon('d2l_graphical_equation');
-				editor.buttons.d2l_equation.button_object.aria('label', 'Graphical equation');
-				editor.buttons.d2l_equation.button_object.settings.serviceId = editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.serviceId;
-			}
-		} else if (setting === 2) {
-			if (editor.buttons.d2l_equation.setting !== 2) {
-				editor.buttons.d2l_equation.setting = 2;
-				editor.buttons.d2l_equation.button_object.title('MathML equation');
-				editor.buttons.d2l_equation.button_object.icon('d2l_mml');
-				editor.buttons.d2l_equation.button_object.aria('label', 'MathML equation');
-				editor.buttons.d2l_equation.button_object.settings.serviceId = editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.serviceId;
-			}
+	function changeButton(editor) {
+		if (editor.buttons.d2l_equation.button_object === null) {
+			return;
+		}
+
+		if (editor.buttons.d2l_equation.setting === 1) {
+			editor.buttons.d2l_equation.button_object.title('Graphical equation');
+			editor.buttons.d2l_equation.button_object.icon('d2l_graphical_equation');
+			editor.buttons.d2l_equation.button_object.aria('label', 'Graphical equation');
+			editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-graphical-equation';
+		} else if (editor.buttons.d2l_equation.setting === 2) {
+			editor.buttons.d2l_equation.button_object.title('MathML equation');
+			editor.buttons.d2l_equation.button_object.icon('d2l_mml');
+			editor.buttons.d2l_equation.button_object.aria('label', 'MathML equation');
+			editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-mml-equation';
 		}
 	}
 
+	function changeSetting(editor, setting) {
+		if (editor.buttons.d2l_equation.setting !== setting) {
+			editor.buttons.d2l_equation.setting = setting;
+			return true;
+		}
+		return false;
+	}
+
 	/*function disableMenuIcon(editor, setting) {
-		console.log(editor.buttons.d2l_equation.button_object.menu._items[setting - 1]);
-		if (setting === 1) {
-			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.icon = 'd2l_graphical_equation_disabled';
-		} else if (setting === 2) {
-			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.icon = 'd2l_mml_disabled';
+		if (!editor.buttons.d2l_equation.button_object.menu) {
+			if (setting === 1) {
+				editor.menuItems.graphical_editor.icon = 'd2l_graphical_equation_disabled';
+			} else if (setting === 2) {
+				editor.menuItems.mml_editor.icon = 'd2l_mml_disabled';
+			}
+		} else {
+			if (setting === 1) {
+				editor.menuItems.graphical_editor.button_object.icon = 'd2l_graphical_equation_disabled';
+				editor.menuItems.graphical_editor.button_object.repaint();
+			} else if (setting === 2) {
+				editor.menuItems.mml_editor.button_object.icon = 'd2l_mml_disabled';
+				editor.menuItems.graphical_editor.button_object.repaint();
+			}
 		}
 	}
 
 	function enableMenuIcon(editor, setting) {
-		console.log(editor.buttons.d2l_equation.button_object.menu._items[setting - 1]);
-		if (setting === 1) {
-			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.icon = 'd2l_graphical_equation';
-		} else if (setting === 2) {
-			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].settings.icon = 'd2l_mml';
+		if (!editor.buttons.d2l_equation.button_object.menu) {
+			if (setting === 1) {
+				editor.menuItems.graphical_editor.icon = 'd2l_graphical_equation';
+			} else if (setting === 2) {
+				editor.menuItems.mml_editor.icon = 'd2l_mml';
+			}
+		} else {
+			if (setting === 1) {
+				editor.menuItems.graphical_editor.button_object.icon = 'd2l_graphical_equation';
+				console.log(editor.menuItems);
+				console.log(editor.menuItems.graphical_editor.button_object);
+				editor.menuItems.graphical_editor.button_object.repaint();
+			} else if (setting === 2) {
+				editor.menuItems.mml_editor.button_object.icon = 'd2l_mml' ;
+				editor.menuItems.graphical_editor.button_object.repaint();
+			}
 		}
 	}*/
 
 	function setIsEnabledByNode(editor, isEnabled, setting) {
-		if (isEnabled) {
-			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].disabled(false);
-			//enableMenuIcon(editor, setting);
+		if (editor.buttons.d2l_equation.button_object === null) {
+			return;
+		} else if (!editor.buttons.d2l_equation.button_object.menu) {
+			if (setting === 1) {
+				if (isEnabled) {
+					editor.menuItems.graphical_editor.disabled = false;
+					//enableMenuIcon(editor, setting);
+				} else {
+					editor.menuItems.graphical_editor.disabled = true;
+					//disableMenuIcon(editor, setting);
+				}
+			} else if (setting === 2) {
+				if (isEnabled) {
+					editor.menuItems.mml_editor.disabled = false;
+					//enableMenuIcon(editor, setting);
+				} else {
+					editor.menuItems.mml_editor.disabled = true;
+					//disableMenuIcon(editor, setting);
+				}
+			}
 		} else {
-			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].disabled(true);
-			//disableMenuIcon(editor, setting);
+			if (isEnabled) {
+				editor.buttons.d2l_equation.button_object.menu._items[setting - 1].disabled(false);
+				//enableMenuIcon(editor, setting);
+			} else {
+				editor.buttons.d2l_equation.button_object.menu._items[setting - 1].disabled(true);
+				//disableMenuIcon(editor, setting);
+			}
 		}
 	}
 
 	function setIsActiveByNode(editor, isActive, setting) {
-		if (isActive) {
-			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].active(true);
+		if (editor.buttons.d2l_equation.button_object === null) {
+			return;
+		} else if (!editor.buttons.d2l_equation.button_object.menu) {
+			if (setting === 1) {
+				if (isActive) {
+					editor.menuItems.graphical_editor.active = true;
+					//enableMenuIcon(editor, setting);
+				} else {
+					editor.menuItems.graphical_editor.active = false;
+				}
+			} else if (setting === 2) {
+				if (isActive) {
+					editor.menuItems.mml_editor.active = true;
+					//enableMenuIcon(editor, setting);
+				} else {
+					editor.menuItems.mml_editor.active = false;
+				}
+			}
 		} else {
-			editor.buttons.d2l_equation.button_object.menu._items[setting - 1].active(false);
+			if (isActive) {
+				editor.buttons.d2l_equation.button_object.menu._items[setting - 1].active(true);
+			} else {
+				editor.buttons.d2l_equation.button_object.menu._items[setting - 1].active(false);
+			}
 		}
 	}
 
@@ -236,8 +304,10 @@ Check that file periodically for changes...
 					isEnabled = true;
 					isActive = isEnabled;
 					if (isEnabled) {
-						changeSetting(editor, setting);
-						if (editor.buttons.d2l_equation.button_object !== 'empty') {
+						if (changeSetting(editor, setting) === true) {
+							changeButton(editor);
+						}
+						if (editor.buttons.d2l_equation.button_object !== null) {
 							editor.buttons.d2l_equation.button_object.active(true);
 						}
 					}
@@ -245,8 +315,10 @@ Check that file periodically for changes...
 					isEnabled = true;
 					isActive = isEnabled;
 					if (isEnabled) {
-						changeSetting(editor, setting);
-						if (editor.buttons.d2l_equation.button_object !== 'empty') {
+						if (changeSetting(editor, setting) === true) {
+							changeButton(editor);
+						}
+						if (editor.buttons.d2l_equation.button_object !== null) {
 							editor.buttons.d2l_equation.button_object.active(true);
 						}
 					}
@@ -254,15 +326,15 @@ Check that file periodically for changes...
 					isEnabled = false;
 				}
 			} else {
-				if (editor.buttons.d2l_equation.button_object !== 'empty') {
+				if (editor.buttons.d2l_equation.button_object !== null) {
 					editor.buttons.d2l_equation.button_object.active(false);
 				}
 			}
 
-			if (editor.buttons.d2l_equation.button_object.menu) {
-				setIsEnabledByNode(editor, isEnabled, setting);
-				setIsActiveByNode(editor, isActive, setting);
-			}
+			//if (editor.buttons.d2l_equation.button_object !== null && editor.buttons.d2l_equation.button_object.menu) {
+			setIsEnabledByNode(editor, isEnabled, setting);
+			setIsActiveByNode(editor, isActive, setting);
+			//}
 		}
 	}
 
@@ -272,28 +344,47 @@ Check that file periodically for changes...
 		plugin: {
 			id: 'd2l_equation',
 			simpleInit: false,
-			serviceId: 'fra-html-editor-graphical-equation', // probably dont need this
+			serviceId: 'fra-html-editor-graphical-equation',
 			init: function(editor, config, client, d2lEditor) {
 
 				tinymce.PluginManager.add('d2l_equation', function(editor) {
+
 					editor.addMenuItem('graphical_editor', {
+						active: false,
+						disabled: false,
 						icon: 'd2l_graphical_equation',
 						text: 'Graphical equation',
 						serviceId: 'fra-html-editor-graphical-equation',
+						button_object: null,
+						onPostRender: function() {
+							editor.menuItems.graphical_editor.button_object = this;
+						},
 						onclick: function() {
 							var setting = 1;
-							changeSetting(editor, setting);
+							var changeButtonState = changeSetting(editor, setting);
+							if (changeButtonState === true) {
+								changeButton(editor);
+							}
 							d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
 
 					editor.addMenuItem('mml_editor', {
+						active: false,
+						disabled: false,
 						icon: 'd2l_mml',
 						text: 'MathML equation',
 						serviceId: 'fra-html-editor-mml-equation',
+						button_object: null,
+						onPostRender: function() {
+							editor.menuItems.mml_editor.button_object = this;
+						},
 						onclick: function() {
 							var setting = 2;
-							changeSetting(editor, setting);
+							var changeButtonState = changeSetting(editor, setting);
+							if (changeButtonState === true) {
+								changeButton(editor);
+							}
               //d2lEditor._callService(client, this.settings.serviceId, editor, command);
 						}
 					});
@@ -318,13 +409,16 @@ Check that file periodically for changes...
 						icon: 'd2l_graphical_equation',
 						type: 'splitbutton',
 						setting: 1,
-						button_object: 'empty',
+						button_object: null,
 						serviceId: 'fra-html-editor-graphical-equation',
 						menu: [editor.menuItems['graphical_editor'],
 						editor.menuItems['mml_editor']],
 						//editor.menuItems['latex_editor']],
 						onPostRender: function() {
 							editor.buttons.d2l_equation.button_object = this;
+							if (editor.buttons.d2l_equation.setting !== 2) {
+								changeButton(editor);
+							}
 						},
 						onclick: function() {
 							d2lEditor._callService(client, this.settings.serviceId, editor, command);
