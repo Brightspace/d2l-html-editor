@@ -18,9 +18,9 @@
 
 	function addPlugin(client, pluginConfig) {
 		return client.getService('fra-html-editor-font-family', '0.1').then(function(service) {
-			service.config().then(function(config) {
+			return service.config().then(function(config) {
 				if (config.isEnabled) {
-					service.get().then(function(fontFamilies) {
+					return service.get().then(function(fontFamilies) {
 						pluginConfig.font_formats = createTinyMceFormatString(fontFamilies);
 					});
 				}
