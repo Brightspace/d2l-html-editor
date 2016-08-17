@@ -8,7 +8,7 @@
 		var fontFormats = fontFamilies.reduce(function(formats, font) {
 			if (font.Value) {
 				var fontFamily = font.Name.concat('=').concat(font.Value);
-		  	return formats.concat(fontFamily).concat(';');
+				return formats.concat(fontFamily).concat(';');
 			} else {
 				return formats;
 			}
@@ -22,7 +22,6 @@
 				if (config.isEnabled) {
 					service.get().then(function(fontFamilies) {
 						pluginConfig.font_formats = createTinyMceFormatString(fontFamilies);
-						console.log(fontFamilies);
 					});
 				}
 			});
