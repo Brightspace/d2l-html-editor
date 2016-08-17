@@ -4,33 +4,34 @@
 (function() {
 	'use strict';
 
-	function addPlugin(client) {
+	function createTinyMceFormatString(fontFamilies) {
+		var fontFormats = fontFamilies.reduce(function(formats, font) {
+			if (font.Value) {
+				var fontFamily = font.Name.concat('=').concat(font.Value);
+		  	return formats.concat(fontFamily).concat(';');
+			} else {
+				return formats;
+			}
+		}, '');
+		return fontFormats;
+	}
+
+	function addPlugin(client, pluginConfig) {
 		return client.getService('fra-html-editor-font-family', '0.1').then(function(service) {
 			service.config().then(function(config) {
 				if (config.isEnabled) {
 					service.get().then(function(fontFamilies) {
+						pluginConfig.font_formats = createTinyMceFormatString(fontFamilies);
 						console.log(fontFamilies);
 					});
 				}
-			}
+			});
 		}).catch(function() {
 		});
 	}
 
-	function addPlugin(client) {
-		return window.D2LHtmlEditor.PolymerBehaviors.Plugin.configureSimpleService(
-			client, {
-				id: 'd2l_image',
-				label: 'Add Image',
-				icon: 'd2l_image',
-				serviceId: 'fra-html-editor-image',
-				cmd: command,
-				init: function() {}
-			});
-	}
-
 	/** @polymerBehavior */
-	var FontFamilyBehaviour = {
+	var FontFamilyBehavior = {
 		plugin: {
 			addPlugin: addPlugin
 		}

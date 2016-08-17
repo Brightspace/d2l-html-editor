@@ -86,7 +86,7 @@ Example:
 			window.D2LHtmlEditor.PolymerBehaviors.InsertRollup,
 			window.D2LHtmlEditor.PolymerBehaviors.EquationEditor,
 			window.D2LHtmlEditor.PolymerBehaviors.Code,
-			window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,l
+			window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,
 			window.D2LHtmlEditor.PolymerBehaviors.FontFamily
 		],
 
@@ -198,6 +198,8 @@ Example:
 		},
 
 		_configurePlugins: function(client) {
+			this.pluginConfig = {};
+
 			var pluginDefinitions = this.behaviors.map(function(behavior) {
 				return behavior.plugin;
 			});
@@ -205,7 +207,7 @@ Example:
 			var plugins = [];
 			pluginDefinitions.forEach(function(plugin) {
 				if (plugin) {
-					plugins.push(plugin.addPlugin(client));
+					plugins.push(plugin.addPlugin(client, this.pluginConfig));
 				}
 			}, this);
 			return plugins;
@@ -259,10 +261,15 @@ Example:
 			this._initTinyMCE();
 		},
 
-		/**
-		 * Init tinyMCE
-		 * @private
-		 */
+		_extend: function(obj, target) {
+       for (var i in obj) {
+          if (obj.hasOwnProperty(i) && !target.hasOwnProperty(i)) {
+             target[i] = obj[i];
+          }
+       }
+			 return target;
+    },
+
 		_initTinyMCE: function() {
 			var that = this;
 
@@ -353,7 +360,7 @@ Example:
 				}
 			};
 
-			tinymce.init(config); // eslint-disable-line no-undef
+			tinymce.init(this._extend(this.pluginConfig, config)); // eslint-disable-line no-undef
 
 			// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
 			this.autoFocus = 0;
