@@ -11,6 +11,7 @@
 <link rel="import" href="d2l-equation-editor-plugin.html">
 <link rel="import" href="d2l-code-plugin.html">
 <link rel="import" href="d2l-replacestring-plugin.html">
+<link rel="import" href="d2l-fontfamily-plugin.html">
 <link rel="stylesheet" href="d2l-icons.css">
 <link rel="stylesheet" href="d2l-equation-editor.css">
 
@@ -85,7 +86,8 @@ Example:
 			window.D2LHtmlEditor.PolymerBehaviors.InsertRollup,
 			window.D2LHtmlEditor.PolymerBehaviors.EquationEditor,
 			window.D2LHtmlEditor.PolymerBehaviors.Code,
-			window.D2LHtmlEditor.PolymerBehaviors.ReplaceString
+			window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,
+			window.D2LHtmlEditor.PolymerBehaviors.FontFamily
 		],
 
 		/**
@@ -196,6 +198,8 @@ Example:
 		},
 
 		_configurePlugins: function(client) {
+			this.pluginConfig = {};
+
 			var pluginDefinitions = this.behaviors.map(function(behavior) {
 				return behavior.plugin;
 			});
@@ -203,7 +207,7 @@ Example:
 			var plugins = [];
 			pluginDefinitions.forEach(function(plugin) {
 				if (plugin) {
-					plugins.push(plugin.addPlugin(client));
+					plugins.push(plugin.addPlugin(client, this.pluginConfig));
 				}
 			}, this);
 			return plugins;
@@ -211,7 +215,7 @@ Example:
 
 		_configureTinyMce: function(client) {
 			var plugins = this._configurePlugins(client);
-			return Promise.all(plugins);  // eslint-disable-line no-undef
+			return Promise.all(plugins);	// eslint-disable-line no-undef
 		},
 
 		_callService: function(client, serviceId, editor, fn) {
@@ -257,10 +261,15 @@ Example:
 			this._initTinyMCE();
 		},
 
-		/**
-		 * Init tinyMCE
-		 * @private
-		 */
+		_extend: function(obj, target) {
+			for (var i in obj) {
+				if (obj.hasOwnProperty(i) && !target.hasOwnProperty(i)) {
+					target[i] = obj[i];
+				}
+			}
+			return target;
+		},
+
 		_initTinyMCE: function() {
 			var that = this;
 
@@ -277,11 +286,11 @@ Example:
 								{title: 'Address', format: 'address'},
 								{title: 'Preformatted', format: 'pre'},
 								{title: 'Header 1', format: 'h1'},
-                                {title: 'Header 2', format: 'h2'},
-                                {title: 'Header 3', format: 'h3'},
-                                {title: 'Header 4', format: 'h4'},
-                                {title: 'Header 5', format: 'h5'},
-                                {title: 'Header 6', format: 'h6'}
+																{title: 'Header 2', format: 'h2'},
+																{title: 'Header 3', format: 'h3'},
+																{title: 'Header 4', format: 'h4'},
+																{title: 'Header 5', format: 'h5'},
+																{title: 'Header 6', format: 'h6'}
 				],
 				auto_focus: this.autoFocus ? this.editorId : null,
 				spellcheck_browser: true,
@@ -299,10 +308,10 @@ Example:
 						if (that.content) {
 							editor.setContent(decodeURIComponent(that.content));
 							// After initial initialization, clear content. The web component may become
-							// detached due to React reordering.  This will cause a re-init, but we want
-							// it to re-init from the current content.  We will look at preventing
-							// initialization on attach/detach in future.  However, detach is currently
-							// the simplest place to clean up the TinyMCE editor.  Probably should include
+							// detached due to React reordering.	This will cause a re-init, but we want
+							// it to re-init from the current content.	We will look at preventing
+							// initialization on attach/detach in future.	However, detach is currently
+							// the simplest place to clean up the TinyMCE editor.	Probably should include
 							// a property to auto clean up, otherwise would need to explicitly call a clean
 							// up method from React componentWillUnmount.
 							that.content = null;
@@ -351,7 +360,7 @@ Example:
 				}
 			};
 
-			tinymce.init(config); // eslint-disable-line no-undef
+			tinymce.init(this._extend(this.pluginConfig, config)); // eslint-disable-line no-undef
 
 			// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
 			this.autoFocus = 0;

@@ -1,0 +1,45 @@
+<link rel="import" href="d2l-html-editor-plugin.html">
+
+<script>
+(function() {
+	'use strict';
+
+	function createTinyMceFormatString(fontFamilies) {
+		var fontFormats = fontFamilies.reduce(function(formats, font) {
+			if (font.Value) {
+				var fontFamily = font.Name.concat('=').concat(font.Value);
+				return formats.concat(fontFamily).concat(';');
+			} else {
+				return formats;
+			}
+		}, '');
+		return fontFormats;
+	}
+
+	function addPlugin(client, pluginConfig) {
+		return client.getService('fra-html-editor-font-family', '0.1').then(function(service) {
+			return service.config().then(function(config) {
+				if (config.isEnabled) {
+					return service.get().then(function(fontFamilies) {
+						pluginConfig.font_formats = createTinyMceFormatString(fontFamilies);
+					});
+				}
+			});
+		}).catch(function() {
+		});
+	}
+
+	/** @polymerBehavior */
+	var FontFamilyBehavior = {
+		plugin: {
+			addPlugin: addPlugin
+		}
+	};
+
+	window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+	window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+	/** @polymerBehavior */
+	window.D2LHtmlEditor.PolymerBehaviors.FontFamily = FontFamilyBehavior;
+
+})();
+</script>
