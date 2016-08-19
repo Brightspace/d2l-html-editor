@@ -62,6 +62,8 @@
 				});
 			}
 		}).catch(function() {
+			tinymce.PluginManager.add(plugin.id, function() {   // eslint-disable-line no-undef
+			});
 		});
 	}
 
