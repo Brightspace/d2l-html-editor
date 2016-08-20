@@ -2,6 +2,15 @@
 (function() {
 	'use strict';
 
+	function hasAttribute(node, name) {
+		if( node.hasAttribute !== undefined ) {
+			return node.hasAttribute( name );
+		} else {
+			var val = node.getAttribute( name );
+			return ( val !== null ) && ( val.length > 0 );
+		}
+	}
+
 	function getSelectedNode(editor) {
 		var node = null;
 		if (editor && editor.selection) {
@@ -50,13 +59,23 @@
 				});
 			} else {
 				tinymce.PluginManager.add(plugin.id, function(editor) {   // eslint-disable-line no-undef
-					editor.addButton(plugin.id, {
-						tooltip: plugin.label,
-						icon: plugin.icon,
-						onclick: function() {
-							callIfrauService(client, plugin.serviceId, editor, plugin.cmd);
-						}
-					});
+					if (plugin.isMenu) {
+						editor.addMenuItem(plugin.id, {
+							text: plugin.label,
+							icon: plugin.icon,
+							onclick: function() {
+								callIfrauService(client, plugin.serviceId, editor, plugin.cmd);
+							}
+						});
+					} else{
+						editor.addButton(plugin.id, {
+							tooltip: plugin.label,
+							icon: plugin.icon,
+							onclick: function() {
+								callIfrauService(client, plugin.serviceId, editor, plugin.cmd);
+							}
+						});
+					}
 
 					plugin.init(editor, config);
 				});
@@ -71,7 +90,8 @@
 		getSelectionContent: getSelectionContent,
 		clearBookmark: clearBookmark,
 		configureSimpleService: configureSimpleService,
-		callIfrauService: callIfrauService
+		callIfrauService: callIfrauService,
+		hasAttribute: hasAttribute
 	};
 
 	window.D2LHtmlEditor = window.D2LHtmlEditor || {};
