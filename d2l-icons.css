@@ -91,3 +91,6 @@ i.mce-caret:before {
 	content: url('../d2l-icons/images/html-editor/equation-latex.svg') !important;
 	opacity: 0.3;
 }
+.mce-i-d2l_preview:before {
+	content: url('../d2l-icons/images/tier1/preview.svg') !important;
+}

@@ -1,0 +1,108 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../sinon-stub-promise/index.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../tinymce-import.html">
+    <link rel="import" href="../d2l-preview-plugin.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <!--<d2l-html-editor></d2l-html-editor>-->
+    <div id="html-editor"></div>
+
+    <script>
+      describe('Preview Plugin', function() {
+
+        var editor, config, client, service;
+
+        beforeEach(function(done) {
+
+          config = {
+            isEnabled: true,
+            isWindowModeOpaque: true
+          };
+
+          client = {
+            connect: function() {},
+            getService: function() {}
+          }
+
+          service = {
+            config: function() {},
+            click: function() {}
+          }
+
+          var servicePromise = sinon.stub(client, 'getService').returnsPromise();
+          servicePromise.resolves(service);
+          var configPromise = sinon.stub(service, 'config').returnsPromise();
+          configPromise.resolves(config);
+
+          window.D2LHtmlEditor.PolymerBehaviors.Preview.plugin.addPlugin(client); // .then(function() {
+            tinymce.init({
+              inline: true,
+              convert_urls: false,
+      				relative_urls: false,
+              forced_root_block: '',
+              selector: '#html-editor',
+              plugins: 'd2l_preview',
+              toolbar: 'd2l_preview test',
+              setup: function(editor) {
+                editor.addButton('test', {
+                  onPostRender: function() {
+                    done();
+                  }
+                });
+              },
+              init_instance_callback: function(ed) {
+                editor = ed;
+                editor.focus();
+              }
+            }); // eslint-disable-line no-undef
+          // });
+        });
+
+        afterEach(function() {
+          editor.setContent('');
+          document.getElementById('html-editor').blur();
+          tinymce.EditorManager.execCommand('mceRemoveEditor', true, 'html-editor'); // eslint-disable-line no-undef
+        })
+
+        describe('click handling', function() {
+
+          it('previews current content', function() {
+
+            document.getElementById('html-editor').innerHTML = '<strong>Zinglewaga</strong>';
+
+            var stub = sinon.stub(service, 'click');
+            stub.returnsPromise().resolves('');
+
+            var button = editor.theme.panel.find('toolbar *')[1];
+
+            button.fire('click', {target: button.getEl().firstChild});
+
+            assert(stub.calledWith('<strong>Zinglewaga</strong>'));
+          });
+        });
+
+      });
+    </script>
+
+  </body>
+</html>
