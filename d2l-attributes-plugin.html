@@ -44,12 +44,12 @@
 	}
 
 	function setAttributes(node, attributes) {
-		if ( node == null ) {
+		if ( node === null ) {
 			return;
 		}
 
 		var setAttr = function( name, value ) {
-			if ( value == '' ) {
+			if ( value === '' ) {
 				node.removeAttribute( name );
 			} else {
 				node.setAttribute( name, value );
@@ -79,7 +79,7 @@
 				editor.focus();
 				editor.selection.moveToBookmark(bookmark);
 				var selectedNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
-				setAttributes(selectedNode, attributes)
+				setAttributes(selectedNode, attributes);
 				editor.focus();
 			}, 10);
 		}, function() {

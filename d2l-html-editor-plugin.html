@@ -3,11 +3,11 @@
 	'use strict';
 
 	function hasAttribute(node, name) {
-		if( node.hasAttribute !== undefined ) {
-			return node.hasAttribute( name );
+		if (node.hasAttribute !== undefined) {
+			return node.hasAttribute(name);
 		} else {
-			var val = node.getAttribute( name );
-			return ( val !== null ) && ( val.length > 0 );
+			var val = node.getAttribute(name);
+			return (val !== null) && (val.length > 0);
 		}
 	}
 
@@ -78,13 +78,14 @@
 							},
 							onPostRender: simplePluginPostRender(editor, plugin.postRender)
 						});
-					} else{
+					} else {
 						editor.addButton(plugin.id, {
 							tooltip: plugin.label,
 							icon: plugin.icon,
 							onclick: function() {
 								callIfrauService(client, plugin.serviceId, editor, plugin.cmd);
-							}
+							},
+							onPostRender: simplePluginPostRender(editor, plugin.postRender)
 						});
 					}
 
