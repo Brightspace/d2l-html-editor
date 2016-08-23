@@ -91,11 +91,12 @@ i.mce-caret:before {
 	content: url('../d2l-icons/images/html-editor/equation-latex.svg') !important;
 	opacity: 0.3;
 }
-
 .mce-i-d2l_attributes:before {
 	content: url('../d2l-icons/images/html-editor/insert-attributes.svg') !important;
 }
-
 div.mce-disabled .mce-i-d2l_attributes:before {
 	opacity: 0.3;
+}
+.mce-i-d2l_preview:before {
+	content: url('../d2l-icons/images/tier1/preview.svg') !important;
 }

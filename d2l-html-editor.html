@@ -13,6 +13,7 @@
 <link rel="import" href="d2l-replacestring-plugin.html">
 <link rel="import" href="d2l-fontfamily-plugin.html">
 <link rel="import" href="d2l-attributes-plugin.html">
+<link rel="import" href="d2l-preview-plugin.html">
 <link rel="stylesheet" href="d2l-icons.css">
 <link rel="stylesheet" href="d2l-equation-editor.css">
 
@@ -89,7 +90,8 @@ Example:
 			window.D2LHtmlEditor.PolymerBehaviors.Code,
 			window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,
 			window.D2LHtmlEditor.PolymerBehaviors.FontFamily,
-			window.D2LHtmlEditor.PolymerBehaviors.Attributes
+			window.D2LHtmlEditor.PolymerBehaviors.Attributes,
+			window.D2LHtmlEditor.PolymerBehaviors.Preview
 		],
 
 		/**
@@ -280,8 +282,8 @@ Example:
 
 			var config = {
 				selector: '#' + this.editorId,
-				plugins: 'd2l_attributes d2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation',
-				toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'd2l_attributes bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code | smallscreen',
+				plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation',
+				toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code d2l_preview | smallscreen',
 				fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 				style_formats: [
 								{title: 'Paragraph', format: 'p'},
