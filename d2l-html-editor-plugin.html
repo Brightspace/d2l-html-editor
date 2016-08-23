@@ -49,6 +49,16 @@
 		});
 	}
 
+	function simplePluginPostRender(editor, postRender) {
+		function curriedPostRender(args) {
+			postRender(editor, args.target);
+		}
+
+		if (postRender) {
+			return curriedPostRender;
+		}
+	}
+
 	function configureSimpleService(client, plugin) {
 		return client.getService(plugin.serviceId, '0.1').then(function(service) {
 			return service.config();
@@ -65,7 +75,8 @@
 							icon: plugin.icon,
 							onclick: function() {
 								callIfrauService(client, plugin.serviceId, editor, plugin.cmd);
-							}
+							},
+							onPostRender: simplePluginPostRender(editor, plugin.postRender)
 						});
 					} else{
 						editor.addButton(plugin.id, {

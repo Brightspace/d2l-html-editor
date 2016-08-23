@@ -53,6 +53,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					var configPromise = sinon.stub(service, 'config').returnsPromise();
 					configPromise.resolves(config);
 
+					tinymce.PluginManager.add('test', function(editor) {
+						editor.addButton('test', {
+							type   : 'MenuButton',
+							icon   : 'arrowdown',
+							title  : 'Insert',
+							menu   : [editor.menuItems.d2l_attributes],
+							onPostRender: function() {
+								done();
+							}
+						});
+					});
+
 					window.D2LHtmlEditor.PolymerBehaviors.Attributes.plugin.addPlugin(client).then(function() {
 						tinymce.init({
 							inline: true,
@@ -60,15 +72,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							relative_urls: false,
 							forced_root_block: '',
 							selector: '#html-editor',
-							plugins: 'd2l_attributes',
-							toolbar: 'd2l_attributes test',
-							setup: function(editor) {
-								editor.addButton('test', {
-									onPostRender: function() {
-										done();
-									}
-								});
-							},
+							plugins: 'd2l_attributes test',
+							toolbar: 'test',
 							init_instance_callback: function(ed) {
 								editor = ed;
 								editor.focus();
@@ -100,9 +105,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							textDirection : 'rtl'
 						});
 
+						var selectedNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+
 						var button = editor.theme.panel.find('toolbar *')[1];
 
 						button.fire('click', {target: button.getEl().firstChild});
+						setTimeout(function() {});
+						var selectedNode2 = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+
+
+						var menuItem = button.menu._items[0];
+						menuItem.fire('click');
+
+						var selectedNode3 = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
 
 						setTimeout(function() {
 							assert.equal(editor.getContent(),

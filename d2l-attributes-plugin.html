@@ -8,11 +8,9 @@
 
 		var node = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
 
-		if (node === null || node.nodeName === 'BODY' || node.nodeType === 9 || node.getAttribute === undefined) {
+		if (!canApplyAttributesToNode(node)) {
 			return null;
 		}
-
-		var href = node.getAttribute( 'href' );
 
 		var title = '';
 		if (window.D2LHtmlEditor.PolymerBehaviors.Plugin.hasAttribute( node, 'title' )) {
@@ -74,15 +72,44 @@
 			// document.activeELement.blur() required for Chrome to get focus back
 			// moveToBookmark required by IE
 			setTimeout(function() {
-				document.activeElement.blur();
+				if (document.activeElement) {
+					document.activeElement.blur();
+				}
+				
 				editor.focus();
 				editor.selection.moveToBookmark(bookmark);
 				var selectedNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
 				setAttributes(selectedNode, attributes)
+				editor.focus();
 			}, 10);
 		}, function() {
 			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+			editor.focus();
 		});
+	}
+
+	function canApplyAttributesToNode(node) {
+		return node !== null && node.nodeName !== 'BODY' && node.nodeName !== 'BR' && node.nodeType !== 9 && node.getAttribute !== undefined;
+	}
+
+	function handleDisabledState(editor, ctrl) {
+		function bindStateListener() {
+			var currentNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+			if (!canApplyAttributesToNode(currentNode)) {
+				ctrl.disabled(true);
+			}
+
+			editor.on('NodeChange', function(e) {
+				var disabled = !canApplyAttributesToNode(e.node);
+				ctrl.disabled(disabled);
+			});
+		}
+
+		if (editor.initialized) {
+			bindStateListener();
+		} else {
+			editor.on('init', bindStateListener);
+		}
 	}
 
 	function addPlugin(client) {
@@ -94,6 +121,7 @@
 				serviceId: 'fra-html-editor-attributes',
 				cmd: command,
 				init: function() {},
+				// postRender: handleDisabledState,
 				isMenu: true
 			});
 	}
