@@ -68,9 +68,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					window.D2LHtmlEditor.PolymerBehaviors.Attributes.plugin.addPlugin(client).then(function() {
 						tinymce.init({
 							inline: true,
+							forced_root_block: '',
 							convert_urls: false,
 							relative_urls: false,
-							forced_root_block: '',
 							selector: '#html-editor',
 							plugins: 'd2l_attributes test',
 							toolbar: 'test',
@@ -92,9 +92,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 					it('sets attributes', function(done) {
 
-						document.getElementById('html-editor').innerHTML = '<a href="somewhere.html">Somewhere</a>'
+						// document.getElementById('html-editor').innerHTML = '<p>Somewhere</p>';
+						editor.setContent('<p>Somewhere</p>');
 
-						editor.selection.select(editor.dom.select('a')[0]);
+						editor.selection.select(editor.dom.select('p')[0]);
 
 						var clickPromise = sinon.stub(service, 'click').returnsPromise();
 						clickPromise.resolves({
@@ -105,44 +106,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							textDirection : 'rtl'
 						});
 
-						var selectedNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
-
 						var button = editor.theme.panel.find('toolbar *')[1];
 
 						button.fire('click', {target: button.getEl().firstChild});
 						setTimeout(function() {});
-						var selectedNode2 = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
-
-
 						var menuItem = button.menu._items[0];
-						menuItem.fire('click');
-
-						var selectedNode3 = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+						menuItem.fire('click', {target: menuItem.getEl().firstChild});
 
 						setTimeout(function() {
 							assert.equal(editor.getContent(),
-								'<a id="zinglezoo" class="fabulous" dir="rtl" style="color: red;" title="Zinglewaga" href="somewhere.html">Somewhere</a>');
+								'<p id="zinglezoo" class="fabulous" dir="rtl" style="color: red;" title="Zinglewaga">Somewhere</p>');
 							done();
 						}, 20);
 					});
 
 					it('updates attributes', function(done) {
-						document.getElementById('html-editor').innerHTML = '<a id="zinglezoo" class="fabulous" dir="rtl" style="color: red;" title="Zinglewaga" href="somewhere.html">Somewhere</a>'
+						document.getElementById('html-editor').innerHTML = '<p id="zinglezoo" class="fabulous" dir="rtl" style="color: red;" title="Zinglewaga">Somewhere</p>';
 
-						editor.selection.select(editor.dom.select('a')[0]);
+						editor.selection.select(editor.dom.select('p')[0]);
 
 						var stub = sinon.stub(service, 'click');
 						stub.returnsPromise().resolves({
 							title : 'ZinglewagaX',
 							id : 'zinglezooX',
 							className : 'fabulousX',
-							style : 'color: blue',
+							style : 'color: blue;',
 							textDirection : 'ltr'
 						});
 
 						var button = editor.theme.panel.find('toolbar *')[1];
 
 						button.fire('click', {target: button.getEl().firstChild});
+						setTimeout(function() {});
+						var menuItem = button.menu._items[0];
+						menuItem.fire('click', {target: menuItem.getEl().firstChild});
 
 						setTimeout(function() {
 							assert(stub.calledWith({
@@ -154,7 +151,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							}), 'service called with unexpected param');
 
 							assert.equal(editor.getContent(),
-								'<a id="zinglezooX" class="fabulousX" dir="ltr" style="color: blue;" title="ZinglewagaX" href="somewhere.html">Somewhere</a>');
+								'<p id="zinglezooX" class="fabulousX" dir="ltr" style="color: blue;" title="ZinglewagaX">Somewhere</p>');
 							done();
 						}, 20);
 					});

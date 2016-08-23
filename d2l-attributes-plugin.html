@@ -56,7 +56,9 @@
 			}
 		};
 
-		node.className = attributes.className;
+		if (attributes.className) {
+			node.className = attributes.className;
+		}
 
 		setAttr( 'title', attributes.title );
 		setAttr( 'id', attributes.id );
@@ -72,10 +74,8 @@
 			// document.activeELement.blur() required for Chrome to get focus back
 			// moveToBookmark required by IE
 			setTimeout(function() {
-				if (document.activeElement) {
-					document.activeElement.blur();
-				}
-				
+				document.activeElement.blur();
+
 				editor.focus();
 				editor.selection.moveToBookmark(bookmark);
 				var selectedNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
@@ -89,7 +89,7 @@
 	}
 
 	function canApplyAttributesToNode(node) {
-		return node !== null && node.nodeName !== 'BODY' && node.nodeName !== 'BR' && node.nodeType !== 9 && node.getAttribute !== undefined;
+		return node && node.nodeName !== 'BODY' && node.nodeName !== 'BR' && node.nodeType !== 9 && node.getAttribute !== undefined;
 	}
 
 	function handleDisabledState(editor, ctrl) {
@@ -121,7 +121,7 @@
 				serviceId: 'fra-html-editor-attributes',
 				cmd: command,
 				init: function() {},
-				// postRender: handleDisabledState,
+				postRender: handleDisabledState,
 				isMenu: true
 			});
 	}
