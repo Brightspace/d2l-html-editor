@@ -92,7 +92,7 @@ Check that file periodically for changes...
 			if (math !== null && math.length > 0) {
 				math = math[0];
 			}
-			if (classString.indexOf('graphicalequation') > -1){
+			if (classString.indexOf('graphicalequation') > -1) {
 				return func(annotateMathML('wiris', '', math, math));
 			}
 			return func(annotateMathML('mathml', '', math, math));
