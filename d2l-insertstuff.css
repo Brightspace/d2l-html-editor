@@ -1,5 +1,6 @@
 .disf_default, .disf_flash, .disf_shockwave, .disf_quicktime, .disf_windowsmedia, .disf_realmedia {
   border-radius: 0.3rem;
+  vertical-align: middle;
   background-color: #f9fafb;
   border: 1px solid #d3d9e3;
   background-position:center;

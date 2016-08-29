@@ -25,6 +25,7 @@ img.mathmlequation:hover, img.mathmlequation[data-mce-selected] {
 img.equation {
   width: 150px;
   height: 150px;
+  vertical-align:middle;
   border-radius: 0.3rem;
   background-position: center;
   background-repeat: no-repeat;
