@@ -19,107 +19,106 @@ Check that file periodically for changes.
 (function() {
 	'use strict';
 
-    function convertXSPLIFrameToXSPLImagePlaceholder(context) {
+	function convertXSPLIFrameToXSPLImagePlaceholder(context) {
 
-        if (context.content === null || context.content.length === 0) {
-            return;
-        }
+		if (context.content === null || context.content.length === 0) {
+			return;
+		}
 
-        var tempContent = context.content;
+		var tempContent = context.content;
 
-        var replace = function(match) {
+		var replace = function(match) {
 
-            var originalContent = getOriginalContent(match);
+			var originalContent = getOriginalContent(match);
 
-            var originalContentEncoded = tinymce.html.Entities.encodeAllRaw(originalContent);
+			var originalContentEncoded = tinymce.html.Entities.encodeAllRaw(originalContent);
 
-            var img = '<img style="' + getDimensions() + '" class="disf_default d2l-xspl-image-placehoder" src="/d2l/img/LP/htmlEditor/eq_trans.gif" data-d2l-xspl-original-html="' +
-                originalContentEncoded + '"/>';
+			var img = '<img style="' + getDimensions() + '" class="disf_default d2l-xspl-image-placehoder" src="/d2l/img/LP/htmlEditor/eq_trans.gif" data-d2l-xspl-original-html="' +
+				originalContentEncoded + '"/>';
 
-            return img;
-        };
+			return img;
+		};
 
-        // remove the xspl place holder images
-        tempContent = tempContent.replace(xsplIFrameRegEx(), replace);
-        context.content = tempContent;
-    }
+		// remove the xspl place holder images
+		tempContent = tempContent.replace(xsplIFrameRegEx(), replace);
+		context.content = tempContent;
+	}
 
-    function xsplIFrameRegEx() {
-        return /<iframe[^>]*class=\"d2l-xspl-box\"[^>]*>(.|\n|\r)*?<\/iframe>/gi;
-    }
+	function xsplIFrameRegEx() {
+		return /<iframe[^>]*class=\"d2l-xspl-box\"[^>]*>(.|\n|\r)*?<\/iframe>/gi;
+	}
 
-    function getDimensions(height, width) {
-        return 'height:' + (height || 8.5) + 'rem;' + ' width:' + (width || 16.5) + 'rem;';
-    }
+	function getDimensions(height, width) {
+		return 'height:' + (height || 8.5) + 'rem;' + ' width:' + (width || 16.5) + 'rem;';
+	}
 
-    function getOriginalContent(html) {
-        var tempContent = html;
+	function getOriginalContent(html) {
+		var tempContent = html;
 
-        var replace = function(match) {
+		var replace = function(match) {
 
-            // swap the iframe with the original content
-            var originalContent = match;
-            var originalContentHtmlEncodedMatch = match.match(/ data-original-html=\"([^\"]*)\"/i);
+			// swap the iframe with the original content
+			var originalContent = match;
+			var originalContentHtmlEncodedMatch = match.match(/ data-original-html=\"([^\"]*)\"/i);
 
-            if (originalContentHtmlEncodedMatch && originalContentHtmlEncodedMatch[1]) {
-                var originalContentHtmlEncoded = originalContentHtmlEncodedMatch[1];
+			if (originalContentHtmlEncodedMatch && originalContentHtmlEncodedMatch[1]) {
+				var originalContentHtmlEncoded = originalContentHtmlEncodedMatch[1];
 
-                originalContent = tinymce.html.Entities.decode(originalContentHtmlEncoded);
-                originalContent = getOriginalContent(originalContent);
-            }
+				originalContent = tinymce.html.Entities.decode(originalContentHtmlEncoded);
+				originalContent = getOriginalContent(originalContent);
+			}
 
-            return originalContent;
-        };
+			return originalContent;
+		};
 
-        tempContent = tempContent.replace(xsplIFrameRegEx(), replace);
-        return tempContent;
-    }
+		tempContent = tempContent.replace(xsplIFrameRegEx(), replace);
+		return tempContent;
+	}
 
-    function convertXSPLImagePlaceholderToOriginalContent(context) {
+	function convertXSPLImagePlaceholderToOriginalContent(context) {
 
-        if (context.content === null || context.content.length === 0) {
-            return;
-        }
+		if (context.content === null || context.content.length === 0) {
+			return;
+		}
 
-        var tempContent = context.content;
+		var tempContent = context.content;
 
-        var replace = function(match) {
+		var replace = function(match) {
 
-            // swap the iframe with the original content
-            var originalContent = match;
-            var originalContentHtmlEncodedMatch = match.match(/ data-d2l-xspl-original-html=\"([^\"]*)\"/i);
+			// swap the iframe with the original content
+			var originalContent = match;
+			var originalContentHtmlEncodedMatch = match.match(/ data-d2l-xspl-original-html=\"([^\"]*)\"/i);
 
-            if (originalContentHtmlEncodedMatch && originalContentHtmlEncodedMatch[1]) {
-                var originalContentHtmlEncoded = originalContentHtmlEncodedMatch[1];
-                originalContent = tinymce.html.Entities.decode(originalContentHtmlEncoded);
-            }
+			if (originalContentHtmlEncodedMatch && originalContentHtmlEncodedMatch[1]) {
+				var originalContentHtmlEncoded = originalContentHtmlEncodedMatch[1];
+				originalContent = tinymce.html.Entities.decode(originalContentHtmlEncoded);
+			}
 
-            return originalContent;
-        };
+			return originalContent;
+		};
 
-        // remove the xspl place holder images
-        tempContent = tempContent.replace(/<img[^>]*class=\"disf_default d2l-xspl-image-placehoder\"[^>]*>/gi, replace);
+		// remove the xspl place holder images
+		tempContent = tempContent.replace(/<img[^>]*class=\"disf_default d2l-xspl-image-placehoder\"[^>]*>/gi, replace);
 
-        context.content = tempContent;
-    }
-
+		context.content = tempContent;
+	}
 
 	/*global tinymce:true */
 	/** @polymerBehavior */
 	var XsplConverterBehavior = {
 		plugin: {
-			addPlugin: function(client) {
-                tinymce.PluginManager.add('d2l_xsplconverter', function(editor) {
-                    editor.on('BeforeSetContent', function(e) {
-                        convertXSPLIFrameToXSPLImagePlaceholder(e);
-                    });
+			addPlugin: function() {
+				tinymce.PluginManager.add('d2l_xsplconverter', function(editor) {
+					editor.on('BeforeSetContent', function(e) {
+						convertXSPLIFrameToXSPLImagePlaceholder(e);
+					});
 
-                    editor.on('PostProcess', function(e) {
-                        if (e.get) {
-                            convertXSPLImagePlaceholderToOriginalContent(e);
-                        }
-                    });
-                });
+					editor.on('PostProcess', function(e) {
+						if (e.get) {
+							convertXSPLImagePlaceholderToOriginalContent(e);
+						}
+					});
+				});
 			}
 		}
 	};
