@@ -60,8 +60,6 @@ Check that file periodically for changes...
 	function convertToImages(obj) {
 		var classString;
 		var func = function(match) {
-			var height = 80,
-				width = 80;
 
 			// get the title of the equation
 			var title = match.match(/title=(\"|\')([^\"]*)(\"|\')/i);
@@ -72,19 +70,22 @@ Check that file periodically for changes...
 			}
 			var annotationRegex = /<annotation encoding="([^"]*)">/gi;
 			var annotationMatch = annotationRegex.exec(match);
+			var altLabel = 'MathML equation placeholder';
 			classString = 'equation';
 			if (annotationMatch === null) {
 				classString += ' mathmlequation';
 			} else {
 				if (annotationMatch[1] === 'wiris') {
 					classString += ' graphicalequation';
+					altLabel = 'Graphical equation placeholder';
 				} else if (annotationMatch[1] === 'latex') {
 					classString += ' latexequation';
+					altLabel = 'Latex equation placeholder';
 				} else {
 					classString += ' mathmlequation';
 				}
 			}
-			return '<img class="' + classString + '" title="' + title + '" alt="' + title + '" src="/d2l/img/LP/htmlEditor/eq_trans.gif" width="' + width + '" height="' + height + '" style="vertical-align:middle;" hspace="5" vspace="5" data-d2l-mathml="' + encodeURIComponent(match) + '" \/>';
+			return '<img class="' + classString + '" title="' + title + '" alt="' + altLabel + '" src="/d2l/img/LP/htmlEditor/eq_trans.gif" hspace="5" vspace="5" data-d2l-mathml="' + encodeURIComponent(match) + '" \/>';
 		};
 
 		var appletFunc = function(match) {

@@ -102,7 +102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 							title : 'Zinglewaga',
 							id : 'zinglezoo',
 							className : 'fabulous',
-							style : 'color: red',
+							style : 'color: red;',
 							textDirection : 'rtl'
 						});
 
@@ -121,7 +121,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					});
 
 					it('updates attributes', function(done) {
-						document.getElementById('html-editor').innerHTML = '<p id="zinglezoo" class="fabulous" dir="rtl" style="color: red;" title="Zinglewaga">Somewhere</p>';
+						editor.setContent('<p id="zinglezoo" class="fabulous" dir="rtl" style="color: red;" title="Zinglewaga">Somewhere</p>');
 
 						editor.selection.select(editor.dom.select('p')[0]);
 
