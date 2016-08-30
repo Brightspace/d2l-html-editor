@@ -29,7 +29,8 @@
     "eslint": "^2.10.2",
     "eslint-config-brightspace": "^0.2.1",
     "eslint-plugin-html": "^1.4.0",
-    "polylint": "^2.10.1"
+    "polylint": "^2.10.1",
+    "sinon-stub-promise": "^3.0.1"
   },
   "dependencies": {
     "bower": "^1.7.9"
