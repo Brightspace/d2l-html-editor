@@ -148,31 +148,47 @@ i.mce-caret:before {
 	content: url('./icons/redo-highlighted.svg') !important;
 }
 
-
 .mce-i-code:before {
 	content: url('../d2l-icons/images/html-editor/source-editor.svg') !important;
 }
+.mce-btn:active .mce-i-code, .mce-btn:focus .mce-i-code, .mce-btn:hover .mce-i-code {
+	content: url('./icons/source-editor-highlighted.svg') !important;
+}
+
+.mce-i-d2l_fullscreen:before  {
+	content: url('../d2l-icons/images/tier1/fullscreen.svg') !important;
+}
+.mce-btn:active .mce-i-d2l_fullscreen, .mce-btn:focus .mce-i-d2l_fullscreen, .mce-btn:hover .mce-i-d2l_fullscreen {
+	content: url('./icons/fullscreen-highlighted.svg') !important;
+}
+
+.mce-i-d2l_smallscreen:before {
+	content: url('../d2l-icons/images/tier1/smallscreen.svg') !important;
+}
+.mce-btn:active .mce-i-d2l_smallscreen, .mce-btn:focus .mce-i-d2l_smallscreen, .mce-btn:hover .mce-i-d2l_smallscreen {
+	content: url('./icons/smallscreen-highlighted.svg') !important;
+}
+
 .mce-i-d2l_graphical_equation:before {
 	content: url('../d2l-icons/images/html-editor/equation-graphical.svg') !important;
 }
+.mce-menu-item:active .mce-i-d2l_graphical_equation, .mce-menu-item:focus .mce-i-d2l_graphical_equation, .mce-menu-item:hover .mce-i-d2l_graphical_equation {
+	content: url('./icons/equation-graphical-highlighted.svg') !important;
+}
+.mce-btn:active .mce-i-d2l_graphical_equation, .mce-btn:focus .mce-i-d2l_graphical_equation, .mce-btn:hover .mce-i-d2l_graphical_equation {
+	content: url('./icons/equation-graphical-highlighted.svg') !important;
+}
+
 .mce-i-d2l_mml:before {
 	content: url('../d2l-icons/images/html-editor/equation-mathml.svg') !important;
 }
-.mce-i-d2l_latex:before {
-	content: url('../d2l-icons/images/html-editor/equation-latex.svg') !important;
+.mce-menu-item:active .mce-i-d2l_mml, .mce-menu-item:focus .mce-i-d2l_mml, .mce-menu-item:hover .mce-i-d2l_mml {
+	content: url('./icons/equation-mathml-highlighted.svg') !important;
 }
-.mce-i-d2l_graphical_equation_disabled:before {
-	content: url('../d2l-icons/images/html-editor/equation-graphical.svg') !important;
-	opacity: 0.3;
+.mce-btn:active .mce-i-d2l_mml, .mce-btn:focus .mce-i-d2l_mml, .mce-btn:hover .mce-i-d2l_mml {
+	content: url('./icons/equation-mathml-highlighted.svg') !important;
 }
-.mce-i-d2l_mml_disabled:before {
-	content: url('../d2l-icons/images/html-editor/equation-mathml.svg') !important;
-	opacity: 0.3;
-}
-.mce-i-d2l_latex_disabled:before {
-	content: url('../d2l-icons/images/html-editor/equation-latex.svg') !important;
-	opacity: 0.3;
-}
+
 .mce-i-d2l_attributes:before {
 	content: url('../d2l-icons/images/html-editor/insert-attributes.svg') !important;
 }
