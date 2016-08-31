@@ -247,8 +247,8 @@ Example:
 			tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
 		},
 
-		getContent: function() {
-			return tinymce.EditorManager.get(this.editorId).getContent(); // eslint-disable-line no-undef
+		getContent: function(args) {
+			return tinymce.EditorManager.get(this.editorId).getContent(args); // eslint-disable-line no-undef
 		},
 
 		_init: function() {

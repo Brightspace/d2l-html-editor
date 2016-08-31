@@ -114,7 +114,7 @@ Check that file periodically for changes.
 					});
 
 					editor.on('PostProcess', function(e) {
-						if (e.get) {
+						if (e.get && !(e.full_screen || e.restore_full_screen)) {
 							convertXSPLImagePlaceholderToOriginalContent(e);
 						}
 					});
