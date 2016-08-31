@@ -152,7 +152,11 @@ Example:
 			},
 			appRoot: {
 				type: String,
-				vale: null
+				value: null
+			},
+			langTag: {
+				type: String,
+				value: null
 			}
 		},
 
@@ -309,6 +313,7 @@ Example:
 				skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
 				convert_urls: false,
 				relative_urls: false,
+				language_url: this.langTag ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
 				setup: function(editor) {
 					editor.on('init', function() {
 						if (that.content) {
