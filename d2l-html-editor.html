@@ -313,7 +313,8 @@ Example:
 				skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
 				convert_urls: false,
 				relative_urls: false,
-				language_url: this.langTag ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
+				//language_url: this.langTag ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
+				language_url: this.appRoot + '../d2l-html-editor/langs/zh_CN.js',
 				setup: function(editor) {
 					editor.on('init', function() {
 						if (that.content) {
@@ -326,6 +327,37 @@ Example:
 							// a property to auto clean up, otherwise would need to explicitly call a clean
 							// up method from React componentWillUnmount.
 							that.content = null;
+						}
+					});
+
+					function translateAccessibility(node, editor) {
+						if (node.nodeType === 1) {
+
+							if (node.hasAttribute('aria-label')){
+								node.setAttribute('aria-label',tinymce.EditorManager.i18n.translate(node.getAttribute('aria-label')));
+							} else if (node.hasAttribute('alt')) {
+								node.setAttribute('alt',tinymce.EditorManager.i18n.translate(node.getAttribute('alt')));
+							}
+							node = node.firstElementChild;
+							while (node) {
+									translateAccessibility(node, editor);
+									node = node.nextSibling;
+							}
+						}
+					}
+
+					editor.on('postRender', function() {
+						var editorStartNode = document.querySelector('d2l-html-editor[editor-id="'+that.editorId+'"]');
+						if (editorStartNode) {
+							translateAccessibility(editorStartNode);
+						}
+					});
+
+					editor.on('nodeChange', function(e) {
+						if (!e.node && e.element) e.node = e.element;
+						console.log(e.node);
+						if (e.node) {
+							translateAccessibility(e.node);
 						}
 					});
 
