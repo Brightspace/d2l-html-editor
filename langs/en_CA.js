@@ -215,5 +215,23 @@ tinymce.addI18n('en_CA',{
 "Tools": "Tools",
 "View": "View",
 "Table": "Table",
-"Format": "Format"
+"Format": "Format",
+
+// D2L
+"Add Image": "Add Image",
+"Insert Stuff": "Insert Stuff",
+"Add Link": "Add Link",
+"Graphical equation": "Graphical equation",
+"MathML equation": "MathML equation",
+"Ordered List": "Ordered List",
+"Indent": "Indent",
+"Outdent": "Outdent",
+"Align Full": "Align Full",
+"Row": "Row",
+"Address": "Address",
+"Preformatted": "Preformatted",
+"HTML Source Editor": "HTML Source Editor",
+"Close Full Screen Editor": "Close Full Screen Editor",
+"Open in Full Screen Editor": "Open in Full Screen Editor",  
+"Add Attributes": "Add Attributes"
 });
