@@ -330,7 +330,7 @@ Example:
 						}
 					});
 
-					function translateAccessibility(node, editor) {
+					function translateAccessibility(node) {
 						if (node.nodeType === 1) {
 
 							if (node.hasAttribute('aria-label')){
@@ -354,10 +354,9 @@ Example:
 					});
 
 					editor.on('nodeChange', function(e) {
-						if (!e.node && e.element) e.node = e.element;
-						console.log(e.node);
-						if (e.node) {
-							translateAccessibility(e.node);
+						var editorStartNode = document.querySelector('d2l-html-editor[editor-id="'+that.editorId+'"]');
+						if (editorStartNode) {
+							translateAccessibility(editorStartNode);
 						}
 					});
 
