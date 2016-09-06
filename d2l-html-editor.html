@@ -314,7 +314,7 @@ Example:
 				convert_urls: false,
 				relative_urls: false,
 				//language_url: this.langTag ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
-				language_url: this.appRoot + '../d2l-html-editor/langs/zh_CN.js',
+				language_url: this.appRoot + '../d2l-html-editor/langs/ar_SA.js',
 				setup: function(editor) {
 					editor.on('init', function() {
 						if (that.content) {
@@ -346,29 +346,24 @@ Example:
 						}
 					}
 
-					editor.on('postRender', function() {
-						var editorStartNode = document.querySelector('d2l-html-editor[editor-id="'+that.editorId+'"]');
+					function passEditorIdTranslate(editorId) {
+						var editorStartNode = document.querySelector('d2l-html-editor[editor-id="'+editorId+'"]');
 						if (editorStartNode) {
 							translateAccessibility(editorStartNode);
 						}
-					});
-
-					editor.on('nodeChange', function(e) {
-						var editorStartNode = document.querySelector('d2l-html-editor[editor-id="'+that.editorId+'"]');
-						if (editorStartNode) {
-							translateAccessibility(editorStartNode);
-						}
-					});
+					}
 
 					editor.on('change', function() {
 						that.fire('change', {content: editor.getContent()});
 					});
 
 					editor.on('focusin', function(e) {
+						passEditorIdTranslate(that.editorId);
 						that.fire('focus', e);
 					});
 
 					editor.on('focusout', function(e) {
+						passEditorIdTranslate(that.editorId);
 						that.fire('blur', e);
 					});
 
