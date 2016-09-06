@@ -157,6 +157,10 @@ Example:
 			langTag: {
 				type: String,
 				value: null
+			},
+			langDir: {
+				type: String,
+				value: null
 			}
 		},
 
@@ -315,6 +319,7 @@ Example:
 				relative_urls: false,
 				//language_url: this.langTag ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
 				language_url: this.appRoot + '../d2l-html-editor/langs/ar_SA.js',
+				directionality: this.langDir,
 				setup: function(editor) {
 					editor.on('init', function() {
 						if (that.content) {
