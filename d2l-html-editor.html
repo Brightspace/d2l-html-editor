@@ -362,12 +362,10 @@ Example:
 					});
 
 					editor.on('focusin', function(e) {
-						passEditorIdTranslate(that.editorId);
 						that.fire('focus', e);
 					});
 
 					editor.on('focusout', function(e) {
-						passEditorIdTranslate(that.editorId);
 						that.fire('blur', e);
 					});
 
@@ -380,6 +378,9 @@ Example:
 						icon: 'd2l_fullscreen',
 						onclick: function() {
 							that.fire('fullscreen');
+						},
+						onPostRender: function() {
+							passEditorIdTranslate(that.editorId)
 						}
 					});
 
@@ -389,6 +390,9 @@ Example:
 						onclick: function() {
 							editor.execCommand('mceFullScreen');
 							that.fire('restore');
+						},
+						onPostRender: function() {
+							passEditorIdTranslate(that.editorId)
 						}
 					});
 
