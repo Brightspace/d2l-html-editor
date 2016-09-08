@@ -77,7 +77,7 @@ Check that file periodically for changes...
 			} else {
 				if (annotationMatch[1] === 'wiris') {
 					classString += ' graphicalequation';
-					altLabel = 'Graphical equation placeholder';
+					altLabel = tinymce.EditorManager.i18n.translate('Graphical equation placeholder');
 				} else if (annotationMatch[1] === 'latex') {
 					classString += ' latexequation';
 					altLabel = 'Latex equation placeholder';
@@ -301,7 +301,6 @@ Check that file periodically for changes...
 	var EquationEditorBehavior = {
 		plugin: {
 			addPlugin: function(client) {
-
 				tinymce.PluginManager.add('d2l_equation', function(editor) {
 
 					editor.addMenuItem('graphical_editor', {
