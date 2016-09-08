@@ -1,10 +1,7 @@
 (function() {
 	'use strict';
 	tinymce.PluginManager.add('d2l_lang', function() {
-		console.log('Hello');
-    tinymce.addI18n('ar_SA', {
-			'Graphical equation placeholder': 'YEY!!!',
-			'Graphical equation': '#YEY!!!'
-    });
-		});
+		tinymce.ScriptLoader.load(tinymce.EditorManager.activeEditor.settings.d2l_html_editor.appRoot + '../d2l-html-editor/langs/d2l-ar-sa.js');
+	});
 })();
+
