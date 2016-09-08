@@ -294,6 +294,7 @@ Example:
 			var config = {
 				d2l_html_editor: that,
 				selector: '#' + this.editorId,
+				external_plugins: {'d2l_lang': this.appRoot+'../d2l-html-editor/d2l-lang-plugin.js'},
 				plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter',
 				toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code d2l_preview | smallscreen',
 				fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
@@ -319,7 +320,8 @@ Example:
 				skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
 				convert_urls: false,
 				relative_urls: false,
-				language_url: this.langTag ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
+				//language_url: this.langTag ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
+				language_url: this.appRoot + '../d2l-html-editor/langs/ar_SA.js',
 				directionality: this.langDir,
 				setup: function(editor) {
 
