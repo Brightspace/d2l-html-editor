@@ -1,11 +1,4 @@
 
-<!--
- * Released under LGPL License.
- * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
- *
- * License: http://www.tinymce.com/license
- * Contributing: http://www.tinymce.com/contributing
- *-->
 <link rel="import" href="d2l-html-editor-plugin.html">
 
 <script>
@@ -18,6 +11,10 @@
 			addPlugin: function(client) {
 				tinymce.PluginManager.add('d2l_filter', function(editor) {
 					editor.on('init', function() {
+
+						if (!editor.getParam('d2l_html_editor').content) {
+							return;
+						}
 						var unfilteredContent =  decodeURIComponent(editor.getParam('d2l_html_editor').content);
 
 						if (unfilteredContent) {
