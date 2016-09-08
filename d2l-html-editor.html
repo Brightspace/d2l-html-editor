@@ -330,9 +330,12 @@ Example:
 
 							if (node.hasAttribute('aria-label')) {
 								node.setAttribute('aria-label', tinymce.EditorManager.i18n.translate(node.getAttribute('aria-label'))); // eslint-disable-line no-undef
-							} else if (node.hasAttribute('alt')) {
+							}
+
+							if (node.hasAttribute('alt')) {
 								node.setAttribute('alt', tinymce.EditorManager.i18n.translate(node.getAttribute('alt'))); // eslint-disable-line no-undef
 							}
+
 							node = node.firstElementChild;
 							while (node) {
 								translateAccessibility(node, editor);
