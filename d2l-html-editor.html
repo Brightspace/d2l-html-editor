@@ -320,8 +320,8 @@ Example:
 				skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
 				convert_urls: false,
 				relative_urls: false,
-				//language_url: this.langTag ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
-				language_url: this.appRoot + '../d2l-html-editor/langs/ar_SA.js',
+				language_url: this.langTag && this.langTag != 'en-us' ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
+				//language_url: this.appRoot + '../d2l-html-editor/langs/ar_SA.js',
 				directionality: this.langDir,
 				setup: function(editor) {
 
