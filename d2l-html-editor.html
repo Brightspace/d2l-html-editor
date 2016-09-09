@@ -213,6 +213,16 @@ Example:
 			this.cleanup();
 		},
 
+		//converts the d2l lang tag into a format that fits with tinyMCE lang files
+		_changeLangTag: function() {
+			if (this.langTag.indexOf('-') > -1) {
+				var start = this.langTag.substring(0, 2);
+				var lowerCaseEnd = this.langTag.substr(3);
+				var upperCaseEnd = lowerCaseEnd.toUpperCase();
+				this.langTag = start + '_' + upperCaseEnd;
+			}
+		},
+
 		_configurePlugins: function(client) {
 			this.pluginConfig = {};
 
@@ -273,6 +283,7 @@ Example:
 			this.element.style.overflowY = 'auto';
 			this.element.style.minHeight = this.minHeight;
 			this.element.style.maxHeight = this.maxHeight;
+			this._changeLangTag();
 
 			this._initTinyMCE();
 		},
@@ -288,13 +299,12 @@ Example:
 
 		_initTinyMCE: function() {
 			var that = this;
-
 			var contentCss = this.inline ? '' : this.cssUrl + ',';
 			contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css';
 			var config = {
 				d2l_html_editor: that,
 				selector: '#' + this.editorId,
-				external_plugins: {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l-lang-plugin.js'},
+				external_plugins: this.langTag && this.langTag !== 'en_US' ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
 				plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter',
 				toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code d2l_preview | smallscreen',
 				fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
@@ -320,8 +330,8 @@ Example:
 				skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
 				convert_urls: false,
 				relative_urls: false,
-				language_url: this.langTag && this.langTag !== 'en-us' ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
-				//language_url: this.appRoot + '../d2l-html-editor/langs/ar_SA.js',
+				language_url: this.langTag && this.langTag !== 'en_US' ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
+				language: this.langTag && this.langTag !== 'en_US' ? this.langTag : null,
 				directionality: this.langDir,
 				setup: function(editor) {
 

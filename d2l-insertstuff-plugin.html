@@ -99,8 +99,9 @@ Check that file periodically for changes...
 			classId = getAttributeValue( 'type', html );
 		}
 
+		var altLabel = tinymce.EditorManager.i18n.translate('Insert stuff placeholder');
 		// create an image with the encoded content
-		return '<img src="/d2l/img/LP/htmlEditor/eq_trans.gif" alt="Insert stuff placeholder" ' +
+		return '<img src="/d2l/img/LP/htmlEditor/eq_trans.gif" alt="' + altLabel + '" ' +
 			'width="' + width + '" ' +
 			'height="' + height + '" ' +
 			'class="' + getImageClassName( classId ) + ' d2l-html-editor' + '" ' +
