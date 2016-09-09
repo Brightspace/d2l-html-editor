@@ -70,7 +70,7 @@ Check that file periodically for changes...
 			}
 			var annotationRegex = /<annotation encoding="([^"]*)">/gi;
 			var annotationMatch = annotationRegex.exec(match);
-			var altLabel = 'MathML equation placeholder';
+			var altLabel = tinymce.EditorManager.i18n.translate('MathML equation placeholder');
 			classString = 'equation';
 			if (annotationMatch === null) {
 				classString += ' mathmlequation';
@@ -80,7 +80,7 @@ Check that file periodically for changes...
 					altLabel = tinymce.EditorManager.i18n.translate('Graphical equation placeholder');
 				} else if (annotationMatch[1] === 'latex') {
 					classString += ' latexequation';
-					altLabel = 'Latex equation placeholder';
+					altLabel = tinymce.EditorManager.i18n.translate('Latex equation placeholder');
 				} else {
 					classString += ' mathmlequation';
 				}
@@ -176,12 +176,12 @@ Check that file periodically for changes...
 		if (editor.buttons.d2l_equation.setting === 1) {
 			editor.buttons.d2l_equation.button_object.title('Graphical equation');
 			editor.buttons.d2l_equation.button_object.icon('d2l_graphical_equation');
-			editor.buttons.d2l_equation.button_object.aria('label', 'Graphical equation');
+			editor.buttons.d2l_equation.button_object.aria('label', tinymce.EditorManager.i18n.translate('Graphical equation'));
 			editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-graphical-equation';
 		} else if (editor.buttons.d2l_equation.setting === 2) {
 			editor.buttons.d2l_equation.button_object.title('MathML equation');
 			editor.buttons.d2l_equation.button_object.icon('d2l_mml');
-			editor.buttons.d2l_equation.button_object.aria('label', 'MathML equation');
+			editor.buttons.d2l_equation.button_object.aria('label', tinymce.EditorManager.i18n.translate('MathML equation'));
 			editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-mml-equation';
 		}
 	}
