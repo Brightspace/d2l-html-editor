@@ -213,6 +213,16 @@ Example:
 			this.cleanup();
 		},
 
+		//converts the d2l lang tag into a format that fits with tinyMCE lang files
+		_changeLangTag: function() {
+			if (this.langTag.indexOf('-') > -1) {
+				var start = this.langTag.substring(0, 2);
+				var lowerCaseEnd = this.langTag.substr(3);
+				var upperCaseEnd = lowerCaseEnd.toUpperCase();
+				this.langTag = start + '_' + upperCaseEnd;
+			}
+		},
+
 		_configurePlugins: function(client) {
 			this.pluginConfig = {};
 
@@ -273,6 +283,7 @@ Example:
 			this.element.style.overflowY = 'auto';
 			this.element.style.minHeight = this.minHeight;
 			this.element.style.maxHeight = this.maxHeight;
+			this._changeLangTag();
 
 			this._initTinyMCE();
 		},
@@ -288,7 +299,6 @@ Example:
 
 		_initTinyMCE: function() {
 			var that = this;
-
 			var contentCss = this.inline ? '' : this.cssUrl + ',';
 			contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css';
 			var config = {
@@ -320,7 +330,7 @@ Example:
 				skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
 				convert_urls: false,
 				relative_urls: false,
-				language_url: this.langTag && this.langTag !== 'en-us' ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
+				language_url: this.langTag && this.langTag !== 'en_US' ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
 				language: this.langTag,
 				directionality: this.langDir,
 				setup: function(editor) {

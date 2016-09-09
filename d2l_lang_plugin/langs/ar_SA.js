@@ -1,4 +1,4 @@
-tinymce.addI18n('ar-sa',{
+tinymce.addI18n('ar_SA',{
 "Add Image": "SA Add Image",
 "Insert Stuff": "SA Insert Stuff",
 "Add Link": "SA Add Link",
