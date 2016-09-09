@@ -1,4 +1,4 @@
-tinymce.addI18n('ar_SA',{
+tinymce.addI18n('ar-sa',{
 "Add Image": "SA Add Image",
 "Insert Stuff": "SA Insert Stuff",
 "Add Link": "SA Add Link",
@@ -16,4 +16,3 @@ tinymce.addI18n('ar_SA',{
 "Open in Full Screen Editor": "SA Open in Full Screen Editor",
 "Add Attributes": "SA Add Attributes"
 });
-console.log('Inside lang folder');
