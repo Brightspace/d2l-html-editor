@@ -13,6 +13,7 @@ tinymce.addI18n('ar_SA',{
 "Preformatted": "SA Preformatted",
 "HTML Source Editor": "SA HTML Source Editor",
 "Close Full Screen Editor": "SA Close Full Screen Editor",
-"Open in Full Screen Editor": "SA Open in Full Screen Editor",  
+"Open in Full Screen Editor": "SA Open in Full Screen Editor",
 "Add Attributes": "SA Add Attributes"
 });
+console.log('Inside lang folder');
