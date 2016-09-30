@@ -10,7 +10,7 @@
     "postinstall": "bower install",
     "test:travis": "npm run test:lint:js && npm run test:unit:travis",
     "test": "npm run test:lint:js",
-    "test:lint:js": "eslint *.html",
+    "test:lint:js": "eslint *.html && eslint html-editor.js",
     "test:lint:wc": "polylint --input d2l-html-editor.html",
     "test:unit:travis": "xvfb-run wct",
     "test:unit:local": "wct --skip-plugin sauce"
