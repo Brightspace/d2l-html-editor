@@ -15,7 +15,7 @@
 		plugin: {
 			addPlugin: function(client) {
 
-				client.getService('fra-html-editor-code', '0.1').then(function(service) {
+				return client.getService('fra-html-editor-code', '0.1').then(function(service) {
 					return service.config().then(function(config) {
 
 						tinymce.PluginManager.add('d2l_code', function(editor) {
