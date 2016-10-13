@@ -404,7 +404,15 @@ Example:
 						editor.on('init', function() {
 							editor.execCommand('mceFullScreen');
 							editor.getBody().setAttribute('aria-label', 'Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside');
-							editor.getDoc().querySelector('html').setAttribute('lang', this.langTag ? this.langTag : 'en-us');
+							var container = editor.getContainer();
+							var langTag = container.parentElement.getAttribute('lang-tag');
+							editor.getDoc().querySelector('html').setAttribute('lang', langTag ? langTag : 'en-us');
+
+							var btns = container.querySelectorAll('.mce-colorbutton > button');
+							var length = btns ? btns.length : -1;
+							for (var i = 0; i < length; i ++) {
+								btns[i].setAttribute('role', 'presentation');
+							}
 						});
 					}
 				}
@@ -414,12 +422,6 @@ Example:
 
 			// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
 			this.autoFocus = 0;
-
-			var btns = document.querySelectorAll('.mce-colorbutton > button');
-			var length = btns ? btns.length : -1;
-			for (var i = 0; i < length; i ++) {
-				btns[i].setAttribute('role', 'presentation');
-			}
 		},
 
 		computeToolbarId: function(editorId) {
