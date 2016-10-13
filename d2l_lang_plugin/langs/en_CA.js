@@ -18,5 +18,6 @@ tinymce.addI18n('en_CA',{
 "HTML Source Editor": "HTML Source Editor",
 "Close Full Screen Editor": "Close Full Screen Editor",
 "Open in Full Screen Editor": "Open in Full Screen Editor",
-"Add Attributes": "Add Attributes"
+"Add Attributes": "Add Attributes",
+"Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside"
 });

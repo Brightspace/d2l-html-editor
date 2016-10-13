@@ -403,7 +403,7 @@ Example:
 					if (!this.inline) {
 						editor.on('init', function() {
 							editor.execCommand('mceFullScreen');
-							editor.getBody().setAttribute('aria-label', 'Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside');
+							editor.getBody().setAttribute('aria-label', tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside'));
 						});
 					}
 				}
