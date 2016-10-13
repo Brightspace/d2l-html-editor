@@ -404,6 +404,15 @@ Example:
 						editor.on('init', function() {
 							editor.execCommand('mceFullScreen');
 							editor.getBody().setAttribute('aria-label', tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
+							var container = editor.getContainer();
+							var langTag = container.parentElement.getAttribute('lang-tag');
+							editor.getDoc().querySelector('html').setAttribute('lang', langTag ? langTag : 'en-us');
+
+							var btns = container.querySelectorAll('.mce-colorbutton > button');
+							var length = btns ? btns.length : -1;
+							for (var i = 0; i < length; i ++) {
+								btns[i].setAttribute('role', 'presentation');
+							}
 						});
 					}
 				}
