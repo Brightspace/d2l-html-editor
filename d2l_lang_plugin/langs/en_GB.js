@@ -1,6 +1,6 @@
 //D2L specific strings
 
-tinymce.addI18n('en_CA',{
+tinymce.addI18n('en_GB',{
 "Add Image": "Add Image",
 "Insert Stuff": "Insert Stuff",
 "Add Link": "Add Link",
