@@ -413,6 +413,12 @@ Example:
 
 			// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
 			this.autoFocus = 0;
+			
+			var btns = document.querySelectorAll('.mce-colorbutton > button');
+			var length = btns ? btns.length : -1;
+			for (var i = 0; i < length; i ++) {
+				btns[i].setAttribute('role', 'presentation');
+			}
 		},
 
 		computeToolbarId: function(editorId) {
