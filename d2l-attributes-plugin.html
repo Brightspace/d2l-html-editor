@@ -84,8 +84,10 @@
 				editor.focus();
 			}, 10);
 		}, function() {
-			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
-			editor.focus();
+			setTimeout(function() {
+				window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+				editor.focus();
+			}, 10);
 		});
 	}
 

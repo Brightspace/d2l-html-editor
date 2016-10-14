@@ -83,7 +83,10 @@
 				editor.execCommand('mceInsertContent', false, response);
 			}, 10);
 		}, function() {
-			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+			setTimeout(function() {
+				window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+				editor.focus();
+			}, 10);
 		});
 	}
 
