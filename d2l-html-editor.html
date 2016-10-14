@@ -408,6 +408,13 @@ Example:
 							var langTag = container.parentElement.getAttribute('lang-tag');
 							editor.getDoc().querySelector('html').setAttribute('lang', langTag ? langTag : 'en-us');
 
+							var titleNode = document.createElement('title');
+							var textNode = document.createTextNode(tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
+							titleNode.appendChild(textNode);
+
+							var headElement = editor.getDoc().querySelector('head');
+							headElement.appendChild(titleNode);
+
 							var btns = container.querySelectorAll('.mce-colorbutton > button');
 							var length = btns ? btns.length : -1;
 							for (var i = 0; i < length; i ++) {
