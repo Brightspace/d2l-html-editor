@@ -1,4 +1,4 @@
-//D2L specific strings
+﻿//D2L specific strings
 
 tinymce.addI18n('zh_TW',{
 "Add Image": "新增影像",

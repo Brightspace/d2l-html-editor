@@ -1,4 +1,4 @@
-tinymce.addI18n('ar_SA',{
+﻿tinymce.addI18n('ar_SA',{
 "Cut": "قص",
 "Heading 5": "العنوان 5",
 "Header 2": "الرأس 2",

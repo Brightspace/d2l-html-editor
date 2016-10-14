@@ -1,4 +1,4 @@
-tinymce.addI18n('pt_BR',{
+﻿tinymce.addI18n('pt_BR',{
 "Cut": "Recortar",
 "Heading 5": "Título 5",
 "Header 2": "Cabeçalho 2",

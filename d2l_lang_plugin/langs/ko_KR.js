@@ -1,4 +1,4 @@
-//D2L specific strings
+﻿//D2L specific strings
 
 tinymce.addI18n('ko_KR',{
 "Add Image": "이미지 추가",

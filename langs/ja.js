@@ -1,4 +1,4 @@
-tinymce.addI18n('ja',{
+﻿tinymce.addI18n('ja',{
 "Cut": "切り取り",
 "Heading 5": "見出し 5",
 "Header 2": "ヘッダー 2",

@@ -1,4 +1,4 @@
-tinymce.addI18n('ko_KR',{
+﻿tinymce.addI18n('ko_KR',{
 "Cut": "잘라내기",
 "Heading 5": "머리글 5",
 "Header 2": "머리글 2",

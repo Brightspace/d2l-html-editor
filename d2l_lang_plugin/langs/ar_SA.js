@@ -1,4 +1,4 @@
-//D2L specific strings
+﻿//D2L specific strings
 
 tinymce.addI18n('ar_SA',{
 "Add Image": "إضافة صورة",

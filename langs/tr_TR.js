@@ -1,4 +1,4 @@
-tinymce.addI18n('tr_TR',{
+﻿tinymce.addI18n('tr_TR',{
 "Cut": "Kes",
 "Heading 5": "Başlık 5",
 "Header 2": "Üstbilgi 2",

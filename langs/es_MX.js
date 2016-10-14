@@ -1,4 +1,4 @@
-tinymce.addI18n('es_MX',{
+﻿tinymce.addI18n('es_MX',{
 "Cut": "Cortar",
 "Heading 5": "Encabezado 5",
 "Header 2": "Encabezado 2",

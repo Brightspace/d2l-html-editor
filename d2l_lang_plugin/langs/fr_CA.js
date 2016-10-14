@@ -1,4 +1,4 @@
-//D2L specific strings
+﻿//D2L specific strings
 
 tinymce.addI18n('fr_CA',{
 "Add Image": "Ajouter une image",

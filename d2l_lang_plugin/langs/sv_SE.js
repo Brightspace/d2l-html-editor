@@ -1,4 +1,4 @@
-//D2L specific strings
+﻿//D2L specific strings
 
 tinymce.addI18n('sv_SE',{
 "Add Image": "Lägg till bild",

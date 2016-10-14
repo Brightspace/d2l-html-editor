@@ -1,4 +1,4 @@
-tinymce.addI18n('zh_TW',{
+﻿tinymce.addI18n('zh_TW',{
 "Cut": "剪下",
 "Heading 5": "標題 5",
 "Header 2": "頁首 2",

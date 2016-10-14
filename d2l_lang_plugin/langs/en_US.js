@@ -1,2 +1,2 @@
-tinymce.addI18n('en_US', {
+﻿tinymce.addI18n('en_US', {
 });
