@@ -18,9 +18,12 @@
 			}, 10);
 		}, function() {
 			setTimeout(function() {
-				window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 				editor.focus();
-			}, 10);
+				editor.selection.moveToBookmark(bookmark);
+				window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+				// for reasons the image and isf dialogs require a longer timeout in IE otherwise
+				// editor.focus() will not focus the editor...
+			}, 500);
 		});
 	}
 
