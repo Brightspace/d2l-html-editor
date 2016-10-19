@@ -85,9 +85,10 @@
 			}, 10);
 		}, function() {
 			setTimeout(function() {
-				window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
 				editor.focus();
-			}, 10);
+				editor.selection.moveToBookmark(bookmark);
+				window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+			}, 100);
 		});
 	}
 
