@@ -1,0 +1,76 @@
+<link rel="import" href="d2l-html-editor-plugin.html">
+
+<script>
+(function() {
+	'use strict';
+	/*global tinymce:true */
+	/** @polymerBehavior */
+	var PlaceholderBehavior = {
+		plugin: {
+			addPlugin: function() {
+				tinymce.PluginManager.add('d2l_placeholder', function(editor) {
+
+					editor.on('init', function() {
+
+						if (!editor.getElement().getAttribute('placeholder')) {
+							return;
+						}
+
+						var label = new Label();
+
+						onBlur();
+
+						tinymce.DOM.bind(label.el, 'click', onFocus);
+						editor.on('focus', onFocus);
+						editor.on('blur', onBlur);
+						editor.on('change', onBlur);
+						editor.on('setContent', onBlur);
+
+						function onFocus() {
+							if (!editor.settings.readonly === true) {
+								label.hide();
+							}
+							editor.execCommand('mceFocus', false);
+						}
+
+						function onBlur() {
+							if (editor.getContent() === '') {
+								label.show();
+							} else {
+								label.hide();
+							}
+						}
+					});
+
+					function Label() {
+						var placeholder_text = editor.getElement().getAttribute('placeholder');
+
+						var placeholder_attrs = editor.settings.placeholder_attrs || {style: {position: 'absolute', top:0, left:0, color: '#888', opacity: 0.5, padding: '0.4rem 1rem', width:'98%', overflow: 'hidden', 'white-space': 'pre-wrap'} };
+
+						var contentAreaContainer = editor.getParam('d2l_html_editor');
+
+						tinymce.DOM.setStyle(contentAreaContainer, 'position', 'relative');
+
+						// Create label el
+						this.el = tinymce.DOM.add( contentAreaContainer, 'label', placeholder_attrs, placeholder_text );
+					}
+
+					Label.prototype.hide = function() {
+						tinymce.DOM.setStyle( this.el, 'display', 'none' );
+					};
+
+					Label.prototype.show = function() {
+						tinymce.DOM.setStyle( this.el, 'display', '' );
+					};
+				});
+			}
+		}
+	};
+
+	window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+	window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+	/** @polymerBehavior */
+	window.D2LHtmlEditor.PolymerBehaviors.Placeholder = PlaceholderBehavior;
+
+})();
+</script>
