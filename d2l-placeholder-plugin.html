@@ -16,52 +16,68 @@
 							return;
 						}
 
-						var label = new Label();
+						if (!editor) {
+							return;
+						}
+						var placeholderId = editor.id + '-input-placeholder';
 
-						onBlur();
+						var placeholderElement = document.getElementById(placeholderId) ? document.getElementById(placeholderId) : createPlaceholder(placeholderId);
 
-						tinymce.DOM.bind(label.el, 'click', onFocus);
-						editor.on('focus', onFocus);
-						editor.on('blur', onBlur);
-						editor.on('change', onBlur);
-						editor.on('setContent', onBlur);
+						onBlur(placeholderElement);
 
-						function onFocus() {
-							if (!editor.settings.readonly === true) {
-								label.hide();
+						tinymce.DOM.bind(placeholderElement, 'mouseover', addStyleToContainerOnHover);
+						tinymce.DOM.bind(placeholderElement, 'mouseout', removeStyleToContainerOnHoverOut);
+						tinymce.DOM.bind(placeholderElement, 'click', function() { onFocus(placeholderElement); });
+						editor.on('focus', function() { onFocus(placeholderElement); });
+						editor.on('blur', function() { onBlur(placeholderElement); });
+						editor.on('change', function() { onBlur(placeholderElement); });
+						editor.on('setContent', function() { onBlur(placeholderElement); });
+
+						function onFocus(placeholderElement) {
+							hidePlaceholder(placeholderElement);
+							if (editor.bodyElement) {
+								editor.focus();
 							}
-							editor.execCommand('mceFocus', false);
 						}
 
-						function onBlur() {
+						function addStyleToContainerOnHover() {
+							tinymce.DOM.addClass(editor.getElement(), 'html-editor-container-hover');
+						}
+
+						function removeStyleToContainerOnHoverOut() {
+							tinymce.DOM.removeClass(editor.getElement(), 'html-editor-container-hover');
+						}
+
+						function onBlur(placeholderElement) {
 							if (editor.getContent() === '') {
-								label.show();
+								showPlaceholder(placeholderElement);
 							} else {
-								label.hide();
+								hidePlaceholder(placeholderElement);
 							}
 						}
 					});
 
-					function Label() {
+					function createPlaceholder(placeholderId) {
 						var placeholder_text = editor.getElement().getAttribute('placeholder');
 
-						var placeholder_attrs = editor.settings.placeholder_attrs || {style: {position: 'absolute', top:0, left:0, color: '#888', opacity: 0.5, padding: '0.4rem 1rem', width:'98%', overflow: 'hidden', 'white-space': 'pre-wrap'} };
-
+						var placeholder_attrs = {
+							class: 'html-editor-input-placeholder',
+							id: placeholderId
+						};
 						var contentAreaContainer = editor.getParam('d2l_html_editor');
 
 						tinymce.DOM.setStyle(contentAreaContainer, 'position', 'relative');
 
-						// Create label el
-						this.el = tinymce.DOM.add( contentAreaContainer, 'label', placeholder_attrs, placeholder_text );
+						return tinymce.DOM.add( contentAreaContainer, 'label', placeholder_attrs, placeholder_text );
 					}
 
-					Label.prototype.hide = function() {
-						tinymce.DOM.setStyle( this.el, 'display', 'none' );
-					};
+					function hidePlaceholder(placeholderElement) {
+						tinymce.DOM.setStyle( placeholderElement, 'display', 'none' );
+					}
 
-					Label.prototype.show = function() {
-						tinymce.DOM.setStyle( this.el, 'display', '' );
-					};
+					function showPlaceholder(placeholderElement) {
+						tinymce.DOM.setStyle( placeholderElement, 'display', '' );
+					}
 				});
 			}
 		}

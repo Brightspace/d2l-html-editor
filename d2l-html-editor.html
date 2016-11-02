@@ -19,6 +19,7 @@
 <link rel="import" href="d2l-placeholder-plugin.html">
 <link rel="stylesheet" href="d2l-icons.css">
 <link rel="stylesheet" href="d2l-equation-editor.css">
+<link rel="stylesheet" href="d2l-placeholder.css">
 
 <!--<link rel="import" href="./vui-input-styles.html">-->
 
@@ -302,7 +303,7 @@ Example:
 		_initTinyMCE: function() {
 			var that = this;
 			var contentCss = this.inline ? '' : this.cssUrl + ',';
-			contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css';
+			contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
 			var config = {
 				d2l_html_editor: that,
 				selector: '#' + this.editorId,
