@@ -1,0 +1,88 @@
+<link rel="import" href="d2l-html-editor-plugin.html">
+<!-- code adapted from: https://github.com/mohan/tinymce-placeholder
+used under MIT License -->
+<script>
+(function() {
+	'use strict';
+	/*global tinymce:true */
+	/** @polymerBehavior */
+	var PlaceholderBehavior = {
+		plugin: {
+			addPlugin: function() {
+				tinymce.PluginManager.add('d2l_placeholder', function(editor) {
+
+					editor.on('init', function() {
+
+						if (!editor.getElement().getAttribute('placeholder')) {
+							return;
+						}
+
+						var placeholderId = editor.id + '-input-placeholder';
+
+						var placeholderElement = document.getElementById(placeholderId) ? document.getElementById(placeholderId) : createPlaceholder(placeholderId);
+
+						onBlur(placeholderElement);
+
+						tinymce.DOM.bind(placeholderElement, 'mouseover', addStyleToContainerOnHover);
+						tinymce.DOM.bind(placeholderElement, 'mouseout', removeStyleToContainerOnHoverOut);
+						tinymce.DOM.bind(placeholderElement, 'click', function() { onFocus(placeholderElement); });
+						editor.on('focus', function() { onFocus(placeholderElement); });
+						editor.on('blur', function() { onBlur(placeholderElement); });
+						editor.on('change', function() { onBlur(placeholderElement); });
+						editor.on('setContent', function() { onBlur(placeholderElement); });
+
+						function onFocus(placeholderElement) {
+							hidePlaceholder(placeholderElement);
+							if (editor.bodyElement) {
+								editor.focus();
+							}
+						}
+
+						function addStyleToContainerOnHover() {
+							tinymce.DOM.addClass(editor.getElement(), 'html-editor-container-hover');
+						}
+
+						function removeStyleToContainerOnHoverOut() {
+							tinymce.DOM.removeClass(editor.getElement(), 'html-editor-container-hover');
+						}
+
+						function onBlur(placeholderElement) {
+							if (editor.getContent() === '') {
+								showPlaceholder(placeholderElement);
+							} else {
+								hidePlaceholder(placeholderElement);
+							}
+						}
+					});
+
+					function createPlaceholder(placeholderId) {
+						var placeholder_text = editor.getElement().getAttribute('placeholder');
+
+						var placeholder_attrs = {
+							class: 'html-editor-input-placeholder',
+							id: placeholderId
+						};
+						var contentAreaContainer = editor.getParam('d2l_html_editor');
+
+						return tinymce.DOM.add( contentAreaContainer, 'label', placeholder_attrs, placeholder_text );
+					}
+
+					function hidePlaceholder(placeholderElement) {
+						tinymce.DOM.setStyle( placeholderElement, 'display', 'none' );
+					}
+
+					function showPlaceholder(placeholderElement) {
+						tinymce.DOM.setStyle( placeholderElement, 'display', '' );
+					}
+				});
+			}
+		}
+	};
+
+	window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+	window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+	/** @polymerBehavior */
+	window.D2LHtmlEditor.PolymerBehaviors.Placeholder = PlaceholderBehavior;
+
+})();
+</script>
