@@ -1,5 +1,6 @@
 <link rel="import" href="d2l-html-editor-plugin.html">
-
+<!-- code adapted from: https://github.com/mohan/tinymce-placeholder
+used under MIT License -->
 <script>
 (function() {
 	'use strict';
@@ -16,9 +17,6 @@
 							return;
 						}
 
-						if (!editor) {
-							return;
-						}
 						var placeholderId = editor.id + '-input-placeholder';
 
 						var placeholderElement = document.getElementById(placeholderId) ? document.getElementById(placeholderId) : createPlaceholder(placeholderId);
@@ -65,8 +63,6 @@
 							id: placeholderId
 						};
 						var contentAreaContainer = editor.getParam('d2l_html_editor');
-
-						tinymce.DOM.setStyle(contentAreaContainer, 'position', 'relative');
 
 						return tinymce.DOM.add( contentAreaContainer, 'label', placeholder_attrs, placeholder_text );
 					}
