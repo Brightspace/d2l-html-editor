@@ -60,8 +60,16 @@ used under MIT License -->
 
 						var placeholder_attrs = {
 							class: 'html-editor-input-placeholder',
-							id: placeholderId
+							id: placeholderId,
+							'aria-hidden': true,
+							role: 'dialog'
 						};
+						/*
+						you may or may not be wondering why I set the role attribute to dialog.
+						Well, this placeholder has a click event listener to hide it when you click on it
+						With ainspector, anything that handles clicks needs a widget role: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques
+						I chose dialog because in a way this hacky label placeholder is a dialog since it is absolutely placed on the html editor.
+						*/
 						var contentAreaContainer = editor.getParam('d2l_html_editor');
 
 						return tinymce.DOM.add( contentAreaContainer, 'label', placeholder_attrs, placeholder_text );
