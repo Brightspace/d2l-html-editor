@@ -378,6 +378,7 @@ Example:
 						for (i = 0; i < length; i ++) {
 							allBtns[i].setAttribute('title', allBtns[i].parentElement.getAttribute('aria-label'));
 						}
+					}
 
 					editor.on('change', function() {
 						that.fire('change', {content: editor.getContent()});
