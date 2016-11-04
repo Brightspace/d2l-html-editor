@@ -367,15 +367,15 @@ Example:
 					function fixButtonLables(editor) {
 						var cont = document.getElementById(editor.id).parentElement;
 
-						var btnDivs = cont.getElementsByClassName("mce-btn");
+						var btnDivs = cont.getElementsByClassName('mce-btn');
 						length = btnDivs ? btnDivs.length : -1;
-						for (i = 0; i < length; i ++) {
+						for (var i = 0; i < length; i ++) {
 							btnDivs[i].removeAttribute('aria-labelledby');
 						}
 
 						var allBtns = cont.querySelectorAll('.mce-btn > button');
 						length = allBtns ? allBtns.length : -1;
-						for (i = 0; i < length; i ++) {
+						for (var i = 0; i < length; i ++) {
 							allBtns[i].setAttribute('title', allBtns[i].parentElement.getAttribute('aria-label'));
 						}
 					}
