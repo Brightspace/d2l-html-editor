@@ -364,12 +364,29 @@ Example:
 						}
 					}
 
+					function fixButtonLables(editor) {
+						var cont = document.getElementById(editor.id).parentElement;
+
+						var btnDivs = cont.getElementsByClassName('mce-btn');
+						length = btnDivs ? btnDivs.length : -1;
+						for (var i = 0; i < length; i ++) {
+							btnDivs[i].removeAttribute('aria-labelledby');
+						}
+
+						var allBtns = cont.querySelectorAll('.mce-btn > button');
+						length = allBtns ? allBtns.length : -1;
+						for (i = 0; i < length; i ++) {
+							allBtns[i].setAttribute('title', allBtns[i].parentElement.getAttribute('aria-label'));
+						}
+					}
+
 					editor.on('change', function() {
 						that.fire('change', {content: editor.getContent()});
 					});
 
 					editor.on('focusin', function(e) {
 						that.fire('focus', e);
+						setTimeout(fixButtonLables, 2000, editor);  // give time for buttons to load
 					});
 
 					editor.on('focusout', function(e) {
@@ -422,18 +439,6 @@ Example:
 							var length = btns ? btns.length : -1;
 							for (var i = 0; i < length; i ++) {
 								btns[i].setAttribute('role', 'presentation');
-							}
-
-							var btnDivs = container.querySelectorAll('.mce-btn');
-							length = btnDivs ? btnDivs.length : -1;
-							for (i = 0; i < length; i ++) {
-								btnDivs[i].removeAttribute('aria-labelledby');
-							}
-
-							var allBtns = container.querySelectorAll('.mce-btn > button');
-							length = allBtns ? allBtns.length : -1;
-							for (i = 0; i < length; i ++) {
-								allBtns[i].setAttribute('title', allBtns[i].parentElement.getAttribute('aria-label'));
 							}
 						});
 					}
