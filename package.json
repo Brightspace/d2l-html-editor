@@ -13,7 +13,8 @@
     "test:lint:js": "eslint *.html",
     "test:lint:wc": "polylint --input d2l-html-editor.html",
     "test:unit:travis": "xvfb-run wct",
-    "test:unit:local": "wct --skip-plugin sauce"
+    "test:unit:local": "wct --skip-plugin sauce",
+    "build" : "browserify d2l-html-editor.js -o d2l-html-editor-bundled.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +30,8 @@
     "eslint": "^2.10.2",
     "eslint-config-brightspace": "^0.2.1",
     "eslint-plugin-html": "^1.4.0",
-    "polylint": "^2.10.1"
+    "polylint": "^2.10.1",
+    "superagent-d2l-session-auth": "^1.0.2"
   },
   "dependencies": {
     "bower": "^1.7.9"
