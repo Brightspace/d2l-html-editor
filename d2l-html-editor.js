@@ -262,14 +262,19 @@ Polymer({
 			directionality: this.langDir,
 			powerpaste_allow_local_images: true,
 			powerpaste_block_drop : false,
-			images_upload_handler: function(blobInfo, successCallback,failureCallback ){
+			images_upload_handler: function(blobInfo, successCallback ){
 				var blob = blobInfo.blob();
 				var filename = blobInfo.filename();
 				var client = that.ifrauClient;
+				var failCallBack = function(){
+					// fail, but we make the url invalid so the user knows something went wrong
+					successCallback("pasteFailed");
+				}
 				function getHost(baseUrl) {
 					var host = /https?:\/\/([^\/]+).*/.exec(baseUrl)[1];
 					return host;
 				}
+				that.fire("d2l-html-editor-image-upload-started");
 				client.request('valenceHost').then( function(valenceHost){
 					superagent.post(valenceHost + '/d2l/api/le/unstable/file/AddTempFile')
 						.use(superagent_auth({trustedHost: getHost(valenceHost)}))
@@ -281,15 +286,16 @@ Polymer({
 								successCallback(response.body);
 							}
 							else{
-
-								failureCallback(error);
+								failCallBack();
 							}
+							that.fire("d2l-html-editor-image-upload-completed");
 
 						})
 
 				}, function(reason){
 					console.error(reason);
-					failureCallback(reason);
+					failCallBack();
+					that.fire("d2l-html-editor-image-upload-completed");
 				});
 
 			},
