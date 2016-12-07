@@ -288,6 +288,7 @@ Polymer({
 							else{
 								failCallBack();
 							}
+							that.fire('change', {content: that.editor.getContent()});
 							that.fire("d2l-html-editor-image-upload-completed");
 
 						})
@@ -295,11 +296,13 @@ Polymer({
 				}, function(reason){
 					console.error(reason);
 					failCallBack();
+					that.fire('change', {content: that.editor.getContent()});
 					that.fire("d2l-html-editor-image-upload-completed");
 				});
 
 			},
 			setup: function(editor) {
+				that.editor = editor;
 
 				function translateAccessibility(node) {
 					if (node.nodeType === 1) {
