@@ -280,8 +280,6 @@ Polymer({
 						.use(superagent_auth({trustedHost: getHost(valenceHost)}))
 						.attach('file',blob,filename)
 						.end( function(error,response){
-							console.log("error " + error );
-							console.log("response" + response );
 							if ( !error ){
 								successCallback(response.body);
 							}
@@ -294,7 +292,6 @@ Polymer({
 						})
 
 				}, function(reason){
-					console.error(reason);
 					failCallBack();
 					that.fire('change', {content: that.editor.getContent()});
 					that.fire("d2l-html-editor-image-upload-completed");
