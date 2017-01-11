@@ -1,0 +1,93 @@
+
+.powerpaste-spinner-shim {
+    background-color: rgba(255,255,255,0.5);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    user-select: none;
+    pointer-events: none;
+}
+
+
+.powerpaste-spinner-bg {
+    content: '';
+    position: absolute;
+    background: url("icons/spinner_bg.svg");
+    width: 2em;
+    height: 2em;
+    background-size: 2em 2em;
+    user-select: none;
+    pointer-events: none;
+}
+
+.powerpaste-spinner-slice1,
+.powerpaste-spinner-slice2,
+.powerpaste-spinner-slice3,
+.powerpaste-spinner-slice4,
+.powerpaste-spinner-slice5 {
+    user-select: none;
+    position: absolute;
+    background: url("icons/spinner_overlay_slice.svg");
+    background-size: 1em 1em;
+    width: 1em;
+    height: 1em;
+    top: 0em;
+    left: 1em;
+    transform-origin: left bottom;
+    animation-timing-function: cubic-bezier(.5,0,.5,1);
+    animation-iteration-count: infinite;
+    animation-duration: 1.5s;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+
+    pointer-events: none;
+}
+
+.powerpaste-spinner-slice1{
+    transform: rotate(54deg);
+    animation-name: powerpaste-spinner-slicespin1;
+}
+.powerpaste-spinner-slice2{
+    transform: rotate(124deg);
+    animation-name: powerpaste-spinner-slicespin2;
+}
+.powerpaste-spinner-slice3{
+    transform: rotate(198deg);
+    animation-name: powerpaste-spinner-slicespin3;
+}
+.powerpaste-spinner-slice4{
+    transform: rotate(270deg);
+    animation-name: powerpaste-spinner-slicespin4;
+}
+.powerpaste-spinner-slice5{
+    transform: rotate(344deg);
+    animation-name: powerpaste-spinner-slicespin5;
+}
+
+
+@keyframes powerpaste-spinner-slicespin1 {
+    0% { transform: rotate(54deg); }
+    80%, 100% { transform: rotate(430deg); }
+}
+@keyframes powerpaste-spinner-slicespin2 {
+    0%, 10% { transform: rotate(124deg); }
+    80%, 100% { transform: rotate(500deg); }
+}
+@keyframes powerpaste-spinner-slicespin3 {
+    0%, 20% { transform: rotate(198deg); }
+    80%, 100% { transform: rotate(574deg); }
+}
+@keyframes powerpaste-spinner-slicespin4 {
+    0%, 35%{ transform: rotate(270deg); }
+    80%, 100% { transform: rotate(644deg); }
+}
+@keyframes powerpaste-spinner-slicespin5 {
+    0%, 60%, { transform: rotate(344deg); }
+    80%, 100% { transform: rotate(720deg); }
+}
+

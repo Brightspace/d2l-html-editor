@@ -207,7 +207,7 @@ Polymer({
 		// seem to be broken - this will probably not work in Shadow DOM
 		// this.element = Polymer.dom(this).querySelector('#' + this.editorId);
 		this.element = this.querySelector('#' + this.editorId);
-		this.element.style.overflowY = 'auto';
+		this.element.style.overflowY = 'scroll';
 		this.element.style.minHeight = this.minHeight;
 		this.element.style.maxHeight = this.maxHeight;
 		this._changeLangTag();
@@ -228,6 +228,49 @@ Polymer({
 		var that = this;
 		var contentCss = this.inline ? '' : this.cssUrl + ',';
 		contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
+		var spinners;
+		var updateSpinners=function(){
+			var body = tinymce.activeEditor.getBody();
+			var images = body.getElementsByTagName('img');
+			if ( spinners ){
+				spinners.parentNode.removeChild(spinners);
+				spinners= null;
+			}
+			for ( var i=0; i < images.length; i++ ){
+				if ( images[i].src.startsWith("blob:")){
+					var img = images[i];
+					var width = img.clientWidth;
+					var height = img.clientHeight;
+					var x = img.offsetLeft;
+					var y = img.offsetTop;
+					var maxDim = Math.max(width,height);
+					var minDim = Math.min(width,height);
+					images[i].setAttribute("id","blob1");
+					var html = images[i].outerHTML;
+					var origHtml = html;
+
+					html = '<div data-mce-bogus="all" style="position:absolute;user-select:none;top:' + y + 'px;left:'+x+'px;height:' + height + 'px;width:'+ width+'px;">' +
+						'<div data-mce-bogus="all" class="powerpaste-spinner-shim" ></div>' +
+						'<div data-mce-bogus="all" class="powerpaste-spinner-bg" style="font-size:' + minDim/2 + 'px;top:0; left:' + (width/2-minDim/2) + 'px">' +
+						'<div data-mce-bogus="all" class="powerpaste-spinner-slice1">&nbsp;</div><div class="powerpaste-spinner-slice2">&nbsp;</div><div class="powerpaste-spinner-slice3">&nbsp;</div><div class="powerpaste-spinner-slice4">&nbsp;</div><div class="powerpaste-spinner-slice5">&nbsp;</div>'+
+						'</div></div>';
+					var div = document.createElement('div');
+					div.innerHTML = html;
+					div.setAttribute("id","data-mce-imagespinners");
+					div.setAttribute("data-mce-bogus","all");
+
+					if ( !spinners ){
+						spinners = document.createElement('div');
+						body.appendChild(spinners);
+					}
+
+					spinners.appendChild(div);
+					spinners = div;
+
+				}
+			}
+		};
+
 		var config = {
 			d2l_html_editor: that,
 			selector: '#' + this.editorId,
@@ -262,10 +305,15 @@ Polymer({
 			directionality: this.langDir,
 			powerpaste_allow_local_images: true,
 			powerpaste_block_drop : false,
-			images_upload_handler: function(blobInfo, successCallback ){
+			images_upload_handler: function(blobInfo, replaceImageUrlFunction){
 				var blob = blobInfo.blob();
 				var filename = blobInfo.filename();
 				var client = that.ifrauClient;
+
+				var successCallback = function(newUrl ){
+					replaceImageUrlFunction(newUrl);
+					setTimeout(updateSpinners,1);	// need to wait one frame for the urls to be updated before we get rid of the image spinners
+				}
 				var failCallBack = function(){
 					// fail, but we make the url invalid so the user knows something went wrong
 					successCallback("pasteFailed");
@@ -343,9 +391,12 @@ Polymer({
 					}
 				}
 
-				editor.on('change', function() {
+				editor.on('change redo undo', function() {
+					updateSpinners();
 					that.fire('change', {content: editor.getContent()});
 				});
+
+
 
 				editor.on('focusin', function(e) {
 					that.fire('focus', e);
