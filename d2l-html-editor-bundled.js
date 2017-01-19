@@ -4468,13 +4468,14 @@ Polymer({
 		var that = this;
 		var contentCss = this.inline ? '' : this.cssUrl + ',';
 		contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
-		var spinners;
-		var updateSpinners=function(){
+
+		var imageSpinnersDiv;
+		var updateImageUploadSpinners=function(){
 			var body = tinymce.activeEditor.getBody();
 			var images = body.getElementsByTagName('img');
-			if ( spinners ){
-				spinners.parentNode.removeChild(spinners);
-				spinners= null;
+			if ( imageSpinnersDiv ){
+				imageSpinnersDiv.parentNode.removeChild(imageSpinnersDiv);
+				imageSpinnersDiv= null;
 			}
 			for ( var i=0; i < images.length; i++ ){
 				if ( images[i].src.startsWith("blob:")){
@@ -4487,7 +4488,6 @@ Polymer({
 					var minDim = Math.min(width,height);
 					images[i].setAttribute("id","blob1");
 					var html = images[i].outerHTML;
-					var origHtml = html;
 
 					html = '<div data-mce-bogus="all" style="position:absolute;user-select:none;top:' + y + 'px;left:'+x+'px;height:' + height + 'px;width:'+ width+'px;">' +
 						'<div data-mce-bogus="all" class="powerpaste-spinner-shim" ></div>' +
@@ -4496,17 +4496,15 @@ Polymer({
 						'</div></div>';
 					var div = document.createElement('div');
 					div.innerHTML = html;
-					div.setAttribute("id","data-mce-imagespinners");
 					div.setAttribute("data-mce-bogus","all");
 
-					if ( !spinners ){
-						spinners = document.createElement('div');
-						body.appendChild(spinners);
+					if ( !imageSpinnersDiv ){
+						imageSpinnersDiv = document.createElement('div');
+						body.appendChild(imageSpinnersDiv);
 					}
 
-					spinners.appendChild(div);
-					spinners = div;
-
+					imageSpinnersDiv.appendChild(div);
+					imageSpinnersDiv = div;
 				}
 			}
 		};
@@ -4552,7 +4550,7 @@ Polymer({
 
 				var successCallback = function(newUrl ){
 					replaceImageUrlFunction(newUrl);
-					setTimeout(updateSpinners,1);	// need to wait one frame for the urls to be updated before we get rid of the image spinners
+					setTimeout(updateImageUploadSpinners,1);	// need to wait one frame for the urls to be updated before we get rid of the image spinners
 				}
 				var failCallBack = function(){
 					// fail, but we make the url invalid so the user knows something went wrong
@@ -4576,7 +4574,6 @@ Polymer({
 							}
 							that.fire('change', {content: that.editor.getContent()});
 							that.fire("d2l-html-editor-image-upload-completed");
-
 						})
 
 				}, function(reason){
@@ -4632,7 +4629,7 @@ Polymer({
 				}
 
 				editor.on('change redo undo', function() {
-					updateSpinners();
+					updateImageUploadSpinners();
 					that.fire('change', {content: editor.getContent()});
 				});
 
@@ -4713,8 +4710,6 @@ Polymer({
 		return totalPadding + (lineHeight * rows) + 'rem';
 	}
 });
-
-
 
 },{"superagent":29,"superagent-d2l-session-auth":28}],36:[function(require,module,exports){
 (function (global){
