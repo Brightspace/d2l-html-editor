@@ -250,7 +250,6 @@ Polymer({
 					var y = img.offsetTop;
 					var maxDim = Math.max(width,height);
 					var minDim = Math.min(width,height);
-					images[i].setAttribute("id","blob1");
 					var html = images[i].outerHTML;
 
 					html = '<div data-mce-bogus="all" style="position:absolute;user-select:none;top:' + y + 'px;left:'+x+'px;height:' + height + 'px;width:'+ width+'px;">' +
