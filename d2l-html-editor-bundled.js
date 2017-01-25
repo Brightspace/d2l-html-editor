@@ -1,4 +1,481 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var superagent_auth = require('superagent-d2l-session-auth');
+var superagent= require('superagent');
+
+
+Polymer({
+
+	is: 'd2l-html-editor',
+
+	behaviors: [
+		window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
+		window.D2LHtmlEditor.PolymerBehaviors.Image,
+		window.D2LHtmlEditor.PolymerBehaviors.Link,
+		window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup,
+		window.D2LHtmlEditor.PolymerBehaviors.FormatRollup,
+		window.D2LHtmlEditor.PolymerBehaviors.InsertRollup,
+		window.D2LHtmlEditor.PolymerBehaviors.EquationEditor,
+		window.D2LHtmlEditor.PolymerBehaviors.Code,
+		window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,
+		window.D2LHtmlEditor.PolymerBehaviors.FontFamily,
+		window.D2LHtmlEditor.PolymerBehaviors.Attributes,
+		window.D2LHtmlEditor.PolymerBehaviors.Preview,
+		window.D2LHtmlEditor.PolymerBehaviors.XsplConverter,
+		window.D2LHtmlEditor.PolymerBehaviors.Filter,
+		window.D2LHtmlEditor.PolymerBehaviors.Placeholder
+	],
+
+	/**
+	 * @see tinymce config
+	 */
+	properties: {
+		inline: {
+			type: Number,
+			value: 1
+		},
+		autoFocus: {
+			type: Number,
+			value: 0
+		},
+		minRows: {
+			type: Number,
+			value: 1
+		},
+		maxRows: {
+			type: Number,
+			value: 3
+		},
+		totalPadding: {
+			type: Number,
+			value: 0.9
+		},
+		lineHeight: {
+			type: Number,
+			value: 1.2
+		},
+		minHeight: {
+			type: String,
+			computed: 'computeHeight(totalPadding, minRows, lineHeight)'
+		},
+		maxHeight: {
+			type: String,
+			computed: 'computeHeight(totalPadding, maxRows, lineHeight)'
+		},
+		editorId: String,
+		toolbarId: {
+			type: String,
+			computed: 'computeToolbarId(editorId)'
+		},
+		content: String,
+		baseUrl: {
+			type: String,
+			value: null
+		},
+		documentBaseUrl: {
+			type: String,
+			value: null
+		},
+		cssUrl: {
+			type: String,
+			value: null
+		},
+		appRoot: {
+			type: String,
+			value: null
+		},
+		langTag: {
+			type: String,
+			value: null
+		},
+		langDir: {
+			type: String,
+			value: null
+		},
+		powerPasteEnabled: {
+			type: Number,
+			value: 0
+		}
+	},
+
+	/**
+	 * Textarea where tinymce is instantiate
+	 * @return {HTMLElement}
+	 */
+	element: null,
+
+	// Element Lifecycle
+	registered: function() {
+		var client = window.ifrauclient({
+			syncFont: false,
+			syncLang: false,
+			resizeFrame: false
+		});
+		this.editorReady = client.connect().then(function() {
+			return this._configureTinyMce(client);
+		}.bind(this));
+		this.ifrauClient = client;
+	},
+
+	ready: function() {
+		// `ready` is called after all elements have been configured, but
+		// propagates bottom-up. This element's children are ready, but parents
+		// are not.
+		//
+		// This is the point where you should make modifications to the DOM (when
+		// necessary), or kick off any processes the element wants to perform.
+	},
+
+	attached: function() {
+		// `attached` fires once the element and its parents have been inserted
+		// into a document.
+		//
+		// This is a good place to perform any work related to your element's
+		// visual state or active behavior (measuring sizes, beginning animations,
+		// loading resources, etc).
+
+		this.initialize();
+		this.fire('d2l-html-editor-attached');
+	},
+
+	detached: function() {
+		// The analog to `attached`, `detached` fires when the element has been
+		// removed from a document.
+		//
+		// Use this to clean up anything you did in `attached`.
+		this.cleanup();
+	},
+
+	//converts the d2l lang tag into a format that fits with tinyMCE lang files
+	_changeLangTag: function() {
+		if (this.langTag.indexOf('-') > -1) {
+			var start = this.langTag.substring(0, 2);
+			var lowerCaseEnd = this.langTag.substr(3);
+			var upperCaseEnd = lowerCaseEnd.toUpperCase();
+			this.langTag = start + '_' + upperCaseEnd;
+		}
+	},
+
+	_configurePlugins: function(client) {
+		this.pluginConfig = {};
+
+		var pluginDefinitions = this.behaviors.map(function(behavior) {
+			return behavior.plugin;
+		});
+
+		var plugins = [];
+		pluginDefinitions.forEach(function(plugin) {
+			if (plugin) {
+				plugins.push(plugin.addPlugin(client, this.pluginConfig));
+			}
+		}, this);
+		return plugins;
+	},
+
+	_configureTinyMce: function(client) {
+		var plugins = this._configurePlugins(client);
+		return Promise.all(plugins);	// eslint-disable-line no-undef
+	},
+
+	_callService: function(client, serviceId, editor, fn) {
+		client.getService(serviceId, '0.1').then(function(service) {
+			fn.call(null, service, editor);
+		});
+	},
+
+	initialize: function() {
+		this.editorReady.then(function() {
+			this._init();
+		}.bind(this));
+	},
+
+	// We cannot cleanup in detached because React seems to cause the web component
+	// to detach/attach during move operations
+	cleanup: function() {
+		tinymce.remove(tinymce.EditorManager.get(this.editorId)); // eslint-disable-line no-undef
+		this.client = null;
+	},
+
+	focus: function() {
+		tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
+	},
+
+	getContent: function(args) {
+		return tinymce.EditorManager.get(this.editorId).getContent(args); // eslint-disable-line no-undef
+	},
+
+	_init: function() {
+		if (null !== this.baseUrl) {
+			tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
+		}
+
+		// In React 15 Polymer dom APIs for distributed light DOM children
+		// seem to be broken - this will probably not work in Shadow DOM
+		// this.element = Polymer.dom(this).querySelector('#' + this.editorId);
+		this.element = this.querySelector('#' + this.editorId);
+		this.element.style.overflowY = 'scroll';
+		this.element.style.minHeight = this.minHeight;
+		this.element.style.maxHeight = this.maxHeight;
+		this._changeLangTag();
+
+		this._initTinyMCE();
+	},
+
+	_extend: function(obj, target) {
+		for (var i in obj) {
+			if (obj.hasOwnProperty(i) && !target.hasOwnProperty(i)) {
+				target[i] = obj[i];
+			}
+		}
+		return target;
+	},
+
+	_initTinyMCE: function() {
+		var that = this;
+		var contentCss = this.inline ? '' : this.cssUrl + ',';
+		contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
+
+		var imageSpinnersDiv;
+		var updateImageUploadSpinners=function(){
+			var body = tinymce.activeEditor.getBody();
+			var images = body.getElementsByTagName('img');
+			if ( imageSpinnersDiv ){
+				imageSpinnersDiv.parentNode.removeChild(imageSpinnersDiv);
+				imageSpinnersDiv= null;
+			}
+			for ( var i=0; i < images.length; i++ ){
+				if ( images[i].src.startsWith("blob:")){
+					var img = images[i];
+					var width = img.clientWidth;
+					var height = img.clientHeight;
+					var x = img.offsetLeft;
+					var y = img.offsetTop;
+					var maxDim = Math.max(width,height);
+					var minDim = Math.min(width,height);
+					var html = images[i].outerHTML;
+
+					html = '<div data-mce-bogus="all" style="position:absolute;user-select:none;top:' + y + 'px;left:'+x+'px;height:' + height + 'px;width:'+ width+'px;">' +
+						'<div data-mce-bogus="all" class="powerpaste-spinner-shim" ></div>' +
+						'<div data-mce-bogus="all" class="powerpaste-spinner-bg" style="font-size:' + minDim/2 + 'px;top:0; left:' + (width/2-minDim/2) + 'px">' +
+						'<div data-mce-bogus="all" class="powerpaste-spinner-slice1">&nbsp;</div><div class="powerpaste-spinner-slice2">&nbsp;</div><div class="powerpaste-spinner-slice3">&nbsp;</div><div class="powerpaste-spinner-slice4">&nbsp;</div><div class="powerpaste-spinner-slice5">&nbsp;</div>'+
+						'</div></div>';
+					var div = document.createElement('div');
+					div.innerHTML = html;
+					div.setAttribute("data-mce-bogus","all");
+
+					if ( !imageSpinnersDiv ){
+						imageSpinnersDiv = document.createElement('div');
+						body.appendChild(imageSpinnersDiv);
+					}
+
+					imageSpinnersDiv.appendChild(div);
+					imageSpinnersDiv = div;
+				}
+			}
+		};
+
+		var config = {
+			d2l_html_editor: that,
+			selector: '#' + this.editorId,
+			external_plugins: this.langTag && this.langTag !== 'en_US' ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
+			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder'+ (this.powerPasteEnabled?' powerpaste':''),
+			toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code d2l_preview | smallscreen',
+			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+			style_formats: [
+				{title: 'Paragraph', format: 'p'},
+				{title: 'Address', format: 'address'},
+				{title: 'Preformatted', format: 'pre'},
+				{title: 'Header 1', format: 'h1'},
+				{title: 'Header 2', format: 'h2'},
+				{title: 'Header 3', format: 'h3'},
+				{title: 'Header 4', format: 'h4'},
+				{title: 'Header 5', format: 'h5'},
+				{title: 'Header 6', format: 'h6'}
+			],
+			auto_focus: this.autoFocus ? this.editorId : null,
+			browser_spellcheck: true,
+			menubar: false,
+			statusbar: false,
+			fixed_toolbar_container: '#' + this.toolbarId,
+			inline: this.inline ? true : false,
+			document_base_url: this.documentBaseUrl + '/',
+			content_css: contentCss,
+			skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
+			convert_urls: false,
+			relative_urls: false,
+			language_url: this.langTag ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
+			language: this.langTag ? this.langTag : null,
+			directionality: this.langDir,
+			powerpaste_allow_local_images: true,
+			powerpaste_block_drop : false,
+			images_upload_handler: function(blobInfo, replaceImageUrlFunction){
+				var blob = blobInfo.blob();
+				var filename = blobInfo.filename();
+				var client = that.ifrauClient;
+
+				var successCallback = function(newUrl ){
+					replaceImageUrlFunction(newUrl);
+					setTimeout(updateImageUploadSpinners,1);	// need to wait one frame for the urls to be updated before we get rid of the image spinners
+				}
+				var failCallBack = function(){
+					// fail, but we make the url invalid so the user knows something went wrong
+					successCallback("pasteFailed");
+				}
+				function getHost(baseUrl) {
+					var host = /https?:\/\/([^\/]+).*/.exec(baseUrl)[1];
+					return host;
+				}
+				that.fire("d2l-html-editor-image-upload-started");
+				client.request('valenceHost').then( function(valenceHost){
+					superagent.post(valenceHost + '/d2l/api/le/unstable/file/AddTempFile')
+						.use(superagent_auth({trustedHost: getHost(valenceHost)}))
+						.attach('file',blob,filename)
+						.end( function(error,response){
+							if ( !error ){
+								successCallback(response.body);
+							}
+							else{
+								failCallBack();
+							}
+							that.fire('change', {content: that.editor.getContent()});
+							that.fire("d2l-html-editor-image-upload-completed");
+						})
+
+				}, function(reason){
+					failCallBack();
+					that.fire('change', {content: that.editor.getContent()});
+					that.fire("d2l-html-editor-image-upload-completed");
+				});
+
+			},
+			setup: function(editor) {
+				that.editor = editor;
+
+				function translateAccessibility(node) {
+					if (node.nodeType === 1) {
+
+						if (node.hasAttribute('aria-label')) {
+							node.setAttribute('aria-label', tinymce.EditorManager.i18n.translate(node.getAttribute('aria-label'))); // eslint-disable-line no-undef
+						}
+
+						if (node.hasAttribute('alt')) {
+							node.setAttribute('alt', tinymce.EditorManager.i18n.translate(node.getAttribute('alt'))); // eslint-disable-line no-undef
+						}
+
+						node = node.firstElementChild;
+						while (node) {
+							translateAccessibility(node, editor);
+							node = node.nextSibling;
+						}
+					}
+				}
+
+				function passEditorIdTranslate(editorId) {
+					var editorStartNode = document.querySelector('d2l-html-editor[editor-id="' + editorId + '"]');
+					if (editorStartNode) {
+						translateAccessibility(editorStartNode);
+					}
+				}
+
+				function fixButtonLables(editor) {
+					var cont = document.getElementById(editor.id).parentElement;
+
+					var btnDivs = cont.getElementsByClassName('mce-btn');
+					length = btnDivs ? btnDivs.length : -1;
+					for (var i = 0; i < length; i ++) {
+						btnDivs[i].removeAttribute('aria-labelledby');
+					}
+
+					var allBtns = cont.querySelectorAll('.mce-btn > button');
+					length = allBtns ? allBtns.length : -1;
+					for (i = 0; i < length; i ++) {
+						allBtns[i].setAttribute('title', allBtns[i].parentElement.getAttribute('aria-label'));
+					}
+				}
+
+				editor.on('change redo undo', function() {
+					updateImageUploadSpinners();
+					that.fire('change', {content: editor.getContent()});
+				});
+
+
+
+				editor.on('focusin', function(e) {
+					that.fire('focus', e);
+					setTimeout(fixButtonLables, 2000, editor);  // give time for buttons to load
+				});
+
+				editor.on('focusout', function(e) {
+					that.fire('blur', e);
+				});
+
+				editor.on('keyup', function() {
+					// that.element.value = editor.getContent();
+				});
+
+				editor.addButton('fullscreen', {
+					title: 'Open in Full Screen Editor',
+					icon: 'd2l_fullscreen',
+					onclick: function() {
+						that.fire('fullscreen');
+					},
+					onPostRender: function() {
+						passEditorIdTranslate(that.editorId);
+					}
+				});
+
+				editor.addButton('smallscreen', {
+					title: 'Close Full Screen Editor',
+					icon: 'd2l_smallscreen',
+					onclick: function() {
+						editor.execCommand('mceFullScreen');
+						that.fire('restore');
+					},
+					onPostRender: function() {
+						passEditorIdTranslate(that.editorId);
+					}
+				});
+
+				if (!this.inline) {
+					editor.on('init', function() {
+						editor.execCommand('mceFullScreen');
+						editor.getBody().setAttribute('aria-label', tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
+						var container = editor.getContainer();
+						var langTag = container.parentElement.getAttribute('lang-tag');
+						editor.getDoc().querySelector('html').setAttribute('lang', langTag ? langTag : 'en-us');
+
+						var titleNode = document.createElement('title');
+						var textNode = document.createTextNode(tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
+						titleNode.appendChild(textNode);
+
+						var headElement = editor.getDoc().querySelector('head');
+						headElement.appendChild(titleNode);
+
+						var btns = container.querySelectorAll('.mce-colorbutton > button');
+						var length = btns ? btns.length : -1;
+						for (var i = 0; i < length; i ++) {
+							btns[i].setAttribute('role', 'presentation');
+						}
+					});
+				}
+			}
+		};
+
+		tinymce.init(this._extend(this.pluginConfig, config)); // eslint-disable-line no-undef
+
+		// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
+		this.autoFocus = 0;
+	},
+
+	computeToolbarId: function(editorId) {
+		return editorId + '-toolbar';
+	},
+
+	computeHeight: function(totalPadding, rows, lineHeight) {
+		return totalPadding + (lineHeight * rows) + 'rem';
+	}
+});
+
+},{"superagent":31,"superagent-d2l-session-auth":29}],2:[function(require,module,exports){
 
 /**
  * Expose `Emitter`.
@@ -163,14 +640,14 @@ Emitter.prototype.hasListeners = function(event){
   return !! this.listeners(event).length;
 };
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
-module.exports = function framed () {
-	return !window.D2L;
+module.exports = function framed() {
+	return !window.D2L || !window.D2L.LP;
 };
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 var Client = require('ifrau/client'),
@@ -195,7 +672,7 @@ module.exports = function getFramedJwt(scope) {
 		});
 };
 
-},{"./request-key":6,"ifrau/client":12,"lie":26}],4:[function(require,module,exports){
+},{"./request-key":7,"ifrau/client":13,"lie":27}],5:[function(require,module,exports){
 'use strict';
 
 var framed = require('frau-framed');
@@ -210,7 +687,7 @@ module.exports = function frauJwt() {
 	return fn.apply(fn, arguments);
 };
 
-},{"./framed":3,"./local":5,"frau-framed":2}],5:[function(require,module,exports){
+},{"./framed":4,"./local":6,"frau-framed":3}],6:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -348,19 +825,19 @@ function sessionListener(e) {
 if (global.addEventListener) {
 	global.addEventListener('storage', sessionListener);
 } else if (global.attachEvent) {
-	global.addEventListener('onstorage', sessionListener);
+	global.attachEvent('onstorage', sessionListener);
 }
 
 module.exports._clock = clock;
 module.exports._resetCaches = resetCaches;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"frau-superagent-xsrf-token":7,"lie":26,"superagent":29}],6:[function(require,module,exports){
+},{"frau-superagent-xsrf-token":8,"lie":27,"superagent":31}],7:[function(require,module,exports){
 'use strict';
 
 module.exports = 'frau-jwt-new-jwt';
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var xsrfToken = require('frau-xsrf-token');
@@ -405,7 +882,7 @@ module.exports = function getXsrfToken (req) {
 	return req;
 };
 
-},{"frau-xsrf-token":8}],8:[function(require,module,exports){
+},{"frau-xsrf-token":9}],9:[function(require,module,exports){
 'use strict';
 
 var Promise = require('lie');
@@ -428,7 +905,7 @@ module.exports = function getXsrfToken () {
 		});
 };
 
-},{"./request-token":9,"./storage":10,"lie":26}],9:[function(require,module,exports){
+},{"./request-token":10,"./storage":11,"lie":27}],10:[function(require,module,exports){
 'use strict';
 
 var Promise = require('lie'),
@@ -453,7 +930,7 @@ function requestXsrfToken () {
 module.exports.get = requestXsrfToken;
 module.exports.XSRF_TOKEN_PATH = XSRF_TOKEN_PATH;
 
-},{"lie":26,"superagent":29}],10:[function(require,module,exports){
+},{"lie":27,"superagent":31}],11:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -494,7 +971,7 @@ module.exports._resetFallback = function resetFallback () {
 };
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /*
  * File: iframeResizer.contentWindow.js
  * Desc: Include this file in any page being loaded into an iframe
@@ -1604,12 +2081,12 @@ module.exports._resetFallback = function resetFallback () {
 
 })(window || {});
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./src/client');
 
-},{"./src/client":13}],13:[function(require,module,exports){
+},{"./src/client":14}],14:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits'),
@@ -1660,7 +2137,7 @@ Client.prototype.connect = function connect() {
 
 module.exports = Client;
 
-},{"./plugins/iframe-resizer/client":14,"./plugins/sync-font/client":15,"./plugins/sync-lang/client":16,"./plugins/sync-title/client":17,"./port":19,"inherits":25,"lie":26}],14:[function(require,module,exports){
+},{"./plugins/iframe-resizer/client":15,"./plugins/sync-font/client":16,"./plugins/sync-lang/client":17,"./plugins/sync-title/client":18,"./port":20,"inherits":26,"lie":27}],15:[function(require,module,exports){
 'use strict';
 
 module.exports = function(client) {
@@ -1671,7 +2148,7 @@ module.exports = function(client) {
 	require('iframe-resizer/js/iframeResizer.contentWindow');
 };
 
-},{"iframe-resizer/js/iframeResizer.contentWindow":11}],15:[function(require,module,exports){
+},{"iframe-resizer/js/iframeResizer.contentWindow":12}],16:[function(require,module,exports){
 'use strict';
 
 module.exports = function clientSyncFont(client) {
@@ -1700,7 +2177,7 @@ module.exports = function clientSyncFont(client) {
 	});
 };
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 module.exports = function clientSyncLang(client) {
@@ -1716,7 +2193,7 @@ module.exports = function clientSyncLang(client) {
 	});
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 function installClientPolling(sync) {
@@ -1765,7 +2242,7 @@ module.exports = function clientSyncTitle(client) {
 	}
 };
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 var uuid = require('uuid');
@@ -1917,12 +2394,12 @@ Port.prototype.use = function use(fn) {
 
 module.exports = Port;
 
-},{"./validate-event":23,"uuid":34}],19:[function(require,module,exports){
+},{"./validate-event":24,"uuid":36}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = require('./services');
 
-},{"./services":21}],20:[function(require,module,exports){
+},{"./services":22}],21:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits'),
@@ -2071,7 +2548,7 @@ PortWithRequests.prototype._receiveRequestResponse = function receiveRequestResp
 
 module.exports = PortWithRequests;
 
-},{"./base":18,"./transform-error":22,"inherits":25,"lie":26}],21:[function(require,module,exports){
+},{"./base":19,"./transform-error":23,"inherits":26,"lie":27}],22:[function(require,module,exports){
 'use strict';
 
 var inherits = require('inherits');
@@ -2151,7 +2628,7 @@ PortWithServices.prototype.registerService = function registerService(serviceTyp
 
 module.exports = PortWithServices;
 
-},{"./requests":20,"inherits":25}],22:[function(require,module,exports){
+},{"./requests":21,"inherits":26}],23:[function(require,module,exports){
 'use strict';
 
 var ERROR_OBJECT_SENTINEL = '_ifrau-error-object';
@@ -2240,7 +2717,7 @@ module.exports.ERROR_OBJECT_SENTINEL = ERROR_OBJECT_SENTINEL;
 module.exports.fromError = deErrorify;
 module.exports.toError = errorify;
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 function isStringEmpty(str) {
@@ -2263,7 +2740,7 @@ function validateEvent(targetOrigin, endpoint, e) {
 
 module.exports = validateEvent;
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function (global){
 'use strict';
 var Mutation = global.MutationObserver || global.WebKitMutationObserver;
@@ -2336,7 +2813,7 @@ function immediate(task) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
@@ -2361,7 +2838,7 @@ if (typeof Object.create === 'function') {
   }
 }
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 var immediate = require('immediate');
 
@@ -2616,7 +3093,7 @@ function race(iterable) {
   }
 }
 
-},{"immediate":24}],27:[function(require,module,exports){
+},{"immediate":25}],28:[function(require,module,exports){
 
 /**
  * Reduce `arr` with `fn`.
@@ -2641,11 +3118,20 @@ module.exports = function(arr, fn, initial){
   
   return curr;
 };
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict';
 
 var getJwt = require('frau-jwt'),
-	url = require('url'),
+	auth = require('./superagent-d2l-session-auth');
+
+module.exports = function(opts) {
+	return auth(getJwt, opts);
+};
+
+},{"./superagent-d2l-session-auth":30,"frau-jwt":5}],30:[function(require,module,exports){
+'use strict';
+
+var url = require('url'),
 	xsrf = require('frau-superagent-xsrf-token');
 
 function noop() {}
@@ -2678,7 +3164,7 @@ function isTrusted(parsed, trustedHost) {
 		|| isTrustedHost(parsed, trustedHost);
 }
 
-module.exports = function(opts) {
+module.exports = function(getJwt, opts) {
 	opts = opts || {};
 
 	return function(req) {
@@ -2716,7 +3202,7 @@ module.exports = function(opts) {
 	};
 };
 
-},{"frau-jwt":4,"frau-superagent-xsrf-token":7,"url":40}],29:[function(require,module,exports){
+},{"frau-superagent-xsrf-token":8,"url":41}],31:[function(require,module,exports){
 /**
  * Module dependencies.
  */
@@ -3795,7 +4281,7 @@ request.put = function(url, data, fn){
   return req;
 };
 
-},{"./is-object":30,"./request":32,"./request-base":31,"emitter":1,"reduce":27}],30:[function(require,module,exports){
+},{"./is-object":32,"./request":34,"./request-base":33,"emitter":2,"reduce":28}],32:[function(require,module,exports){
 /**
  * Check if `obj` is an object.
  *
@@ -3810,7 +4296,7 @@ function isObject(obj) {
 
 module.exports = isObject;
 
-},{}],31:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /**
  * Module of mixed-in functions shared between node and client code
  */
@@ -3978,7 +4464,7 @@ exports.field = function(name, val) {
   return this;
 };
 
-},{"./is-object":30}],32:[function(require,module,exports){
+},{"./is-object":32}],34:[function(require,module,exports){
 // The node and browser modules expose versions of this with the
 // appropriate constructor function bound as first argument
 /**
@@ -4012,7 +4498,7 @@ function request(RequestConstructor, method, url) {
 
 module.exports = request;
 
-},{}],33:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 (function (global){
 
 var rng;
@@ -4048,7 +4534,7 @@ module.exports = rng;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],34:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 //     uuid.js
 //
 //     Copyright (c) 2010-2012 Robert Kieffer
@@ -4233,484 +4719,7 @@ uuid.unparse = unparse;
 
 module.exports = uuid;
 
-},{"./rng":33}],35:[function(require,module,exports){
-var superagent_auth = require('superagent-d2l-session-auth');
-var superagent= require('superagent');
-
-
-Polymer({
-
-	is: 'd2l-html-editor',
-
-	behaviors: [
-		window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
-		window.D2LHtmlEditor.PolymerBehaviors.Image,
-		window.D2LHtmlEditor.PolymerBehaviors.Link,
-		window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup,
-		window.D2LHtmlEditor.PolymerBehaviors.FormatRollup,
-		window.D2LHtmlEditor.PolymerBehaviors.InsertRollup,
-		window.D2LHtmlEditor.PolymerBehaviors.EquationEditor,
-		window.D2LHtmlEditor.PolymerBehaviors.Code,
-		window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,
-		window.D2LHtmlEditor.PolymerBehaviors.FontFamily,
-		window.D2LHtmlEditor.PolymerBehaviors.Attributes,
-		window.D2LHtmlEditor.PolymerBehaviors.Preview,
-		window.D2LHtmlEditor.PolymerBehaviors.XsplConverter,
-		window.D2LHtmlEditor.PolymerBehaviors.Filter,
-		window.D2LHtmlEditor.PolymerBehaviors.Placeholder
-	],
-
-	/**
-	 * @see tinymce config
-	 */
-	properties: {
-		inline: {
-			type: Number,
-			value: 1
-		},
-		autoFocus: {
-			type: Number,
-			value: 0
-		},
-		minRows: {
-			type: Number,
-			value: 1
-		},
-		maxRows: {
-			type: Number,
-			value: 3
-		},
-		totalPadding: {
-			type: Number,
-			value: 0.9
-		},
-		lineHeight: {
-			type: Number,
-			value: 1.2
-		},
-		minHeight: {
-			type: String,
-			computed: 'computeHeight(totalPadding, minRows, lineHeight)'
-		},
-		maxHeight: {
-			type: String,
-			computed: 'computeHeight(totalPadding, maxRows, lineHeight)'
-		},
-		editorId: String,
-		toolbarId: {
-			type: String,
-			computed: 'computeToolbarId(editorId)'
-		},
-		content: String,
-		baseUrl: {
-			type: String,
-			value: null
-		},
-		documentBaseUrl: {
-			type: String,
-			value: null
-		},
-		cssUrl: {
-			type: String,
-			value: null
-		},
-		appRoot: {
-			type: String,
-			value: null
-		},
-		langTag: {
-			type: String,
-			value: null
-		},
-		langDir: {
-			type: String,
-			value: null
-		},
-		powerPasteEnabled: {
-			type: Number,
-			value: 0
-		}
-	},
-
-	/**
-	 * Textarea where tinymce is instantiate
-	 * @return {HTMLElement}
-	 */
-	element: null,
-
-	// Element Lifecycle
-	registered: function() {
-		var client = window.ifrauclient({
-			syncFont: false,
-			syncLang: false,
-			resizeFrame: false
-		});
-		this.editorReady = client.connect().then(function() {
-			return this._configureTinyMce(client);
-		}.bind(this));
-		this.ifrauClient = client;
-	},
-
-	ready: function() {
-		// `ready` is called after all elements have been configured, but
-		// propagates bottom-up. This element's children are ready, but parents
-		// are not.
-		//
-		// This is the point where you should make modifications to the DOM (when
-		// necessary), or kick off any processes the element wants to perform.
-	},
-
-	attached: function() {
-		// `attached` fires once the element and its parents have been inserted
-		// into a document.
-		//
-		// This is a good place to perform any work related to your element's
-		// visual state or active behavior (measuring sizes, beginning animations,
-		// loading resources, etc).
-
-		this.initialize();
-		this.fire('d2l-html-editor-attached');
-	},
-
-	detached: function() {
-		// The analog to `attached`, `detached` fires when the element has been
-		// removed from a document.
-		//
-		// Use this to clean up anything you did in `attached`.
-		this.cleanup();
-	},
-
-	//converts the d2l lang tag into a format that fits with tinyMCE lang files
-	_changeLangTag: function() {
-		if (this.langTag.indexOf('-') > -1) {
-			var start = this.langTag.substring(0, 2);
-			var lowerCaseEnd = this.langTag.substr(3);
-			var upperCaseEnd = lowerCaseEnd.toUpperCase();
-			this.langTag = start + '_' + upperCaseEnd;
-		}
-	},
-
-	_configurePlugins: function(client) {
-		this.pluginConfig = {};
-
-		var pluginDefinitions = this.behaviors.map(function(behavior) {
-			return behavior.plugin;
-		});
-
-		var plugins = [];
-		pluginDefinitions.forEach(function(plugin) {
-			if (plugin) {
-				plugins.push(plugin.addPlugin(client, this.pluginConfig));
-			}
-		}, this);
-		return plugins;
-	},
-
-	_configureTinyMce: function(client) {
-		var plugins = this._configurePlugins(client);
-		return Promise.all(plugins);	// eslint-disable-line no-undef
-	},
-
-	_callService: function(client, serviceId, editor, fn) {
-		client.getService(serviceId, '0.1').then(function(service) {
-			fn.call(null, service, editor);
-		});
-	},
-
-	initialize: function() {
-		this.editorReady.then(function() {
-			this._init();
-		}.bind(this));
-	},
-
-	// We cannot cleanup in detached because React seems to cause the web component
-	// to detach/attach during move operations
-	cleanup: function() {
-		tinymce.remove(tinymce.EditorManager.get(this.editorId)); // eslint-disable-line no-undef
-		this.client = null;
-	},
-
-	focus: function() {
-		tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
-	},
-
-	getContent: function(args) {
-		return tinymce.EditorManager.get(this.editorId).getContent(args); // eslint-disable-line no-undef
-	},
-
-	_init: function() {
-		if (null !== this.baseUrl) {
-			tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
-		}
-
-		// In React 15 Polymer dom APIs for distributed light DOM children
-		// seem to be broken - this will probably not work in Shadow DOM
-		// this.element = Polymer.dom(this).querySelector('#' + this.editorId);
-		this.element = this.querySelector('#' + this.editorId);
-		this.element.style.overflowY = 'scroll';
-		this.element.style.minHeight = this.minHeight;
-		this.element.style.maxHeight = this.maxHeight;
-		this._changeLangTag();
-
-		this._initTinyMCE();
-	},
-
-	_extend: function(obj, target) {
-		for (var i in obj) {
-			if (obj.hasOwnProperty(i) && !target.hasOwnProperty(i)) {
-				target[i] = obj[i];
-			}
-		}
-		return target;
-	},
-
-	_initTinyMCE: function() {
-		var that = this;
-		var contentCss = this.inline ? '' : this.cssUrl + ',';
-		contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
-
-		var imageSpinnersDiv;
-		var updateImageUploadSpinners=function(){
-			var body = tinymce.activeEditor.getBody();
-			var images = body.getElementsByTagName('img');
-			if ( imageSpinnersDiv ){
-				imageSpinnersDiv.parentNode.removeChild(imageSpinnersDiv);
-				imageSpinnersDiv= null;
-			}
-			for ( var i=0; i < images.length; i++ ){
-				if ( images[i].src.startsWith("blob:")){
-					var img = images[i];
-					var width = img.clientWidth;
-					var height = img.clientHeight;
-					var x = img.offsetLeft;
-					var y = img.offsetTop;
-					var maxDim = Math.max(width,height);
-					var minDim = Math.min(width,height);
-					var html = images[i].outerHTML;
-
-					html = '<div data-mce-bogus="all" style="position:absolute;user-select:none;top:' + y + 'px;left:'+x+'px;height:' + height + 'px;width:'+ width+'px;">' +
-						'<div data-mce-bogus="all" class="powerpaste-spinner-shim" ></div>' +
-						'<div data-mce-bogus="all" class="powerpaste-spinner-bg" style="font-size:' + minDim/2 + 'px;top:0; left:' + (width/2-minDim/2) + 'px">' +
-						'<div data-mce-bogus="all" class="powerpaste-spinner-slice1">&nbsp;</div><div class="powerpaste-spinner-slice2">&nbsp;</div><div class="powerpaste-spinner-slice3">&nbsp;</div><div class="powerpaste-spinner-slice4">&nbsp;</div><div class="powerpaste-spinner-slice5">&nbsp;</div>'+
-						'</div></div>';
-					var div = document.createElement('div');
-					div.innerHTML = html;
-					div.setAttribute("data-mce-bogus","all");
-
-					if ( !imageSpinnersDiv ){
-						imageSpinnersDiv = document.createElement('div');
-						body.appendChild(imageSpinnersDiv);
-					}
-
-					imageSpinnersDiv.appendChild(div);
-					imageSpinnersDiv = div;
-				}
-			}
-		};
-
-		var config = {
-			d2l_html_editor: that,
-			selector: '#' + this.editorId,
-			external_plugins: this.langTag && this.langTag !== 'en_US' ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
-			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder'+ (this.powerPasteEnabled?' powerpaste':''),
-			toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code d2l_preview | smallscreen',
-			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
-			style_formats: [
-				{title: 'Paragraph', format: 'p'},
-				{title: 'Address', format: 'address'},
-				{title: 'Preformatted', format: 'pre'},
-				{title: 'Header 1', format: 'h1'},
-				{title: 'Header 2', format: 'h2'},
-				{title: 'Header 3', format: 'h3'},
-				{title: 'Header 4', format: 'h4'},
-				{title: 'Header 5', format: 'h5'},
-				{title: 'Header 6', format: 'h6'}
-			],
-			auto_focus: this.autoFocus ? this.editorId : null,
-			browser_spellcheck: true,
-			menubar: false,
-			statusbar: false,
-			fixed_toolbar_container: '#' + this.toolbarId,
-			inline: this.inline ? true : false,
-			document_base_url: this.documentBaseUrl + '/',
-			content_css: contentCss,
-			skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
-			convert_urls: false,
-			relative_urls: false,
-			language_url: this.langTag ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
-			language: this.langTag ? this.langTag : null,
-			directionality: this.langDir,
-			powerpaste_allow_local_images: true,
-			powerpaste_block_drop : false,
-			images_upload_handler: function(blobInfo, replaceImageUrlFunction){
-				var blob = blobInfo.blob();
-				var filename = blobInfo.filename();
-				var client = that.ifrauClient;
-
-				var successCallback = function(newUrl ){
-					replaceImageUrlFunction(newUrl);
-					setTimeout(updateImageUploadSpinners,1);	// need to wait one frame for the urls to be updated before we get rid of the image spinners
-				}
-				var failCallBack = function(){
-					// fail, but we make the url invalid so the user knows something went wrong
-					successCallback("pasteFailed");
-				}
-				function getHost(baseUrl) {
-					var host = /https?:\/\/([^\/]+).*/.exec(baseUrl)[1];
-					return host;
-				}
-				that.fire("d2l-html-editor-image-upload-started");
-				client.request('valenceHost').then( function(valenceHost){
-					superagent.post(valenceHost + '/d2l/api/le/unstable/file/AddTempFile')
-						.use(superagent_auth({trustedHost: getHost(valenceHost)}))
-						.attach('file',blob,filename)
-						.end( function(error,response){
-							if ( !error ){
-								successCallback(response.body);
-							}
-							else{
-								failCallBack();
-							}
-							that.fire('change', {content: that.editor.getContent()});
-							that.fire("d2l-html-editor-image-upload-completed");
-						})
-
-				}, function(reason){
-					failCallBack();
-					that.fire('change', {content: that.editor.getContent()});
-					that.fire("d2l-html-editor-image-upload-completed");
-				});
-
-			},
-			setup: function(editor) {
-				that.editor = editor;
-
-				function translateAccessibility(node) {
-					if (node.nodeType === 1) {
-
-						if (node.hasAttribute('aria-label')) {
-							node.setAttribute('aria-label', tinymce.EditorManager.i18n.translate(node.getAttribute('aria-label'))); // eslint-disable-line no-undef
-						}
-
-						if (node.hasAttribute('alt')) {
-							node.setAttribute('alt', tinymce.EditorManager.i18n.translate(node.getAttribute('alt'))); // eslint-disable-line no-undef
-						}
-
-						node = node.firstElementChild;
-						while (node) {
-							translateAccessibility(node, editor);
-							node = node.nextSibling;
-						}
-					}
-				}
-
-				function passEditorIdTranslate(editorId) {
-					var editorStartNode = document.querySelector('d2l-html-editor[editor-id="' + editorId + '"]');
-					if (editorStartNode) {
-						translateAccessibility(editorStartNode);
-					}
-				}
-
-				function fixButtonLables(editor) {
-					var cont = document.getElementById(editor.id).parentElement;
-
-					var btnDivs = cont.getElementsByClassName('mce-btn');
-					length = btnDivs ? btnDivs.length : -1;
-					for (var i = 0; i < length; i ++) {
-						btnDivs[i].removeAttribute('aria-labelledby');
-					}
-
-					var allBtns = cont.querySelectorAll('.mce-btn > button');
-					length = allBtns ? allBtns.length : -1;
-					for (i = 0; i < length; i ++) {
-						allBtns[i].setAttribute('title', allBtns[i].parentElement.getAttribute('aria-label'));
-					}
-				}
-
-				editor.on('change redo undo', function() {
-					updateImageUploadSpinners();
-					that.fire('change', {content: editor.getContent()});
-				});
-
-
-
-				editor.on('focusin', function(e) {
-					that.fire('focus', e);
-					setTimeout(fixButtonLables, 2000, editor);  // give time for buttons to load
-				});
-
-				editor.on('focusout', function(e) {
-					that.fire('blur', e);
-				});
-
-				editor.on('keyup', function() {
-					// that.element.value = editor.getContent();
-				});
-
-				editor.addButton('fullscreen', {
-					title: 'Open in Full Screen Editor',
-					icon: 'd2l_fullscreen',
-					onclick: function() {
-						that.fire('fullscreen');
-					},
-					onPostRender: function() {
-						passEditorIdTranslate(that.editorId);
-					}
-				});
-
-				editor.addButton('smallscreen', {
-					title: 'Close Full Screen Editor',
-					icon: 'd2l_smallscreen',
-					onclick: function() {
-						editor.execCommand('mceFullScreen');
-						that.fire('restore');
-					},
-					onPostRender: function() {
-						passEditorIdTranslate(that.editorId);
-					}
-				});
-
-				if (!this.inline) {
-					editor.on('init', function() {
-						editor.execCommand('mceFullScreen');
-						editor.getBody().setAttribute('aria-label', tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
-						var container = editor.getContainer();
-						var langTag = container.parentElement.getAttribute('lang-tag');
-						editor.getDoc().querySelector('html').setAttribute('lang', langTag ? langTag : 'en-us');
-
-						var titleNode = document.createElement('title');
-						var textNode = document.createTextNode(tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
-						titleNode.appendChild(textNode);
-
-						var headElement = editor.getDoc().querySelector('head');
-						headElement.appendChild(titleNode);
-
-						var btns = container.querySelectorAll('.mce-colorbutton > button');
-						var length = btns ? btns.length : -1;
-						for (var i = 0; i < length; i ++) {
-							btns[i].setAttribute('role', 'presentation');
-						}
-					});
-				}
-			}
-		};
-
-		tinymce.init(this._extend(this.pluginConfig, config)); // eslint-disable-line no-undef
-
-		// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
-		this.autoFocus = 0;
-	},
-
-	computeToolbarId: function(editorId) {
-		return editorId + '-toolbar';
-	},
-
-	computeHeight: function(totalPadding, rows, lineHeight) {
-		return totalPadding + (lineHeight * rows) + 'rem';
-	}
-});
-
-},{"superagent":29,"superagent-d2l-session-auth":28}],36:[function(require,module,exports){
+},{"./rng":35}],37:[function(require,module,exports){
 (function (global){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -5247,7 +5256,7 @@ Polymer({
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5333,7 +5342,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5420,13 +5429,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":37,"./encode":38}],40:[function(require,module,exports){
+},{"./decode":38,"./encode":39}],41:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6160,7 +6169,7 @@ Url.prototype.parseHost = function() {
   if (host) this.hostname = host;
 };
 
-},{"./util":41,"punycode":36,"querystring":39}],41:[function(require,module,exports){
+},{"./util":42,"punycode":37,"querystring":40}],42:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -6178,4 +6187,4 @@ module.exports = {
   }
 };
 
-},{}]},{},[35]);
+},{}]},{},[1]);
