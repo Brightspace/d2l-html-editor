@@ -248,13 +248,15 @@ Polymer({
 					var height = img.clientHeight;
 					var x = img.offsetLeft;
 					var y = img.offsetTop;
-					var maxDim = Math.max(width,height);
 					var minDim = Math.min(width,height);
+					minDim = Math.min(69,minDim);
 					var html = images[i].outerHTML;
 
 					html = '<div data-mce-bogus="all" style="position:absolute;user-select:none;top:' + y + 'px;left:'+x+'px;height:' + height + 'px;width:'+ width+'px;">' +
 						'<div data-mce-bogus="all" class="powerpaste-spinner-shim" ></div>' +
-						'<div data-mce-bogus="all" class="powerpaste-spinner-bg" style="font-size:' + minDim/2 + 'px;top:0; left:' + (width/2-minDim/2) + 'px">' +
+						'<div data-mce-bogus="all" class="powerpaste-spinner-bg" style="font-size:' + minDim/2 + 'px;'
+						+ 'top:'+ (height/2-minDim/2) + 'px;'
+						+ 'left:' + (width/2-minDim/2) + 'px">' +
 						'<div data-mce-bogus="all" class="powerpaste-spinner-slice1">&nbsp;</div><div class="powerpaste-spinner-slice2">&nbsp;</div><div class="powerpaste-spinner-slice3">&nbsp;</div><div class="powerpaste-spinner-slice4">&nbsp;</div><div class="powerpaste-spinner-slice5">&nbsp;</div>'+
 						'</div></div>';
 					var div = document.createElement('div');
@@ -263,6 +265,7 @@ Polymer({
 
 					if ( !imageSpinnersDiv ){
 						imageSpinnersDiv = document.createElement('div');
+						imageSpinnersDiv.setAttribute("data-mce-bogus","all");
 						body.appendChild(imageSpinnersDiv);
 					}
 
