@@ -89,7 +89,19 @@ Check that file periodically for changes...
 					classString += ' mathmlequation';
 				}
 			}
-			return '<img class="' + classString + '" title="' + title + '" alt="' + altLabel + '" src="/d2l/img/LP/htmlEditor/eq_trans.gif" hspace="5" vspace="5" data-d2l-mathml="' + encodeURIComponent(match) + '" \/>';
+			
+			// remove whitespace between XML tags to minimize query length before encoding
+			var trimmedMml = match.replace(/>\s+</g, "><");
+			var encodedMml = encodeURIComponent(trimmedMml);
+
+			var previewImageSrc = "/wiris/editorservice.aspx/render.png?mml=" + encodedMml;
+			var placeholderImageTitle = "'Preview image not available for this equation'";
+
+			// if there's an error loading preview image, placeholder image will be shown instead
+			var imageHtml = '<img class="' + classString + '" title="' + title + '" alt="' + title + '" src="' + previewImageSrc + '"' 
+				+ ' data-d2l-mathml="' + encodedMml + '" \/>';
+
+			return imageHtml;
 		};
 
 		var appletFunc = function(match) {
