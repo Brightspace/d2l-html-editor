@@ -65,42 +65,36 @@ Check that file periodically for changes...
 		var classString;
 		var func = function(match) {
 
-			// get the title of the equation
-			var title = match.match(/title=(\"|\')([^\"]*)(\"|\')/i);
-			if ((title !== null) && (title.length === 4) && (title[2] !== null)) {
-				title = title[2];
-			} else {
-				title = '';
-			}
 			var annotationRegex = /<annotation encoding="([^"]*)">/gi;
 			var annotationMatch = annotationRegex.exec(match);
-			var altLabel = tinymce.EditorManager.i18n.translate('MathML equation placeholder');
+			var title = tinymce.EditorManager.i18n.translate('MathML');
 			classString = 'equation';
 			if (annotationMatch === null) {
 				classString += ' mathmlequation';
 			} else {
 				if (annotationMatch[1] === 'wiris') {
 					classString += ' graphicalequation';
-					altLabel = tinymce.EditorManager.i18n.translate('Graphical equation placeholder');
+					label = tinymce.EditorManager.i18n.translate('Graphical');
 				} else if (annotationMatch[1] === 'latex') {
 					classString += ' latexequation';
-					altLabel = tinymce.EditorManager.i18n.translate('Latex equation placeholder');
+					label = tinymce.EditorManager.i18n.translate('Latex');
 				} else {
 					classString += ' mathmlequation';
 				}
 			}
+			title = title + ' equation preview image';
 			
 			// remove whitespace between XML tags to minimize query length before encoding
 			var trimmedMml = match.replace(/>\s+</g, "><");
 			var encodedMml = encodeURIComponent(trimmedMml);
-
 			var previewImageSrc = "/wiris/editorservice.aspx/render.png?mml=" + encodedMml;
-			var placeholderImageTitle = "'Preview image not available for this equation'";
 
-			// if there's an error loading preview image, placeholder image will be shown instead
-			var imageHtml = '<img class="' + classString + '" title="' + title + '" alt="' + title + '" src="' + previewImageSrc + '"' 
+			// if the image fails to load due to invalid MML or querystring overflow,
+			// placeholder symbol is rendered in place via style sheet ":before" event
+			var imageHtml = '<img class="' + classString + '" title="' + title + '"' 
+				+ ' src="' + previewImageSrc + '"'
 				+ ' data-d2l-mathml="' + encodedMml + '" \/>';
-
+				
 			return imageHtml;
 		};
 

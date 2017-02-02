@@ -1,4 +1,4 @@
-img.equation:hover, img[data-mce-selected]{
+img.equation:hover, img.equation:hover:before, img[data-mce-selected]{
   background-color: #f2f8fc !important;
 }
 
