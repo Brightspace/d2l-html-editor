@@ -245,6 +245,7 @@ Polymer({
 
 			for ( var i=0; i < images.length; i++ ){
 				if ( images[i].src.startsWith("blob:")){
+					images[i].setAttribute("data-mce-bogus","all");
 					var img = images[i];
 					var width = img.clientWidth;
 					var height = img.clientHeight;
@@ -274,6 +275,9 @@ Polymer({
 
 					imageSpinnersDiv.appendChild(div);
 					imageSpinnersDiv = div;
+				}
+				else {
+					images[i].removeAttribute("data-mce-bogus");
 				}
 			}
 		};
