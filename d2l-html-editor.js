@@ -240,7 +240,7 @@ Polymer({
 			var imageSpinnersDiv = body.querySelector("#d2l-html-editor-image-upload-spinners");
 			if ( imageSpinnersDiv ){
 				imageSpinnersDiv.parentNode.removeChild(imageSpinnersDiv);
-				iamgeSpinnersDiv = null;
+				imageSpinnersDiv = null;
 			}
 
 			for ( var i=0; i < images.length; i++ ){
