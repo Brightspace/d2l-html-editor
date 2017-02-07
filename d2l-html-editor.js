@@ -233,16 +233,19 @@ Polymer({
 		var contentCss = this.inline ? '' : this.cssUrl + ',';
 		contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
 
-		var imageSpinnersDiv;
+
 		var updateImageUploadSpinners=function(){
 			var body = tinymce.activeEditor.getBody();
 			var images = body.getElementsByTagName('img');
+			var imageSpinnersDiv = body.querySelector("#d2l-html-editor-image-upload-spinners");
 			if ( imageSpinnersDiv ){
 				imageSpinnersDiv.parentNode.removeChild(imageSpinnersDiv);
-				imageSpinnersDiv= null;
+				imageSpinnersDiv = null;
 			}
+
 			for ( var i=0; i < images.length; i++ ){
 				if ( images[i].src.startsWith("blob:")){
+					images[i].setAttribute("data-mce-bogus","all");
 					var img = images[i];
 					var width = img.clientWidth;
 					var height = img.clientHeight;
@@ -266,11 +269,15 @@ Polymer({
 					if ( !imageSpinnersDiv ){
 						imageSpinnersDiv = document.createElement('div');
 						imageSpinnersDiv.setAttribute("data-mce-bogus","all");
+						imageSpinnersDiv.setAttribute("id","d2l-html-editor-image-upload-spinners")
 						body.appendChild(imageSpinnersDiv);
 					}
 
 					imageSpinnersDiv.appendChild(div);
 					imageSpinnersDiv = div;
+				}
+				else {
+					images[i].removeAttribute("data-mce-bogus");
 				}
 			}
 		};
