@@ -390,6 +390,11 @@ Polymer({
 				}
 
 				function fixButtonLabels(editor) {
+					var editorElement = document.getElementById(editor.id);
+					if (!editorElement) {
+						return;
+					}
+
 					var cont = document.getElementById(editor.id).parentElement;
 
 					var btnDivs = cont.getElementsByClassName('mce-btn');
