@@ -224,3 +224,7 @@ div.mce-disabled .mce-i-d2l_attributes:before {
 .mce-i-a11y:before {
 	content: url('../d2l-icons/images/html-editor/accessibility-check.svg') !important;
 }
+
+.mce-btn:active .mce-i-a11y, .mce-btn:focus .mce-i-a11y, .mce-btn:hover .mce-i-a11y {
+	content: url('./icons/accessibility-check-highlighted.svg') !important;
+}
