@@ -239,6 +239,10 @@ Polymer({
 
 
 		var updateImageUploadSpinners=function(){
+			if( !tinymce.activeEditor ){
+				return;
+			}
+
 			var body = tinymce.activeEditor.getBody();
 			var images = body.getElementsByTagName('img');
 			var imageSpinnersDiv = body.querySelector("#d2l-html-editor-image-upload-spinners");
