@@ -240,6 +240,10 @@ Polymer({
 
 
 		var updateImageUploadSpinners=function(){
+			if( !tinymce.activeEditor ){
+				return;
+			}
+
 			var body = tinymce.activeEditor.getBody();
 			var images = body.getElementsByTagName('img');
 			var imageSpinnersDiv = body.querySelector("#d2l-html-editor-image-upload-spinners");
@@ -391,6 +395,11 @@ Polymer({
 				}
 
 				function fixButtonLabels(editor) {
+					var editorElement = document.getElementById(editor.id);
+					if (!editorElement) {
+						return;
+					}
+
 					var cont = document.getElementById(editor.id).parentElement;
 
 					var btnDivs = cont.getElementsByClassName('mce-btn');
