@@ -21,7 +21,6 @@ tinymce.addI18n('en_CA',{
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside",
 
 // a11ychecker plugin
-"Prev": "Previous",
 "Accessibility Checker": "Accessibility Checker",
 "No accessibility issues detected.": "No accessibility issues detected.",
 "Issue ": "Issue ",
