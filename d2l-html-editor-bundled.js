@@ -1627,8 +1627,6 @@ Polymer({
 			var http = new XMLHttpRequest();
 			http.open('HEAD', url, false);
 			http.send();
-			// eslint-disable-next-line
-		  console.log(http.status / 100);
 			return Math.floor(http.status / 100) !== 4;
 	},
 
