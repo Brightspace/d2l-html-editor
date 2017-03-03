@@ -2,7 +2,8 @@
 
 tinymce.addI18n('en_CA',{
 "Add Image": "Add Image",
-"Insert Stuff": "Insert Stuff", "Add Link": "Add Link",
+"Insert Stuff": "Insert Stuff",
+"Add Link": "Add Link",
 "Graphical equation": "Graphical equation",
 "Graphical equation placeholder": "Graphical equation placeholder",
 "MathML equation": "MathML equation",
