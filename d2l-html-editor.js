@@ -386,7 +386,7 @@ Polymer({
 				}
 
 				function fixButtonLables(editor) {
-					var cont = document.getElementById(editor.id).parentElement;
+					/*var cont = document.getElementById(editor.id).parentElement;
 
 					var btnDivs = cont.getElementsByClassName('mce-btn');
 					length = btnDivs ? btnDivs.length : -1;
@@ -398,7 +398,8 @@ Polymer({
 					length = allBtns ? allBtns.length : -1;
 					for (i = 0; i < length; i ++) {
 						allBtns[i].setAttribute('title', allBtns[i].parentElement.getAttribute('aria-label'));
-					}
+						allBtns[i].setAttribute('tooltip', "");
+					} */
 				}
 
 				editor.on('change redo undo', function() {
