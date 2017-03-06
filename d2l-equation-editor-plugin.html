@@ -51,7 +51,7 @@ Check that file periodically for changes...
 
 	function convertToMath(obj) {
 		var func = function(match) {
-					// find the MathML
+			// find the MathML
 			var hackRegEx = /^<img[^>]*\s+data-d2l-mathml=\"([^\"]*)\"(.|\n|\r)*/i;
 			var hackResult = hackRegEx.exec(match);
 			var hack = decodeURIComponent(hackResult[1]);
@@ -68,25 +68,35 @@ Check that file periodically for changes...
 			var annotationRegex = /<annotation encoding="([^"]*)">/gi;
 			var annotationMatch = annotationRegex.exec(match);
 			var title = tinymce.EditorManager.i18n.translate('MathML');
+			
+			var removeAnnotation = false;
 			classString = 'equation';
 			if (annotationMatch === null) {
 				classString += ' mathmlequation';
+				removeAnnotation = true;
 			} else {
 				if (annotationMatch[1] === 'wiris') {
 					classString += ' graphicalequation';
-					label = tinymce.EditorManager.i18n.translate('Graphical');
+					title = tinymce.EditorManager.i18n.translate('Graphical');
 				} else if (annotationMatch[1] === 'latex') {
 					classString += ' latexequation';
-					label = tinymce.EditorManager.i18n.translate('Latex');
+					title = tinymce.EditorManager.i18n.translate('Latex');
 				} else {
 					classString += ' mathmlequation';
+					removeAnnotation = true;
 				}
 			}
 			title = title + ' equation preview image';
 			
-			// remove whitespace between XML tags to minimize query length before encoding
+			// remove whitespace and annotation markup to reduce query length
 			var trimmedMml = match.replace(/>\s+</g, "><");
+			if (removeAnnotation) {
+				trimmedMml = trimmedMml.replace(/<annotation[\s\S]*<\/annotation>/g, "");
+			} else {
+				trimmedMml = trimmedMml.replace(/;\s+&/g, ";&");
+			}
 			var encodedMml = encodeURIComponent(trimmedMml);
+			
 			var previewImageSrc = "/wiris/editorservice.aspx/render.png?mml=" + encodedMml;
 
 			// if the image fails to load due to invalid MML or querystring overflow,
