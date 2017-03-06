@@ -1633,10 +1633,8 @@ Polymer({
 		http.send();
 		if (Math.floor(http.status / 100) !== 4 && Math.floor(http.status / 100) !== 5) {
 			this.langAvailable.bool = true;
-			console.log(this.langAvailable);
 		} else {
 			this.langAvailable.bool = false;
-			console.log(this.langAvailable);
 		}
 	},
 
@@ -1716,7 +1714,6 @@ Polymer({
 
 	_initTinyMCE: function() {
 		var that = this;
-		console.log(this.langAvailable.bool);
 		if (this.langAvailable.bool === undefined || this.langAvailable.bool === null) {
 			this._checkIfLangExists(this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js');
 		}
