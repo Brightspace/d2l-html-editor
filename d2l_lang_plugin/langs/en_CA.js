@@ -3,6 +3,9 @@
 tinymce.addI18n('en_CA',{
 "Add Image": "Add Image",
 "Insert Stuff": "Insert Stuff",
+"More Text Styles": "More Text Styles",
+"More Insert Options": "More Insert Options",
+"More Paragraph Formatting": "More Paragraph Formatting",
 "Add Link": "Add Link",
 "Graphical equation": "Graphical equation",
 "Graphical equation placeholder": "Graphical equation placeholder",
