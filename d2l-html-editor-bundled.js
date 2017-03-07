@@ -258,7 +258,7 @@ Polymer({
 
 
 		var updateImageUploadSpinners=function(){
-			if( !tinymce.activeEditor ){
+			if (!tinymce.activeEditor){
 				return;
 			}
 
