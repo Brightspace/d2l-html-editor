@@ -1880,12 +1880,6 @@ Polymer({
 					for (var i = 0; i < length; i ++) {
 						btnDivs[i].removeAttribute('aria-labelledby');
 					}
-
-					var allBtns = cont.querySelectorAll('.mce-btn > button');
-					length = allBtns ? allBtns.length : -1;
-					for (i = 0; i < length; i ++) {
-						//allBtns[i].setAttribute('title', allBtns[i].parentElement.getAttribute('aria-label'));
-					}
 				}
 
 				editor.on('change redo undo', function() {
@@ -3571,7 +3565,7 @@ module.exports._resetFallback = function resetFallback () {
 	addEventListener(window, 'message', receiver);
 	chkLateLoaded();
 
-	
+
 
 })();
 
@@ -4599,7 +4593,7 @@ function race(iterable) {
  * TODO: combatible error handling?
  */
 
-module.exports = function(arr, fn, initial){  
+module.exports = function(arr, fn, initial){
   var idx = 0;
   var len = arr.length;
   var curr = arguments.length == 3
@@ -4609,7 +4603,7 @@ module.exports = function(arr, fn, initial){
   while (idx < len) {
     curr = fn.call(null, curr, arr[idx], ++idx, arr);
   }
-  
+
   return curr;
 };
 },{}],35:[function(require,module,exports){
@@ -5280,7 +5274,7 @@ Request.prototype.type = function(type){
 };
 
 /**
- * Set responseType to `val`. Presently valid responseTypes are 'blob' and 
+ * Set responseType to `val`. Presently valid responseTypes are 'blob' and
  * 'arraybuffer'.
  *
  * Examples:
