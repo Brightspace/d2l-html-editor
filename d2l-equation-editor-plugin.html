@@ -102,6 +102,7 @@ Check that file periodically for changes...
 			// if the image fails to load due to invalid MML or querystring overflow,
 			// placeholder symbol is rendered in place via style sheet ":before" event
 			var imageHtml = '<img class="' + classString + '" title="' + title + '"' 
+				+ ' alt="" '
 				+ ' src="' + previewImageSrc + '"'
 				+ ' data-d2l-mathml="' + encodedMml + '" \/>';
 				
