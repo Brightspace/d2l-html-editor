@@ -1714,6 +1714,7 @@ Polymer({
 
 	_initTinyMCE: function() {
 		var that = this;
+
 		if (this.langAvailable.bool === undefined || this.langAvailable.bool === null) {
 			this._checkIfLangExists(this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js');
 		}
@@ -1845,7 +1846,6 @@ Polymer({
 			},
 			setup: function(editor) {
 				that.editor = editor;
-
 				function translateAccessibility(node) {
 					if (node.nodeType === 1) {
 
@@ -1888,12 +1888,33 @@ Polymer({
 					}
 				}
 
-				editor.on('change redo undo', function() {
-					updateImageUploadSpinners();
-					that.fire('change', {content: editor.getContent()});
+				function updateTableAttributes(editor) {
+					var attributeValue;
+					var cont = document.getElementById(editor.id).parentElement;
+					var tables = cont.getElementsByTagName('table');
+					console.log(tables);
+					length = tables ? tables.length : -1;
+					for (var i = 0; i < length; i ++) {
+						if (tables[i].getAttribute('border') === null || tables[i].getAttribute('border') === '' || tables[i].getAttribute('border') === '0') {
+							console.log("Add a border attribute");
+							tables[i].setAttribute('border', 1);
+						}
+						attributeValue = tables[i].getAttribute('data-mce-style');
+						if (!attributeValue.includes('border-style: solid;')) {
+							tables[i].setAttribute('data-mce-style', attributeValue + 'border-style: solid;');
+						}
+					}
+				}
+
+				editor.on('setcontent', function() {
+					updateTableAttributes(editor);
 				});
 
-
+				editor.on('change redo undo', function() {
+					updateImageUploadSpinners();
+					updateTableAttributes(editor);
+					that.fire('change', {content: editor.getContent()});
+				});
 
 				editor.on('focusin', function(e) {
 					that.fire('focus', e);
