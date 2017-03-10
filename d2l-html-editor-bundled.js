@@ -2473,10 +2473,8 @@ module.exports._resetFallback = function resetFallback () {
  */
 
 
-;(function(undefined) {
+;(function(window, undefined) {
 	'use strict';
-
-	if(typeof window === 'undefined') return; // don't run for server side render
 
 	var
 		autoResize            = true,
@@ -3519,7 +3517,7 @@ module.exports._resetFallback = function resetFallback () {
 		}
 
 		function isMiddleTier(){
-			return !(typeof module !== 'undefined' && module.exports) && ('iFrameResize' in window);
+			return ('iFrameResize' in window);
 		}
 
 		function isInitMsg(){
@@ -3566,7 +3564,7 @@ module.exports._resetFallback = function resetFallback () {
 
 	
 
-})();
+})(window || {});
 
 },{}],19:[function(require,module,exports){
 'use strict';
@@ -4444,7 +4442,7 @@ handlers.reject = function (self, error) {
 function getThen(obj) {
   // Make sure we only access the accessor once as required by the spec
   var then = obj && obj.then;
-  if (obj && (typeof obj === 'object' || typeof obj === 'function') && typeof then === 'function') {
+  if (obj && typeof obj === 'object' && typeof then === 'function') {
     return function appyThen() {
       then.apply(obj, arguments);
     };
