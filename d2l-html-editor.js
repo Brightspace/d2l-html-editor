@@ -82,6 +82,10 @@ Polymer({
 			type: String,
 			value: null
 		},
+		langAvailable: {
+			type: Object,
+			value: {}
+		},
 		langTag: {
 			type: String,
 			value: null
@@ -159,9 +163,10 @@ Polymer({
 		http.open('HEAD', url, false);
 		http.send();
 		if (Math.floor(http.status / 100) !== 4 && Math.floor(http.status / 100) !== 5) {
-			return true;
+			this.langAvailable.bool = true;
+		} else {
+			this.langAvailable.bool = false;
 		}
-		return false;
 	},
 
 	_configurePlugins: function(client) {
@@ -240,7 +245,9 @@ Polymer({
 
 	_initTinyMCE: function() {
 		var that = this;
-		var langFileExists = this._checkIfLangExists(this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js');
+		if (this.langAvailable.bool === undefined || this.langAvailable.bool === null) {
+			this._checkIfLangExists(this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js');
+		}
 		var contentCss = this.inline ? '' : this.cssUrl + ',';
 		contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
 
@@ -296,7 +303,7 @@ Polymer({
 		var config = {
 			d2l_html_editor: that,
 			selector: '#' + this.editorId,
-			external_plugins: this.langTag && this.langTag !== 'en_US' && langFileExists ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
+			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable.bool ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
 			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder'+ (this.powerPasteEnabled?' powerpaste':''),
 			toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code d2l_preview | smallscreen',
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
@@ -322,8 +329,8 @@ Polymer({
 			skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
 			convert_urls: false,
 			relative_urls: false,
-			language_url: this.langTag && langFileExists ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
-			language: this.langTag && langFileExists ? this.langTag : null,
+			language_url: this.langTag && this.langAvailable.bool ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
+			language: this.langTag && this.langAvailable.bool ? this.langTag : null,
 			directionality: this.langDir,
 			powerpaste_allow_local_images: true,
 			powerpaste_block_drop : false,
@@ -403,12 +410,6 @@ Polymer({
 					length = btnDivs ? btnDivs.length : -1;
 					for (var i = 0; i < length; i ++) {
 						btnDivs[i].removeAttribute('aria-labelledby');
-					}
-
-					var allBtns = cont.querySelectorAll('.mce-btn > button');
-					length = allBtns ? allBtns.length : -1;
-					for (i = 0; i < length; i ++) {
-						allBtns[i].setAttribute('title', allBtns[i].parentElement.getAttribute('aria-label'));
 					}
 				}
 
