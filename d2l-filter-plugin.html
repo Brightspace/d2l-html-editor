@@ -22,6 +22,10 @@
 								return service.filterHtml(unfilteredContent);
 							}).then(function(filteredContent) {
 								editor.setContent(filteredContent);
+								// This call is necessary for the undo button to work properly, otherwise the undo button
+								// can undo the saved content as well.
+								editor.undoManager.clear();
+								
 								// After initial initialization, clear content. The web component may become
 								// detached due to React reordering.	This will cause a re-init, but we want
 								// it to re-init from the current content.	We will look at preventing

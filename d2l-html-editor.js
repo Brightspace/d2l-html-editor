@@ -424,12 +424,6 @@ Polymer({
 					for (var i = 0; i < length; i ++) {
 						btnDivs[i].removeAttribute('aria-labelledby');
 					}
-
-					var allBtns = cont.querySelectorAll('.mce-btn > button');
-					length = allBtns ? allBtns.length : -1;
-					for (i = 0; i < length; i ++) {
-						allBtns[i].setAttribute('title', allBtns[i].parentElement.getAttribute('aria-label'));
-					}
 				}
 
 				editor.on('change redo undo', function() {
