@@ -1888,14 +1888,30 @@ Polymer({
 					}
 				}
 
-				function updateTableAttributes(editor) {
-					var attributeValue;
+				function findTables(editor) {
+					var tables;
 					var cont = document.getElementById(editor.id).parentElement;
-					var tables = cont.getElementsByTagName('table');
-					console.log(tables);
+					console.log('Content');
+					console.log(cont);
+					var iframes = cont.getElementsByTagName('iframe');
+					if(iframes.length > 0) {
+						for (var i = 0; i < length; i++) {
+							console.log('In an iframe');
+							tables = iframes[i].contentDocument.getElementsByTagName("table")
+							updateTableAttributes(tables);
+						}
+					} else {
+						tables = cont.getElementsByTagName('table');
+						updateTableAttributes(tables);
+					}
+				}
+
+				function updateTableAttributes(tables) {
+					var attributeValue;
 					length = tables ? tables.length : -1;
 					for (var i = 0; i < length; i ++) {
-						if (tables[i].getAttribute('border') === null || tables[i].getAttribute('border') === '' || tables[i].getAttribute('border') === '0') {
+						attributeValue = tables[i].getAttribute('style');
+						if ((tables[i].getAttribute('border') === null || tables[i].getAttribute('border') === '') && attributeValue.includes('border-color')) {
 							console.log("Add a border attribute");
 							tables[i].setAttribute('border', 1);
 						}
@@ -1907,12 +1923,13 @@ Polymer({
 				}
 
 				editor.on('setcontent', function() {
-					updateTableAttributes(editor);
+					console.log("HELLO SETCONTENT");
+					findTables(editor);
 				});
 
 				editor.on('change redo undo', function() {
 					updateImageUploadSpinners();
-					updateTableAttributes(editor);
+					findTables(editor);
 					that.fire('change', {content: editor.getContent()});
 				});
 
@@ -1957,6 +1974,7 @@ Polymer({
 						editor.execCommand('mceFullScreen');
 						editor.getBody().setAttribute('aria-label', tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
 						var container = editor.getContainer();
+						console.log(container);
 						var langTag = container.parentElement.getAttribute('lang-tag');
 						editor.getDoc().querySelector('html').setAttribute('lang', langTag ? langTag : 'en-us');
 
