@@ -1891,13 +1891,10 @@ Polymer({
 				function findTables(editor) {
 					var tables;
 					var cont = document.getElementById(editor.id).parentElement;
-					console.log('Content');
-					console.log(cont);
 					var iframes = cont.getElementsByTagName('iframe');
-					if(iframes.length > 0) {
+					if (iframes.length > 0) {
 						for (var i = 0; i < length; i++) {
-							console.log('In an iframe');
-							tables = iframes[i].contentDocument.getElementsByTagName("table")
+							tables = iframes[i].contentDocument.getElementsByTagName('table');
 							updateTableAttributes(tables);
 						}
 					} else {
@@ -1907,16 +1904,17 @@ Polymer({
 				}
 
 				function updateTableAttributes(tables) {
-					var attributeValue;
+					var attributeValue, tableBorder;
 					length = tables ? tables.length : -1;
 					for (var i = 0; i < length; i ++) {
 						attributeValue = tables[i].getAttribute('style');
-						if ((tables[i].getAttribute('border') === null || tables[i].getAttribute('border') === '') && attributeValue.includes('border-color')) {
-							console.log("Add a border attribute");
+						tableBorder = tables[i].getAttribute('border');
+						if ((tableBorder === null || tableBorder === '') && attributeValue.includes('border-color')) {
 							tables[i].setAttribute('border', 1);
 						}
 						attributeValue = tables[i].getAttribute('data-mce-style');
-						if (!attributeValue.includes('border-style: solid;')) {
+						tableBorder = tables[i].getAttribute('border');
+						if (!(tableBorder === null || tableBorder === '' || tableBorder === 0) && !attributeValue.includes('border-style: solid;')) {
 							tables[i].setAttribute('data-mce-style', attributeValue + 'border-style: solid;');
 						}
 					}
