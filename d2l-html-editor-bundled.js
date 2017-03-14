@@ -1893,7 +1893,7 @@ Polymer({
 					var cont = document.getElementById(editor.id).parentElement;
 					var iframes = cont.getElementsByTagName('iframe');
 					if (iframes.length > 0) {
-						for (var i = 0; i < length; i++) {
+						for (var i = 0; i < iframes.length; i++) {
 							tables = iframes[i].contentDocument.getElementsByTagName('table');
 							updateTableAttributes(tables);
 						}
@@ -1909,19 +1909,22 @@ Polymer({
 					for (var i = 0; i < length; i ++) {
 						attributeValue = tables[i].getAttribute('style');
 						tableBorder = tables[i].getAttribute('border');
-						if ((tableBorder === null || tableBorder === '') && attributeValue.includes('border-color')) {
+						if ((tableBorder === null || tableBorder === '') && attributeValue && attributeValue.includes('border-color')) {
 							tables[i].setAttribute('border', 1);
+							tables[i].setAttribute('class', '');
+						} else if (tableBorder < 0) {
+							tables[i].setAttribute('border', 0);
+							tables[i].setAttribute('class', 'mce-item-table');
 						}
 						attributeValue = tables[i].getAttribute('data-mce-style');
 						tableBorder = tables[i].getAttribute('border');
-						if (!(tableBorder === null || tableBorder === '' || tableBorder === 0) && !attributeValue.includes('border-style: solid;')) {
+						if (!(tableBorder === null || tableBorder === '' || tableBorder === 0) && attributeValue && !attributeValue.includes('border-style: solid;')) {
 							tables[i].setAttribute('data-mce-style', attributeValue + 'border-style: solid;');
 						}
 					}
 				}
 
 				editor.on('setcontent', function() {
-					console.log("HELLO SETCONTENT");
 					findTables(editor);
 				});
 
@@ -1972,7 +1975,6 @@ Polymer({
 						editor.execCommand('mceFullScreen');
 						editor.getBody().setAttribute('aria-label', tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
 						var container = editor.getContainer();
-						console.log(container);
 						var langTag = container.parentElement.getAttribute('lang-tag');
 						editor.getDoc().querySelector('html').setAttribute('lang', langTag ? langTag : 'en-us');
 
