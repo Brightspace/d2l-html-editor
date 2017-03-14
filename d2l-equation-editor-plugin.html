@@ -86,7 +86,7 @@ Check that file periodically for changes...
 					removeAnnotation = true;
 				}
 			}
-			title = title + ' equation preview image';
+			title = title + ' ' + tinymce.EditorManager.i18n.translate('equation preview image');
 			
 			// remove whitespace and annotation markup to reduce query length
 			var trimmedMml = match.replace(/>\s+</g, "><");
