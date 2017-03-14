@@ -97,6 +97,10 @@ Polymer({
 		powerPasteEnabled: {
 			type: Number,
 			value: 0
+		},
+		a11ycheckerEnabled: {
+			type: Number,
+			value: 0
 		}
 	},
 
@@ -253,6 +257,10 @@ Polymer({
 
 
 		var updateImageUploadSpinners=function(){
+			if (!tinymce.activeEditor){
+				return;
+			}
+
 			var body = tinymce.activeEditor.getBody();
 			var images = body.getElementsByTagName('img');
 			var imageSpinnersDiv = body.querySelector("#d2l-html-editor-image-upload-spinners");
@@ -304,8 +312,8 @@ Polymer({
 			d2l_html_editor: that,
 			selector: '#' + this.editorId,
 			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable.bool ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
-			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder'+ (this.powerPasteEnabled?' powerpaste':''),
-			toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code d2l_preview | smallscreen',
+			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':''),
+			toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled?' a11ycheck':'') + ' d2l_preview | smallscreen',
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 			style_formats: [
 				{title: 'Paragraph', format: 'p'},
@@ -403,7 +411,12 @@ Polymer({
 					}
 				}
 
-				function fixButtonLables(editor) {
+				function fixButtonLabels(editor) {
+					var editorElement = document.getElementById(editor.id);
+					if (!editorElement) {
+						return;
+					}
+
 					var cont = document.getElementById(editor.id).parentElement;
 
 					var btnDivs = cont.getElementsByClassName('mce-btn');
@@ -422,7 +435,7 @@ Polymer({
 
 				editor.on('focusin', function(e) {
 					that.fire('focus', e);
-					setTimeout(fixButtonLables, 2000, editor);  // give time for buttons to load
+					setTimeout(fixButtonLabels, 2000, editor);  // give time for buttons to load
 				});
 
 				editor.on('focusout', function(e) {

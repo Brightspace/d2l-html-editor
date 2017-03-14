@@ -1,6 +1,6 @@
 {
   "name": "d2l-html-editor",
-  "version": "0.0.82",
+  "version": "0.0.85",
   "authors": [
     "Anonymous <anonymous@example.com>"
   ],
@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
-    "d2l-icons": "git+ssh://git@github.com/Brightspace/d2l-icons-ui.git#^v2.2.0"
+    "d2l-icons": "git+ssh://git@github.com/Brightspace/d2l-icons-ui.git#^v3.1.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
