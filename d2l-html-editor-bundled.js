@@ -250,6 +250,7 @@ Polymer({
 
 	_initTinyMCE: function() {
 		var that = this;
+
 		if (this.langAvailable.bool === undefined || this.langAvailable.bool === null) {
 			this._checkIfLangExists(this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js');
 		}
@@ -385,7 +386,6 @@ Polymer({
 			},
 			setup: function(editor) {
 				that.editor = editor;
-
 				function translateAccessibility(node) {
 					if (node.nodeType === 1) {
 
@@ -427,12 +427,51 @@ Polymer({
 					}
 				}
 
-				editor.on('change redo undo', function() {
-					updateImageUploadSpinners();
-					that.fire('change', {content: editor.getContent()});
+				function findTables(editor) {
+					var tables;
+					var cont = document.getElementById(editor.id).parentElement;
+					var iframes = cont.getElementsByTagName('iframe');
+					if (iframes.length > 0) {
+						for (var i = 0; i < iframes.length; i++) {
+							tables = iframes[i].contentDocument.getElementsByTagName('table');
+							updateTableAttributes(tables);
+						}
+					} else {
+						tables = cont.getElementsByTagName('table');
+						updateTableAttributes(tables);
+					}
+				}
+
+				function updateTableAttributes(tables) {
+					var attributeValue, tableBorder;
+					length = tables ? tables.length : -1;
+					for (var i = 0; i < length; i ++) {
+						attributeValue = tables[i].getAttribute('style');
+						tableBorder = tables[i].getAttribute('border');
+						if ((tableBorder === null || tableBorder === '') && attributeValue && attributeValue.includes('border-color')) {
+							tables[i].setAttribute('border', 1);
+							tables[i].setAttribute('class', '');
+						} else if (tableBorder < 0) {
+							tables[i].setAttribute('border', 0);
+							tables[i].setAttribute('class', 'mce-item-table');
+						}
+						attributeValue = tables[i].getAttribute('data-mce-style');
+						tableBorder = tables[i].getAttribute('border');
+						if (!(tableBorder === null || tableBorder === '' || tableBorder === 0) && attributeValue && !attributeValue.includes('border-style: solid;')) {
+							tables[i].setAttribute('data-mce-style', attributeValue + 'border-style: solid;');
+						}
+					}
+				}
+
+				editor.on('setcontent', function() {
+					findTables(editor);
 				});
 
-
+				editor.on('change redo undo', function() {
+					updateImageUploadSpinners();
+					findTables(editor);
+					that.fire('change', {content: editor.getContent()});
+				});
 
 				editor.on('focusin', function(e) {
 					that.fire('focus', e);
