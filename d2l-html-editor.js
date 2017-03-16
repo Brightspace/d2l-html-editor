@@ -427,6 +427,9 @@ Polymer({
 				}
 
 				function findTables(editor) {
+					if (!document.getElementById(editor.id)) {
+						return;
+					}
 					var tables;
 					var cont = document.getElementById(editor.id).parentElement;
 					var iframes = cont.getElementsByTagName('iframe');
