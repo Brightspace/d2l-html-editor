@@ -446,8 +446,8 @@ Polymer({
 					length = tables ? tables.length : -1;
 					for (var i = 0; i < length; i ++) {
 						attributeValue = tables[i].getAttribute('style');
-						tableBorder = tables[i].getAttribute('border');
-						if ((tableBorder === null || tableBorder === '') && attributeValue && attributeValue.includes('border-color')) {
+						tableBorder = parseFloat(tables[i].getAttribute('border'));
+						if (isNaN(tableBorder) && attributeValue && attributeValue.indexOf('border-color') > -1) {
 							tables[i].setAttribute('border', 1);
 							tables[i].setAttribute('class', '');
 						} else if (tableBorder < 0) {
@@ -455,9 +455,12 @@ Polymer({
 							tables[i].setAttribute('class', 'mce-item-table');
 						}
 						attributeValue = tables[i].getAttribute('data-mce-style');
-						tableBorder = tables[i].getAttribute('border');
-						if (!(tableBorder === null || tableBorder === '' || tableBorder === 0) && attributeValue && !attributeValue.includes('border-style: solid;')) {
+						tableBorder = parseFloat(tables[i].getAttribute('border'));
+						if (!(isNaN(tableBorder) || tableBorder === 0) && attributeValue && attributeValue.indexOf('border-style: solid;') === -1) {
 							tables[i].setAttribute('data-mce-style', attributeValue + 'border-style: solid;');
+						} else if (tableBorder === 0 && attributeValue && attributeValue.indexOf('border-style: solid;') > -1) {
+							attributeValue = attributeValue.replace('border-style: solid;', '');
+							tables[i].setAttribute('data-mce-style', attributeValue);
 						}
 					}
 				}
