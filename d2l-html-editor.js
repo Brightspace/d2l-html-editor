@@ -98,6 +98,10 @@ Polymer({
 			type: Number,
 			value: 0
 		},
+		powerPasteFormatting: {
+			type: String,
+			value: null
+		},
 		a11ycheckerEnabled: {
 			type: Number,
 			value: 0
@@ -341,6 +345,7 @@ Polymer({
 			language_url: this.langTag && this.langAvailable.bool ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
 			language: this.langTag && this.langAvailable.bool ? this.langTag : null,
 			directionality: this.langDir,
+			powerpaste_word_import: this.powerPasteFormatting,
 			powerpaste_allow_local_images: true,
 			powerpaste_block_drop : false,
 			images_upload_handler: function(blobInfo, replaceImageUrlFunction){
