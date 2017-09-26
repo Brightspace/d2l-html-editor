@@ -477,10 +477,10 @@ Polymer({
 					findTables(editor);
 				});
 
-				editor.on('change redo undo', function() {
+				editor.on('change redo undo', function( event ) {
 					updateImageUploadSpinners();
 					findTables(editor);
-					that.fire('change', {content: editor.getContent()});
+					that.fire('change', {content: event.level.content});
 				});
 
 				editor.on('focusin', function(e) {
