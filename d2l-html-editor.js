@@ -213,7 +213,12 @@ Polymer({
 	// We cannot cleanup in detached because React seems to cause the web component
 	// to detach/attach during move operations
 	cleanup: function() {
-		tinymce.remove(tinymce.EditorManager.get(this.editorId)); // eslint-disable-line no-undef
+		let editor = tinymce.EditorManager.get(this.editorId);
+		
+		// prevent save before remove, since it throws an exception when the HTML content contains a table
+		editor.save = function(){};
+		editor.remove();
+		
 		this.client = null;
 	},
 
