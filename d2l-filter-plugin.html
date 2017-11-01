@@ -19,6 +19,9 @@
 
 						if (unfilteredContent) {
 							client.getService('convert-to-viewable-html', '0.1').then(function(service) {
+								if ( editor.getParam('d2l_html_editor').allowUnsafe ) {
+									return unfilteredContent;
+								}
 								return service.filterHtml(unfilteredContent);
 							}).then(function(filteredContent) {
 								editor.setContent(filteredContent);
