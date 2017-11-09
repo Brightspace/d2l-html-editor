@@ -325,7 +325,7 @@
 									var href = link.substring( hrefStart+1, link.indexOf( "\"", hrefStart+1 ) );
 									href = editor.documentBaseURI.toAbsolute( href );
 									customLinks.push( href );
-									editor.dom.loadCSS( href );
+									editor.contentCSS.push( href );
 								}
 							}
 						}
@@ -406,10 +406,7 @@
 							editorHead.removeChild( unusedHeadNodes[i] );
 						}
 
-						var stylesArray = headContent.match( /<style[^>]*>(.|\n|\r)*?<\/style>/gi );
-						if ( stylesArray == null || stylesArray.length == 0 ) {
-							return;
-						}
+						var stylesArray = headContent.match( /<style[^>]*>(.|\n|\r)*?<\/style>/gi ) || [];
 
 						for ( var i=0; i<stylesArray.length; i++ ) {
 							var style = stylesArray[i];
@@ -419,6 +416,14 @@
 								editorHead.appendChild(tempNode.childNodes[0]);
 							}
 						}
+
+						// Add desired styles back into the document
+						editor.contentCSS.forEach( function( cssUrl ) {
+							var linkTag = editor.getDoc().createElement('link');
+							linkTag.rel = 'stylesheet';
+							linkTag.href = cssUrl;
+							editorHead.appendChild( linkTag );
+						});
 
 						return;
 					}
