@@ -21,7 +21,8 @@ Polymer({
 		window.D2LHtmlEditor.PolymerBehaviors.Preview,
 		window.D2LHtmlEditor.PolymerBehaviors.XsplConverter,
 		window.D2LHtmlEditor.PolymerBehaviors.Filter,
-		window.D2LHtmlEditor.PolymerBehaviors.Placeholder
+		window.D2LHtmlEditor.PolymerBehaviors.Placeholder,
+		window.D2LHtmlEditor.PolymerBehaviors.Fullpage
 	],
 
 	/**
@@ -105,6 +106,10 @@ Polymer({
 		a11ycheckerEnabled: {
 			type: Number,
 			value: 0
+		},
+		allowUnsafe: {
+			type: Boolean,
+			value: false
 		}
 	},
 
@@ -213,7 +218,12 @@ Polymer({
 	// We cannot cleanup in detached because React seems to cause the web component
 	// to detach/attach during move operations
 	cleanup: function() {
-		tinymce.remove(tinymce.EditorManager.get(this.editorId)); // eslint-disable-line no-undef
+		var editor = tinymce.EditorManager.get(this.editorId);
+		
+		// prevent save before remove, since it throws an exception when the HTML content contains a table
+		editor.save = function(){};
+		editor.remove();
+		
 		this.client = null;
 	},
 
@@ -317,7 +327,7 @@ Polymer({
 			d2l_html_editor: that,
 			selector: '#' + this.editorId,
 			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable.bool ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
-			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':''),
+			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link d2l_fullpage autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':''),
 			toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled?' a11ycheck':'') + ' d2l_preview | smallscreen',
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 			style_formats: [
@@ -337,6 +347,7 @@ Polymer({
 			statusbar: false,
 			fixed_toolbar_container: '#' + this.toolbarId,
 			inline: this.inline ? true : false,
+			extended_valid_elements: 'span[*]' + this.allowUnsafe ? ',script[type|src]' : '',
 			document_base_url: this.documentBaseUrl + '/',
 			content_css: contentCss,
 			skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
@@ -483,10 +494,10 @@ Polymer({
 					findTables(editor);
 				});
 
-				editor.on('change redo undo', function() {
+				editor.on('change redo undo', function( event ) {
 					updateImageUploadSpinners();
 					findTables(editor);
-					that.fire('change', {content: editor.getContent()});
+					that.fire('change', {content: event.level.content});
 				});
 
 				editor.on('focusin', function(e) {
