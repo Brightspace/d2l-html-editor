@@ -451,8 +451,14 @@ Polymer({
 					var iframes = cont.getElementsByTagName('iframe');
 					if (iframes.length > 0) {
 						for (var i = 0; i < iframes.length; i++) {
-							tables = iframes[i].contentDocument.getElementsByTagName('table');
-							updateTableAttributes(tables);
+							try {
+								tables = iframes[i].contentDocument.getElementsByTagName('table');
+								updateTableAttributes(tables);
+							} catch (e) {
+								/*This is being left empty, as we don't want to pollute the console log, and don't currently have a means of keeping track of logged exceptions. 
+								This try-catch was needed to catch exceptions related to attempting to check the contentDocument of cross-origin iframes, which was a problem
+								in the non full-screen question editor text areas (specifically as a result of issues with Kaltura videos).*/
+							}
 						}
 					} else {
 						tables = cont.getElementsByTagName('table');
