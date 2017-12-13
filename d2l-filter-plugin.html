@@ -33,6 +33,9 @@
 								//until there is already an undo action in the undomanager)
 								editor.undoManager.add();
 
+								// Focus textarea to ensure toolbar is currently showing correct font
+								editor.fire('focusin');
+
 								// After initial initialization, clear content. The web component may become
 								// detached due to React reordering.	This will cause a re-init, but we want
 								// it to re-init from the current content.	We will look at preventing
