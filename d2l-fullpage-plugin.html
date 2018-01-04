@@ -354,11 +354,6 @@
 						var unusedHeadNodes = [];
 						for ( var i=0; i<editorHead.childNodes.length; i++ ) {
 
-							// just remove existing styles since we will recreate them
-							if ( editorHead.childNodes[i].tagName.toLowerCase() == 'style' ) {
-								unusedHeadNodes.push( editorHead.childNodes[i] );
-							}
-
 							// remove linked CSS if it has been removed
 							if ( ( editorHead.childNodes[i].tagName.toLowerCase() == 'link' ) && ( editorHead.childNodes[i].getAttribute( 'rel' ) == 'stylesheet' ) ) {
 								var href = editorHead.childNodes[i].href;
