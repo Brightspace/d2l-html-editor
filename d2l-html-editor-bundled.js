@@ -1579,6 +1579,10 @@ Polymer({
 		allowUnsafe: {
 			type: Boolean,
 			value: false
+		},
+		fullpageEnabled: {
+			type: Boolean,
+			value: true
 		}
 	},
 
@@ -1688,11 +1692,11 @@ Polymer({
 	// to detach/attach during move operations
 	cleanup: function() {
 		var editor = tinymce.EditorManager.get(this.editorId);
-		
+
 		// prevent save before remove, since it throws an exception when the HTML content contains a table
 		editor.save = function(){};
 		editor.remove();
-		
+
 		this.client = null;
 	},
 
@@ -1796,7 +1800,7 @@ Polymer({
 			d2l_html_editor: that,
 			selector: '#' + this.editorId,
 			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable.bool ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
-			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link d2l_fullpage autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':''),
+			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':''),
 			toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled?' a11ycheck':'') + ' d2l_preview | smallscreen',
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 			style_formats: [
@@ -1924,7 +1928,7 @@ Polymer({
 								tables = iframes[i].contentDocument.getElementsByTagName('table');
 								updateTableAttributes(tables);
 							} catch (e) {
-								/*This is being left empty, as we don't want to pollute the console log, and don't currently have a means of keeping track of logged exceptions. 
+								/*This is being left empty, as we don't want to pollute the console log, and don't currently have a means of keeping track of logged exceptions.
 								This try-catch was needed to catch exceptions related to attempting to check the contentDocument of cross-origin iframes, which was a problem
 								in the non full-screen question editor text areas (specifically as a result of issues with Kaltura videos).*/
 							}
