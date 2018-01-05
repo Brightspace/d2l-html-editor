@@ -1581,8 +1581,8 @@ Polymer({
 			value: false
 		},
 		fullpageEnabled: {
-			type: Boolean,
-			value: true
+			type: Number,
+			value: 1
 		}
 	},
 
