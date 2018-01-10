@@ -80,4 +80,23 @@ Example:
 	</template>
 
 </dom-module>
+<script type="text/javascript">
+	if (window.DEV) {
+		loadScripts();
+	}
+
+	function loadScripts() {
+
+		var scripts = [
+			'http://localhost:8080/d2l-html-editor/demo/dependencies/client.js'
+		];
+
+		for (var i=0;i<scripts.length;i++) {
+			var clientScript = document.createElement('script');
+			clientScript.src = scripts[i];
+			clientScript.type='text/javascript';
+			document.getElementsByTagName('head')[0].appendChild(clientScript);
+		}
+	}
+</script>
 <script type="text/javascript" src="d2l-html-editor-bundled.js" ></script>

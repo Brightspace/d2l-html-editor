@@ -14,7 +14,11 @@
     "test:lint:wc": "polylint --input d2l-html-editor.html",
     "test:unit:travis": "xvfb-run wct",
     "test:unit:local": "wct --skip-plugin sauce",
-    "build" : "browserify d2l-html-editor.js -o d2l-html-editor-bundled.js"
+    "build": "browserify d2l-html-editor.js -o d2l-html-editor-bundled.js",
+    "watch": "watchify d2l-html-editor.js -o d2l-html-editor-bundled.js -v",
+    "serve": "polymer serve --open",
+	"demo-assets": "cd .. && http-server --cors",
+    "start": "parallelshell \"npm run serve\" \"npm run watch\" \"npm run demo-assets\""
   },
   "repository": {
     "type": "git",
@@ -30,8 +34,12 @@
     "eslint": "^2.10.2",
     "eslint-config-brightspace": "^0.2.1",
     "eslint-plugin-html": "^1.4.0",
+    "http-server": "^0.11.1",
+    "parallelshell": "^3.0.2",
     "polylint": "^2.10.1",
-    "superagent-d2l-session-auth": "^1.0.2"
+    "polymer-cli": "^1.5.7",
+    "superagent-d2l-session-auth": "^1.0.2",
+    "watchify": "^3.9.0"
   },
   "dependencies": {
     "bower": "^1.7.9"
