@@ -17,7 +17,7 @@
     "build": "browserify d2l-html-editor.js -o d2l-html-editor-bundled.js",
     "watch": "watchify d2l-html-editor.js -o d2l-html-editor-bundled.js -v",
     "serve": "polymer serve --open",
-	"demo-assets": "cd .. && http-server --cors",
+	"demo-assets": "cd .. && http-server --cors -c-1",
     "start": "parallelshell \"npm run serve\" \"npm run watch\" \"npm run demo-assets\""
   },
   "repository": {
