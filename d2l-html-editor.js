@@ -95,6 +95,10 @@ Polymer({
 			type: String,
 			value: null
 		},
+		imageToolsEnabled: {
+			type: Number,
+			value: 1
+		},
 		powerPasteEnabled: {
 			type: Number,
 			value: 0
@@ -279,6 +283,7 @@ Polymer({
 			if (!tinymce.activeEditor){
 				return;
 			}
+			
 
 			var body = tinymce.activeEditor.getBody();
 			var images = body.getElementsByTagName('img');
@@ -330,8 +335,9 @@ Polymer({
 		var config = {
 			d2l_html_editor: that,
 			selector: '#' + this.editorId,
+			imagetools_cors_hosts : ["klx3-akwiatkows:44447","klx3-akwiatkows:3000","klx3-akwiatkows","localhost"],
 			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable.bool ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
-			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':''),
+			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':'') + (this.imageToolsEnabled?' image imagetools':''),
 			toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled?' a11ycheck':'') + ' d2l_preview | smallscreen',
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 			style_formats: [
