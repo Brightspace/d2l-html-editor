@@ -5,7 +5,10 @@ window.ifrauclient = function() {
 		getService: function() {
 			return Promise.resolve({
 				config: function() {
-					return Promise.resolve({});
+					return Promise.resolve({isEnabled: true});
+				},
+				click: function() {
+					return Promise.resolve('abc');
 				}
 			});
 		},
