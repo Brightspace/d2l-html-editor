@@ -1765,7 +1765,7 @@ Polymer({
 
 			for ( var i=0; i < images.length; i++ ){
 				if ( images[i].src.startsWith("blob:") 
-				&& !img.getAttribute("data-mce-selected") 	// if an image is selected in this state it's usually being manipulated by image tools plugin
+				&& !images[i].getAttribute("data-mce-selected") 	// if an image is selected in this state it's usually being manipulated by image tools plugin
 				){
 					images[i].setAttribute("data-mce-bogus","all");
 					var img = images[i];
@@ -1860,28 +1860,19 @@ Polymer({
 					return host;
 				}
 				that.fire("d2l-html-editor-image-upload-started");
-				{
-					superagent.post(valenceHost + '/d2l/api/le/unstable/file/AddTempFile')
-						.use(superagent_auth({trustedHost: getHost(valenceHost)}))
-						.attach('file',blob,filename)
-						.end( function(error,response){
-							if ( !error ){
-								successCallback(response.body);
-							}
-							else{
-								failCallBack();
-							}
-							that.fire('change', {content: that.editor.getContent()});
-							that.fire("d2l-html-editor-image-upload-completed");
-						})
-
-				}
-				/*, function(reason){
-					failCallBack();
-					that.fire('change', {content: that.editor.getContent()});
-					that.fire("d2l-html-editor-image-upload-completed");
-				});*/
-
+				superagent.post(valenceHost + '/d2l/api/le/unstable/file/AddTempFile')
+					.use(superagent_auth({trustedHost: getHost(valenceHost)}))
+					.attach('file',blob,filename)
+					.end( function(error,response){
+						if ( !error ){
+							successCallback(response.body);
+						}
+						else{
+							failCallBack();
+						}
+						that.fire('change', {content: that.editor.getContent()});
+						that.fire("d2l-html-editor-image-upload-completed");
+					});
 			},
 			setup: function(editor) {
 				that.editor = editor;
