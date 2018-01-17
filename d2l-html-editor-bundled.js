@@ -1564,6 +1564,10 @@ Polymer({
 			type: String,
 			value: null
 		},
+		imageToolsEnabled: {
+			type: Number,
+			value: 0
+		},
 		powerPasteEnabled: {
 			type: Number,
 			value: 0
@@ -1683,8 +1687,11 @@ Polymer({
 	},
 
 	initialize: function() {
+		var that = this;
 		this.editorReady.then(function() {
-			this._init();
+			that.ifrauClient.request('valenceHost').then( function(valenceHost){
+				that._init(valenceHost);
+			});
 		}.bind(this));
 	},
 
@@ -1708,7 +1715,7 @@ Polymer({
 		return tinymce.EditorManager.get(this.editorId).getContent(args); // eslint-disable-line no-undef
 	},
 
-	_init: function() {
+	_init: function(valenceHost ) {
 		if (null !== this.baseUrl) {
 			tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
 		}
@@ -1722,7 +1729,7 @@ Polymer({
 		this.element.style.maxHeight = this.maxHeight;
 		this._changeLangTag();
 
-		this._initTinyMCE();
+		this._initTinyMCE(valenceHost);
 	},
 
 	_extend: function(obj, target) {
@@ -1734,7 +1741,7 @@ Polymer({
 		return target;
 	},
 
-	_initTinyMCE: function() {
+	_initTinyMCE: function(valenceHost) {
 		var that = this;
 
 		if (this.langAvailable.bool === undefined || this.langAvailable.bool === null) {
@@ -1748,7 +1755,6 @@ Polymer({
 			if (!tinymce.activeEditor){
 				return;
 			}
-
 			var body = tinymce.activeEditor.getBody();
 			var images = body.getElementsByTagName('img');
 			var imageSpinnersDiv = body.querySelector("#d2l-html-editor-image-upload-spinners");
@@ -1758,7 +1764,9 @@ Polymer({
 			}
 
 			for ( var i=0; i < images.length; i++ ){
-				if ( images[i].src.startsWith("blob:")){
+				if ( images[i].src.startsWith("blob:") 
+				&& !img.getAttribute("data-mce-selected") 	// if an image is selected in this state it's usually being manipulated by image tools plugin
+				){
 					images[i].setAttribute("data-mce-bogus","all");
 					var img = images[i];
 					var width = img.clientWidth;
@@ -1795,10 +1803,12 @@ Polymer({
 				}
 			}
 		};
+		
 
 		var config = {
 			d2l_html_editor: that,
 			selector: '#' + this.editorId,
+
 			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable.bool ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
 			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':''),
 			toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled?' a11ycheck':'') + ' d2l_preview | smallscreen',
@@ -1850,7 +1860,7 @@ Polymer({
 					return host;
 				}
 				that.fire("d2l-html-editor-image-upload-started");
-				client.request('valenceHost').then( function(valenceHost){
+				{
 					superagent.post(valenceHost + '/d2l/api/le/unstable/file/AddTempFile')
 						.use(superagent_auth({trustedHost: getHost(valenceHost)}))
 						.attach('file',blob,filename)
@@ -1865,11 +1875,12 @@ Polymer({
 							that.fire("d2l-html-editor-image-upload-completed");
 						})
 
-				}, function(reason){
+				}
+				/*, function(reason){
 					failCallBack();
 					that.fire('change', {content: that.editor.getContent()});
 					that.fire("d2l-html-editor-image-upload-completed");
-				});
+				});*/
 
 			},
 			setup: function(editor) {
@@ -2033,6 +2044,20 @@ Polymer({
 				}
 			}
 		};
+
+		if ( this.imageToolsEnabled ){
+			config.plugins += ' image imagetools';
+			if ( valenceHost ){
+				// get the root domain name of the valence host
+				var domainName = valenceHost.toLowerCase().replace("http://","").replace("https://","");
+				// strip the port number if it exists
+				var indexOfColon = domainName.indexOf(":");
+				if ( indexOfColon !== -1 ){
+					domainName =  domainName.substring(0,indexOfColon);
+				}
+				config.imagetools_cors_hosts = [domainName];
+			}
+		}
 
 		tinymce.init(this._extend(this.pluginConfig, config)); // eslint-disable-line no-undef
 
@@ -3549,7 +3574,7 @@ module.exports._resetFallback = function resetFallback () {
 					setTimeout(function(){ initLock = false;},eventCancelTimer);
 				}
 
-				if (document.body){
+				if (document.readyState === "interactive" || document.readyState === "complete"){
 					fireInit();
 				} else {
 					log('Waiting for page ready');

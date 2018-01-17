@@ -97,7 +97,7 @@ Polymer({
 		},
 		imageToolsEnabled: {
 			type: Number,
-			value: 1
+			value: 0
 		},
 		powerPasteEnabled: {
 			type: Number,
