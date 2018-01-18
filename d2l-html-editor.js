@@ -571,13 +571,11 @@ Polymer({
 			config.plugins += ' image imagetools';
 			if ( valenceHost ){
 				// get the root domain name of the valence host
-				var domainName = valenceHost.toLowerCase().replace("http://","").replace("https://","");
-				// strip the port number if it exists
-				var indexOfColon = domainName.indexOf(":");
-				if ( indexOfColon !== -1 ){
-					domainName =  domainName.substring(0,indexOfColon);
+				var matches = valenceHost.toLowerCase().match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
+				var domainName = matches && matches[1];  
+				if ( domainName ){
+					config.imagetools_cors_hosts = [domainName];
 				}
-				config.imagetools_cors_hosts = [domainName];
 			}
 		}
 
