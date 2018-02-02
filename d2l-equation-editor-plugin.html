@@ -196,14 +196,22 @@ Check that file periodically for changes...
 
 		if (editor.buttons.d2l_equation.setting === 1) {
 			editor.buttons.d2l_equation.button_object.title('Graphical equation');
+			editor.buttons.d2l_equation.button_object.settings.tooltip = 'Graphical equation';
 			editor.buttons.d2l_equation.button_object.icon('d2l_graphical_equation');
 			editor.buttons.d2l_equation.button_object.aria('label', tinymce.EditorManager.i18n.translate('Graphical equation'));
 			editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-graphical-equation';
 		} else if (editor.buttons.d2l_equation.setting === 2) {
 			editor.buttons.d2l_equation.button_object.title('MathML equation');
+			editor.buttons.d2l_equation.button_object.settings.tooltip = 'MathML equation';
 			editor.buttons.d2l_equation.button_object.icon('d2l_mml');
 			editor.buttons.d2l_equation.button_object.aria('label', tinymce.EditorManager.i18n.translate('MathML equation'));
 			editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-mml-equation';
+		} else if (editor.buttons.d2l_equation.setting === 3) {
+			editor.buttons.d2l_equation.button_object.title('LaTeX equation');
+			editor.buttons.d2l_equation.button_object.settings.tooltip = 'LaTeX equation';
+			editor.buttons.d2l_equation.button_object.icon('d2l_latex');
+			editor.buttons.d2l_equation.button_object.aria('label', tinymce.EditorManager.i18n.translate('LaTeX equation'));
+			editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-latex-equation';
 		}
 		var btns = document.querySelectorAll('.mce-splitbtn button');
 		var length = btns ? btns.length : -1;
@@ -236,6 +244,12 @@ Check that file periodically for changes...
 				} else {
 					editor.menuItems.mml_editor.disabled = true;
 				}
+			} else if (setting === 3) {
+				if (isEnabled) {
+					editor.menuItems.latex_editor.disabled = false;
+				} else {
+					editor.menuItems.latex_editor.disabled = true;
+				}
 			}
 		} else {
 			if (isEnabled) {
@@ -262,6 +276,12 @@ Check that file periodically for changes...
 				} else {
 					editor.menuItems.mml_editor.active = false;
 				}
+			} else if (setting === 3) {
+				if (isActive) {
+					editor.menuItems.latex_editor.active = true;
+				} else {
+					editor.menuItems.latex_editor.active = false;
+				}
 			}
 		} else {
 			if (isActive) {
@@ -278,7 +298,7 @@ Check that file periodically for changes...
 			setting,
 			i;
 
-		for (i = 1; i <= 2; i++) {
+		for (i = 1; i <= 3; i++) {
 			isEnabled = true;
 			isActive = false;
 			setting = i;
@@ -307,7 +327,18 @@ Check that file periodically for changes...
 							editor.buttons.d2l_equation.button_object.active(true);
 						}
 					}
-				} else {
+				} else if (setting === 3 && e.node.getAttribute('data-d2l-mathml').indexOf('latex') > -1) {
+					isEnabled = true;
+					isActive = isEnabled;
+					if (isEnabled) {
+						if (changeSetting(editor, setting) === true) {
+							changeButton(editor);
+						}
+						if (editor.buttons.d2l_equation.button_object !== null) {
+							editor.buttons.d2l_equation.button_object.active(true);
+						}
+					}
+				}else {
 					isEnabled = false;
 				}
 			} else {
@@ -369,34 +400,40 @@ Check that file periodically for changes...
 						}
 					});
 
-					//This will be added in a later story
-					/*editor.addMenuItem('latex_editor', {
+					editor.addMenuItem('latex_editor', {
+						active: false,
+						disabled: false,
 						icon: 'd2l_latex',
 						text: 'LaTeX equation',
 						serviceId: 'fra-html-editor-latex-equation',
+						button_object: null,
+						onPostRender: function() {
+							editor.menuItems.latex_editor.button_object = this;
+						},
 						onclick: function() {
-							if (editor.buttons.d2l_equation.setting !== 3) {
-								editor.buttons.d2l_equation.setting = 3;
-								editor.buttons.d2l_equation.button_object.icon('d2l_latex');
-								editor.buttons.d2l_equation.button_object.aria('label', 'Latex Equation Selected - Equation Editor');
+							var setting = 3;
+							var changeButtonState = changeSetting(editor, setting);
+							if (changeButtonState === true) {
+								changeButton(editor);
 							}
-              //d2lEditor._callService(client, this.settings.serviceId, editor, command);
+							window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
 						}
-					});*/
+					});
 
 					editor.addButton('d2l_equation', {
 						title: 'Graphical equation',
+						tooltip: 'Graphical equation',
 						icon: 'd2l_graphical_equation',
 						type: 'splitbutton',
 						setting: 1,
 						button_object: null,
 						serviceId: 'fra-html-editor-graphical-equation',
 						menu: [editor.menuItems['graphical_editor'],
-						editor.menuItems['mml_editor']],
-						//editor.menuItems['latex_editor']],
+						editor.menuItems['mml_editor'],
+						editor.menuItems['latex_editor']],
 						onPostRender: function() {
 							editor.buttons.d2l_equation.button_object = this;
-							if (editor.buttons.d2l_equation.setting !== 2) {
+							if (editor.buttons.d2l_equation.setting !== 2 || editor.buttons.d2l_equation.setting !== 3) {
 								changeButton(editor);
 							}
 						},
