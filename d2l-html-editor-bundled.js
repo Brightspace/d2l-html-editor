@@ -1715,6 +1715,10 @@ Polymer({
 		return tinymce.EditorManager.get(this.editorId).getContent(args); // eslint-disable-line no-undef
 	},
 
+	setContent: function(content, args) {
+		tinymce.EditorManager.get(this.editorId).setContent(content); // eslint-disable-line no-undef
+	},
+
 	_init: function(valenceHost ) {
 		if (null !== this.baseUrl) {
 			tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
