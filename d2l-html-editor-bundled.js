@@ -2055,9 +2055,6 @@ Polymer({
 		}
 
 		tinymce.init(this._extend(this.pluginConfig, config)); // eslint-disable-line no-undef
-
-		// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
-		this.autoFocus = 0;
 	},
 
 	computeToolbarId: function(editorId) {

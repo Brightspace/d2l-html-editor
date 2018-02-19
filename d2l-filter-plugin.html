@@ -41,6 +41,13 @@
 								// a property to auto clean up, otherwise would need to explicitly call a clean
 								// up method from React componentWillUnmount.
 								editor.getParam('d2l_html_editor').content = null;
+
+								if (editor.getParam('d2l_html_editor').autoFocus) {
+									// Set cursor to end of input
+									editor.focus();
+									editor.selection.select(editor.getBody(), true);
+									editor.selection.collapse(false);
+								}
 							});
 						}
 					});
