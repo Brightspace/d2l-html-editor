@@ -1587,7 +1587,11 @@ Polymer({
 		fullpageEnabled: {
 			type: Number,
 			value: 1
-		}
+		},
+		autoFocusEnd: {
+			type: Boolean,
+			value: false,
+		},
 	},
 
 	/**
@@ -1971,8 +1975,18 @@ Polymer({
 					}
 				}
 
-				editor.on('setcontent', function() {
+				editor.on('setcontent', function(event) {
 					findTables(editor);
+
+					// The content of the first setcontent event is always "", 
+					// if there is content to be set, it will be in the second setcontent event
+					if (event.content && config.auto_focus && that.autoFocusEnd) {
+						// Set cursor to end of input
+						editor.focus();
+						editor.selection.select(editor.getBody(), true);
+						editor.selection.collapse(false);
+						that.autoFocusEnd = false;
+					}
 				});
 
 				editor.on('change redo undo', function( event ) {
