@@ -136,7 +136,8 @@ Polymer({
 		var client = window.ifrauclient({
 			syncFont: false,
 			syncLang: false,
-			resizeFrame: false
+			resizeFrame: false,
+			syncTitle: false,
 		});
 		this.editorReady = client.connect().then(function() {
 			return this._configureTinyMce(client);
