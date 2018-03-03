@@ -7,22 +7,22 @@ Polymer({
 	is: 'd2l-html-editor',
 
 	behaviors: [
-		// window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
-		// window.D2LHtmlEditor.PolymerBehaviors.Image,
-		// window.D2LHtmlEditor.PolymerBehaviors.Link,
-		// window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup,
-		// window.D2LHtmlEditor.PolymerBehaviors.FormatRollup,
-		// window.D2LHtmlEditor.PolymerBehaviors.InsertRollup,
-		// window.D2LHtmlEditor.PolymerBehaviors.EquationEditor,
-		// window.D2LHtmlEditor.PolymerBehaviors.Code,
-		// window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,
-		// window.D2LHtmlEditor.PolymerBehaviors.FontFamily,
-		// window.D2LHtmlEditor.PolymerBehaviors.Attributes,
-		// window.D2LHtmlEditor.PolymerBehaviors.Preview,
-		// window.D2LHtmlEditor.PolymerBehaviors.XsplConverter,
+		window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
+		window.D2LHtmlEditor.PolymerBehaviors.Image,
+		window.D2LHtmlEditor.PolymerBehaviors.Link,
+		window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup,
+		window.D2LHtmlEditor.PolymerBehaviors.FormatRollup,
+		window.D2LHtmlEditor.PolymerBehaviors.InsertRollup,
+		window.D2LHtmlEditor.PolymerBehaviors.EquationEditor,
+		window.D2LHtmlEditor.PolymerBehaviors.Code,
+		window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,
+		window.D2LHtmlEditor.PolymerBehaviors.FontFamily,
+		window.D2LHtmlEditor.PolymerBehaviors.Attributes,
+		window.D2LHtmlEditor.PolymerBehaviors.Preview,
+		window.D2LHtmlEditor.PolymerBehaviors.XsplConverter,
 		window.D2LHtmlEditor.PolymerBehaviors.Filter,
 		window.D2LHtmlEditor.PolymerBehaviors.Placeholder,
-		// window.D2LHtmlEditor.PolymerBehaviors.Fullpage
+		window.D2LHtmlEditor.PolymerBehaviors.Fullpage
 	],
 
 	/**
