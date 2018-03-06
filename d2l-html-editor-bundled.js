@@ -244,8 +244,10 @@ Polymer({
 		this.client = null;
 	},
 
-	focus: function() {
-		tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
+  focus: function () {
+    this.editorReady.then(function () {
+      tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
+    }.bind(this));
 	},
 
 	getContent: function(args) {
@@ -305,7 +307,7 @@ Polymer({
 			}
 
 			for ( var i=0; i < images.length; i++ ){
-				if ( images[i].src.startsWith("blob:") 
+				if ( images[i].src.startsWith("blob:")
 				&& !images[i].getAttribute("data-mce-selected") 	// if an image is selected in this state it's usually being manipulated by image tools plugin
 				){
 					images[i].setAttribute("data-mce-bogus","all");
@@ -344,7 +346,7 @@ Polymer({
 				}
 			}
 		};
-		
+
 
 		var config = {
 			d2l_html_editor: that,
@@ -513,7 +515,7 @@ Polymer({
 				editor.on('setcontent', function(event) {
 					findTables(editor);
 
-					// The content of the first setcontent event is always "", 
+					// The content of the first setcontent event is always "",
 					// if there is content to be set, it will be in the second setcontent event
 					if (event.content && config.auto_focus && that.autoFocusEnd) {
 						// Set cursor to end of input
@@ -596,7 +598,7 @@ Polymer({
 			if ( valenceHost ){
 				// get the root domain name of the valence host
 				var matches = valenceHost.toLowerCase().match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
-				var domainName = matches && matches[1];  
+				var domainName = matches && matches[1];
 				if ( domainName ){
 					config.imagetools_cors_hosts = [domainName];
 				}
@@ -2222,7 +2224,7 @@ module.exports._resetFallback = function resetFallback () {
   addEventListener(window, 'message', receiver);
   chkLateLoaded();
 
-  
+
 
 })();
 
@@ -3270,7 +3272,7 @@ function race(iterable) {
  * TODO: combatible error handling?
  */
 
-module.exports = function(arr, fn, initial){  
+module.exports = function(arr, fn, initial){
   var idx = 0;
   var len = arr.length;
   var curr = arguments.length == 3
@@ -3280,7 +3282,7 @@ module.exports = function(arr, fn, initial){
   while (idx < len) {
     curr = fn.call(null, curr, arr[idx], ++idx, arr);
   }
-  
+
   return curr;
 };
 },{}],29:[function(require,module,exports){
@@ -3951,7 +3953,7 @@ Request.prototype.type = function(type){
 };
 
 /**
- * Set responseType to `val`. Presently valid responseTypes are 'blob' and 
+ * Set responseType to `val`. Presently valid responseTypes are 'blob' and
  * 'arraybuffer'.
  *
  * Examples:
