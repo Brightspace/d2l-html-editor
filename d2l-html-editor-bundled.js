@@ -1622,11 +1622,9 @@ Polymer({
 			syncFont: false,
 			syncLang: false,
 			resizeFrame: false,
-			syncTitle: false,
+			syncTitle: false
 		});
-		this.editorReady = client.connect().then(function() {
-			return this._configureTinyMce(client);
-		}.bind(this));
+		client.connect();
 		this.ifrauClient = client;
 	},
 
@@ -1683,9 +1681,13 @@ Polymer({
 	_configurePlugins: function(client) {
 		this.pluginConfig = {};
 
-		var pluginDefinitions = this.behaviors.map(function(behavior) {
-			return behavior.plugin;
-		});
+		var pluginsArr = this.plugins.split(' ');
+		var pluginDefinitions = pluginsArr.map(function(plugin) {
+			var pluginBehavior = this._getPluginBehavior(plugin);
+			return pluginBehavior ? pluginBehavior.plugin : null;
+		}, this);
+		// FontFamily not specified in this.plugins, but should be included in config
+		pluginDefinitions.push(window.D2LHtmlEditor.PolymerBehaviors.FontFamily.plugin);
 
 		var plugins = [];
 		pluginDefinitions.forEach(function(plugin) {
@@ -1694,6 +1696,56 @@ Polymer({
 			}
 		}, this);
 		return plugins;
+	},
+
+	_getPluginBehavior: function(plugin) {
+		switch (plugin) {
+			case 'd2l_attributes':
+				return window.D2LHtmlEditor.PolymerBehaviors.Attributes;
+			case 'd2l_preview':
+				return window.D2LHtmlEditor.PolymerBehaviors.Preview;
+			case 'd2l_image':
+				return window.D2LHtmlEditor.PolymerBehaviors.Image;
+			case 'd2l_isf':
+				return window.D2LHtmlEditor.PolymerBehaviors.InsertStuff;
+			case 'd2l_link':
+				return window.D2LHtmlEditor.PolymerBehaviors.Link;
+			case 'd2l_fullpage':
+				return window.D2LHtmlEditor.PolymerBehaviors.Fullpage;
+			case 'd2l_code':
+				return window.D2LHtmlEditor.PolymerBehaviors.Code;
+			case 'd2l_replacestring':
+				return window.D2LHtmlEditor.PolymerBehaviors.ReplaceString;
+			case 'd2l_formatrollup':
+				return window.D2LHtmlEditor.PolymerBehaviors.FormatRollup;
+			case 'd2l_textstylerollup':
+				return window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup;
+			case 'd2l_insertrollup':
+				return window.D2LHtmlEditor.PolymerBehaviors.InsertRollup;
+			case 'd2l_equation':
+				return window.D2LHtmlEditor.PolymerBehaviors.EquationEditor;
+			case 'd2l_xsplconverter':
+				return window.D2LHtmlEditor.PolymerBehaviors.XsplConverter;
+			case 'd2l_filter':
+				return window.D2LHtmlEditor.PolymerBehaviors.Filter;
+			case 'd2l_placeholder':
+				return window.D2LHtmlEditor.PolymerBehaviors.Placeholder;
+			case 'autolink':
+			case 'table':
+			case 'fullscreen':
+			case 'directionality':
+			case 'hr':
+			case 'textcolor':
+			case 'colorpicker':
+			case 'charmap':
+			case 'link':
+			case 'lists':
+			case 'powerpaste':
+			case 'paste':
+			case 'a11ychecker':
+			default:
+				return null;
+		}
 	},
 
 	_configureTinyMce: function(client) {
@@ -1709,7 +1761,7 @@ Polymer({
 
 	initialize: function() {
 		var that = this;
-		this.editorReady.then(function() {
+		this._configureTinyMce(this.ifrauClient).then(function() {
 			that.ifrauClient.request('valenceHost').then( function(valenceHost){
 				that._init(valenceHost);
 			});
