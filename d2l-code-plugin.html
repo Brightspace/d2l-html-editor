@@ -14,17 +14,22 @@
 	var CodeBehavior = {
 		plugin: {
 			addPlugin: function(client) {
-
-				return client.getService('fra-html-editor-code', '0.1').then(function(service) {
+				var pluginConfig = {
+					id: 'd2l_code',
+					label: 'HTML Source Editor',
+					icon: 'code',
+					serviceId: 'fra-html-editor-code'
+				};
+				return client.getService(pluginConfig.serviceId, '0.1').then(function(service) {
 					return service.config().then(function(config) {
 
-						tinymce.PluginManager.add('d2l_code', function(editor) {
+						tinymce.PluginManager.add(pluginConfig.id, function(editor) {
 							function showDialog() {
 								var win = editor.windowManager.open({
-									title: 'HTML Source Editor',
+									title: pluginConfig.label,
 									body: {
 										type: 'textbox',
-										name: 'code',
+										name: pluginConfig.icon,
 										multiline: true,
 										minWidth: editor.getParam('code_dialog_width', 600),
 										minHeight: editor.getParam('code_dialog_height', Math.min(tinymce.DOM.getViewPort().h - 200, 200)),
@@ -65,16 +70,16 @@
 
 							if (config.isEnabled) {
 
-								editor.addButton('d2l_code', {
-									icon: 'code',
-									tooltip: 'HTML Source Editor',
+								editor.addButton(pluginConfig.id, {
+									icon: pluginConfig.icon,
+									tooltip: pluginConfig.label,
 									onclick: showDialog
 								});
 							}
 						});
 					});
 				}).catch(function() {
-					tinymce.PluginManager.add(plugin.id, function() {   // eslint-disable-line no-undef
+					tinymce.PluginManager.add(pluginConfig.id, function() {   // eslint-disable-line no-undef
 					});
 				});
 			}
