@@ -7,22 +7,22 @@ Polymer({
 	is: 'd2l-html-editor',
 
 	behaviors: [
-		window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
-		window.D2LHtmlEditor.PolymerBehaviors.Image,
-		window.D2LHtmlEditor.PolymerBehaviors.Link,
-		window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup,
-		window.D2LHtmlEditor.PolymerBehaviors.FormatRollup,
-		window.D2LHtmlEditor.PolymerBehaviors.InsertRollup,
-		window.D2LHtmlEditor.PolymerBehaviors.EquationEditor,
-		window.D2LHtmlEditor.PolymerBehaviors.Code,
-		window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,
-		window.D2LHtmlEditor.PolymerBehaviors.FontFamily,
-		window.D2LHtmlEditor.PolymerBehaviors.Attributes,
-		window.D2LHtmlEditor.PolymerBehaviors.Preview,
-		window.D2LHtmlEditor.PolymerBehaviors.XsplConverter,
+		// window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
+		// window.D2LHtmlEditor.PolymerBehaviors.Image,
+		// window.D2LHtmlEditor.PolymerBehaviors.Link,
+		// window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup,
+		// window.D2LHtmlEditor.PolymerBehaviors.FormatRollup,
+		// window.D2LHtmlEditor.PolymerBehaviors.InsertRollup,
+		// window.D2LHtmlEditor.PolymerBehaviors.EquationEditor,
+		// window.D2LHtmlEditor.PolymerBehaviors.Code,
+		// window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,
+		// window.D2LHtmlEditor.PolymerBehaviors.FontFamily,
+		// window.D2LHtmlEditor.PolymerBehaviors.Attributes,
+		// window.D2LHtmlEditor.PolymerBehaviors.Preview,
+		// window.D2LHtmlEditor.PolymerBehaviors.XsplConverter,
 		window.D2LHtmlEditor.PolymerBehaviors.Filter,
 		window.D2LHtmlEditor.PolymerBehaviors.Placeholder,
-		window.D2LHtmlEditor.PolymerBehaviors.Fullpage
+		// window.D2LHtmlEditor.PolymerBehaviors.Fullpage
 	],
 
 	/**
@@ -118,7 +118,11 @@ Polymer({
 		fullpageEnabled: {
 			type: Number,
 			value: 1
-		}
+		},
+		autoFocusEnd: {
+			type: Boolean,
+			value: false,
+		},
 	},
 
 	/**
@@ -132,7 +136,8 @@ Polymer({
 		var client = window.ifrauclient({
 			syncFont: false,
 			syncLang: false,
-			resizeFrame: false
+			resizeFrame: false,
+			syncTitle: false,
 		});
 		this.editorReady = client.connect().then(function() {
 			return this._configureTinyMce(client);
@@ -246,6 +251,10 @@ Polymer({
 		return tinymce.EditorManager.get(this.editorId).getContent(args); // eslint-disable-line no-undef
 	},
 
+	clearContent: function(content, args) {
+		tinymce.EditorManager.get(this.editorId).setContent(''); // eslint-disable-line no-undef
+	},
+
 	_init: function(valenceHost ) {
 		if (null !== this.baseUrl) {
 			tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
@@ -341,8 +350,10 @@ Polymer({
 			selector: '#' + this.editorId,
 
 			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable.bool ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
-			plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':''),
-			toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled?' a11ycheck':'') + ' d2l_preview | smallscreen',
+			//plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':''),
+			plugins: 'autolink table fullscreen directionality hr textcolor colorpicker charmap link lists d2l_placeholder d2l_filter' + (this.powerPasteEnabled ? ' powerpaste' : ' paste'),
+			//toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled?' a11ycheck':'') + ' d2l_preview | smallscreen',
+			toolbar: 'bold italic underline bullist',
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 			style_formats: [
 				{title: 'Paragraph', format: 'p'},
@@ -371,8 +382,10 @@ Polymer({
 			language: this.langTag && this.langAvailable.bool ? this.langTag : null,
 			directionality: this.langDir,
 			powerpaste_word_import: this.powerPasteFormatting,
-			powerpaste_allow_local_images: true,
+			powerpaste_allow_local_images: this.powerPasteEnabled ? true : false,
 			powerpaste_block_drop : false,
+			paste_as_text: this.powerPasteEnabled ? false : true,
+			paste_text_sticky: this.powerPasteEnabled ? false : true,
 			images_upload_handler: function(blobInfo, replaceImageUrlFunction){
 				var blob = blobInfo.blob();
 				var filename = blobInfo.filename();
@@ -496,8 +509,18 @@ Polymer({
 					}
 				}
 
-				editor.on('setcontent', function() {
+				editor.on('setcontent', function(event) {
 					findTables(editor);
+
+					// The content of the first setcontent event is always "", 
+					// if there is content to be set, it will be in the second setcontent event
+					if (event.content && config.auto_focus && that.autoFocusEnd) {
+						// Set cursor to end of input
+						editor.focus();
+						editor.selection.select(editor.getBody(), true);
+						editor.selection.collapse(false);
+						that.autoFocusEnd = false;
+					}
 				});
 
 				editor.on('change redo undo', function( event ) {

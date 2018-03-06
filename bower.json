@@ -21,11 +21,11 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.0.0",
-    "d2l-icons": "git+ssh://git@github.com/Brightspace/d2l-icons-ui.git#^v3.1.0"
+    "d2l-icons": "Brightspace/d2l-icons-ui#^3.1.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "sinon-stub-promise": "git+ssh://git@github.com/substantial/sinon-stub-promise#^v3.0.1",
+    "sinon-stub-promise": "substantial/sinon-stub-promise#^3.0.1",
     "web-component-tester": "*"
   }
 }
