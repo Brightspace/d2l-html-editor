@@ -290,7 +290,7 @@ Polymer({
 					that._init(valenceHost);
 				});
 			});
-		}.bind(this));
+		});
 	},
 
 	// We cannot cleanup in detached because React seems to cause the web component
