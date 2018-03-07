@@ -7,22 +7,10 @@ Polymer({
 	is: 'd2l-html-editor',
 
 	behaviors: [
-		// window.D2LHtmlEditor.PolymerBehaviors.InsertStuff,
-		// window.D2LHtmlEditor.PolymerBehaviors.Image,
-		// window.D2LHtmlEditor.PolymerBehaviors.Link,
-		// window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup,
-		// window.D2LHtmlEditor.PolymerBehaviors.FormatRollup,
-		// window.D2LHtmlEditor.PolymerBehaviors.InsertRollup,
-		// window.D2LHtmlEditor.PolymerBehaviors.EquationEditor,
-		// window.D2LHtmlEditor.PolymerBehaviors.Code,
-		// window.D2LHtmlEditor.PolymerBehaviors.ReplaceString,
-		// window.D2LHtmlEditor.PolymerBehaviors.FontFamily,
-		// window.D2LHtmlEditor.PolymerBehaviors.Attributes,
-		// window.D2LHtmlEditor.PolymerBehaviors.Preview,
-		// window.D2LHtmlEditor.PolymerBehaviors.XsplConverter,
-		window.D2LHtmlEditor.PolymerBehaviors.Filter,
-		window.D2LHtmlEditor.PolymerBehaviors.Placeholder,
-		// window.D2LHtmlEditor.PolymerBehaviors.Fullpage
+		/**
+		 * Do not place plugin behaviors here
+		 * Place plugin behaviors in the _getPluginBehavior function
+		 */
 	],
 
 	/**
@@ -121,8 +109,24 @@ Polymer({
 		},
 		autoFocusEnd: {
 			type: Boolean,
-			value: false,
+			value: false
 		},
+		toolbar: {
+			type: String,
+			value: function(props) {
+				if (props.inline) {
+					return 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen';
+				} else {
+					return 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (props.a11ycheckerEnabled ? ' a11ycheck' : '') + ' d2l_preview | smallscreen';
+				}
+			}
+		},
+		plugins: {
+			type: String,
+			value: function(props) {
+				return 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (props.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (props.powerPasteEnabled ? ' powerpaste' : ' paste') + (props.a11ycheckerEnabled ? ' a11ychecker' : '');
+			}
+		}
 	},
 
 	/**
@@ -137,11 +141,9 @@ Polymer({
 			syncFont: false,
 			syncLang: false,
 			resizeFrame: false,
-			syncTitle: false,
+			syncTitle: false
 		});
-		this.editorReady = client.connect().then(function() {
-			return this._configureTinyMce(client);
-		}.bind(this));
+		this.editorReady = client.connect();
 		this.ifrauClient = client;
 	},
 
@@ -198,9 +200,17 @@ Polymer({
 	_configurePlugins: function(client) {
 		this.pluginConfig = {};
 
-		var pluginDefinitions = this.behaviors.map(function(behavior) {
-			return behavior.plugin;
-		});
+		var pluginsArr = this.plugins.split(' ');
+		var pluginDefinitions = pluginsArr.map(function(plugin) {
+			var pluginAlreadyLoaded = tinymce.PluginManager.get(plugin);
+			if (pluginAlreadyLoaded) {
+				return null;
+			}
+			var pluginBehavior = this._getPluginBehavior(plugin);
+			return pluginBehavior ? pluginBehavior.plugin : null;
+		}, this);
+		// FontFamily not specified in this.plugins, but should be included in config
+		pluginDefinitions.push(window.D2LHtmlEditor.PolymerBehaviors.FontFamily.plugin);
 
 		var plugins = [];
 		pluginDefinitions.forEach(function(plugin) {
@@ -209,6 +219,56 @@ Polymer({
 			}
 		}, this);
 		return plugins;
+	},
+
+	_getPluginBehavior: function(plugin) {
+		switch (plugin) {
+			case 'd2l_attributes':
+				return window.D2LHtmlEditor.PolymerBehaviors.Attributes;
+			case 'd2l_preview':
+				return window.D2LHtmlEditor.PolymerBehaviors.Preview;
+			case 'd2l_image':
+				return window.D2LHtmlEditor.PolymerBehaviors.Image;
+			case 'd2l_isf':
+				return window.D2LHtmlEditor.PolymerBehaviors.InsertStuff;
+			case 'd2l_link':
+				return window.D2LHtmlEditor.PolymerBehaviors.Link;
+			case 'd2l_fullpage':
+				return window.D2LHtmlEditor.PolymerBehaviors.Fullpage;
+			case 'd2l_code':
+				return window.D2LHtmlEditor.PolymerBehaviors.Code;
+			case 'd2l_replacestring':
+				return window.D2LHtmlEditor.PolymerBehaviors.ReplaceString;
+			case 'd2l_formatrollup':
+				return window.D2LHtmlEditor.PolymerBehaviors.FormatRollup;
+			case 'd2l_textstylerollup':
+				return window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup;
+			case 'd2l_insertrollup':
+				return window.D2LHtmlEditor.PolymerBehaviors.InsertRollup;
+			case 'd2l_equation':
+				return window.D2LHtmlEditor.PolymerBehaviors.EquationEditor;
+			case 'd2l_xsplconverter':
+				return window.D2LHtmlEditor.PolymerBehaviors.XsplConverter;
+			case 'd2l_filter':
+				return window.D2LHtmlEditor.PolymerBehaviors.Filter;
+			case 'd2l_placeholder':
+				return window.D2LHtmlEditor.PolymerBehaviors.Placeholder;
+			case 'autolink':
+			case 'table':
+			case 'fullscreen':
+			case 'directionality':
+			case 'hr':
+			case 'textcolor':
+			case 'colorpicker':
+			case 'charmap':
+			case 'link':
+			case 'lists':
+			case 'powerpaste':
+			case 'paste':
+			case 'a11ychecker':
+			default:
+				return null;
+		}
 	},
 
 	_configureTinyMce: function(client) {
@@ -225,10 +285,12 @@ Polymer({
 	initialize: function() {
 		var that = this;
 		this.editorReady.then(function() {
-			that.ifrauClient.request('valenceHost').then( function(valenceHost){
-				that._init(valenceHost);
+			that._configureTinyMce(that.ifrauClient).then(function() {
+				that.ifrauClient.request('valenceHost').then( function(valenceHost){
+					that._init(valenceHost);
+				});
 			});
-		}.bind(this));
+		});
 	},
 
 	// We cannot cleanup in detached because React seems to cause the web component
@@ -343,17 +405,14 @@ Polymer({
 				}
 			}
 		};
-		
 
 		var config = {
 			d2l_html_editor: that,
 			selector: '#' + this.editorId,
 
 			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable.bool ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
-			//plugins: 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled?' powerpaste':'') + (this.a11ycheckerEnabled?' a11ychecker':''),
-			plugins: 'autolink table fullscreen directionality hr textcolor colorpicker charmap link lists d2l_placeholder d2l_filter' + (this.powerPasteEnabled ? ' powerpaste' : ' paste'),
-			//toolbar: this.inline ? 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen' : 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled?' a11ycheck':'') + ' d2l_preview | smallscreen',
-			toolbar: 'bold italic underline bullist',
+			plugins: this.plugins,
+			toolbar: this.toolbar,
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
 			style_formats: [
 				{title: 'Paragraph', format: 'p'},
