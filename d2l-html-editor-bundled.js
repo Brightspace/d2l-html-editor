@@ -1612,7 +1612,7 @@ Polymer({
 			resizeFrame: false,
 			syncTitle: false
 		});
-		client.connect();
+		this.editorReady = client.connect();
 		this.ifrauClient = client;
 	},
 
@@ -1671,6 +1671,10 @@ Polymer({
 
 		var pluginsArr = this.plugins.split(' ');
 		var pluginDefinitions = pluginsArr.map(function(plugin) {
+			var pluginAlreadyLoaded = tinymce.PluginManager.get(plugin);
+			if (pluginAlreadyLoaded) {
+				return null;
+			}
 			var pluginBehavior = this._getPluginBehavior(plugin);
 			return pluginBehavior ? pluginBehavior.plugin : null;
 		}, this);
@@ -1749,9 +1753,11 @@ Polymer({
 
 	initialize: function() {
 		var that = this;
-		this._configureTinyMce(this.ifrauClient).then(function() {
-			that.ifrauClient.request('valenceHost').then( function(valenceHost){
-				that._init(valenceHost);
+		this.editorReady.then(function() {
+			that._configureTinyMce(that.ifrauClient).then(function() {
+				that.ifrauClient.request('valenceHost').then( function(valenceHost){
+					that._init(valenceHost);
+				});
 			});
 		}.bind(this));
 	},
