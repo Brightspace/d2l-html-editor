@@ -1582,19 +1582,11 @@ Polymer({
 		},
 		toolbar: {
 			type: String,
-			value: function(props) {
-				if (props.inline) {
-					return 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen';
-				} else {
-					return 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (props.a11ycheckerEnabled ? ' a11ycheck' : '') + ' d2l_preview | smallscreen';
-				}
-			}
+			value: null
 		},
 		plugins: {
 			type: String,
-			value: function(props) {
-				return 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (props.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (props.powerPasteEnabled ? ' powerpaste' : ' paste') + (props.a11ycheckerEnabled ? ' a11ychecker' : '');
-			}
+			value: null
 		}
 	},
 
@@ -1751,8 +1743,27 @@ Polymer({
 		});
 	},
 
+	_setDefaultToolbar: function() {
+		if (this.inline) {
+			this.toolbar = 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen';
+		} else {
+			this.toolbar = 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled ? ' a11ycheck' : '') + ' d2l_preview | smallscreen';
+		}
+	},
+
+	_setDefaultPlugins: function() {
+		this.plugins = 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled ? ' powerpaste' : ' paste') + (this.a11ycheckerEnabled ? ' a11ychecker' : '');
+	},
+
 	initialize: function() {
 		var that = this;
+		if (this.toolbar === null) {
+			this._setDefaultToolbar();
+		}
+		if (this.plugins === null) {
+			this._setDefaultPlugins();
+		}
+
 		this.editorReady.then(function() {
 			that._configureTinyMce(that.ifrauClient).then(function() {
 				that.ifrauClient.request('valenceHost').then( function(valenceHost){
