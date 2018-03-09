@@ -7,9 +7,9 @@
 	/** @polymerBehavior */
 	var FullpageBehavior = {
 		plugin: {
-			addPlugin: function(client) {
+			addPlugin: function() {
 				tinymce.PluginManager.add('d2l_fullpage', function(editor) {
-					
+
 					var each = tinymce.each, Node = tinymce.html.Node;
 					var head, foot;
 
@@ -44,12 +44,12 @@
 						}
 
 						// Default some values
-						data.fontface = editor.getParam("fullpage_default_font_family", "");
-						data.fontsize = editor.getParam("fullpage_default_font_size", "");
+						data.fontface = editor.getParam('fullpage_default_font_family', '');
+						data.fontsize = editor.getParam('fullpage_default_font_size', '');
 
 						// Parse XML PI
 						elm = headerFragment.firstChild;
-						if (elm.type == 7) {
+						if (elm.type === 7) {
 							data.xml_pi = true;
 							matches = /encoding="([^"]+)"/.exec(elm.value);
 							if (matches) {
@@ -60,7 +60,7 @@
 						// Parse doctype
 						elm = headerFragment.getAll('#doctype')[0];
 						if (elm) {
-							data.doctype = '<!DOCTYPE' + elm.value + ">";
+							data.doctype = '<!DOCTYPE' + elm.value + '>';
 						}
 
 						// Parse title element
@@ -75,7 +75,7 @@
 
 							if (name) {
 								data[name.toLowerCase()] = meta.attr('content');
-							} else if (httpEquiv == "Content-Type") {
+							} else if (httpEquiv === 'Content-Type') {
 								matches = /charset\s*=\s*(.*)\s*/gi.exec(meta.attr('content'));
 
 								if (matches) {
@@ -92,7 +92,7 @@
 
 						// Parse stylesheet
 						elm = headerFragment.getAll('link')[0];
-						if (elm && elm.attr('rel') == 'stylesheet') {
+						if (elm && elm.attr('rel') === 'stylesheet') {
 							data.stylesheet = elm.attr('href');
 						}
 
@@ -146,13 +146,13 @@
 								value += ' encoding="' + data.docencoding + '"';
 							}
 
-							if (elm.type != 7) {
+							if (elm.type !== 7) {
 								elm = new Node('xml', 7);
 								headerFragment.insert(elm, headerFragment.firstChild, true);
 							}
 
 							elm.value = value;
-						} else if (elm && elm.type == 7) {
+						} else if (elm && elm.type === 7) {
 							elm.remove();
 						}
 
@@ -178,7 +178,7 @@
 						if (data.docencoding) {
 							elm = null;
 							each(headerFragment.getAll('meta'), function(meta) {
-								if (meta.attr('http-equiv') == 'Content-Type') {
+								if (meta.attr('http-equiv') === 'Content-Type') {
 									elm = meta;
 								}
 							});
@@ -212,7 +212,7 @@
 							for (i = 0; i < nodes.length; i++) {
 								meta = nodes[i];
 
-								if (meta.attr('name') == name) {
+								if (meta.attr('name') === name) {
 									if (value) {
 										meta.attr('content', value);
 									} else {
@@ -235,7 +235,7 @@
 
 						// Add/update/delete link
 						elm = headerFragment.getAll('link')[0];
-						if (elm && elm.attr('rel') == 'stylesheet') {
+						if (elm && elm.attr('rel') === 'stylesheet') {
 							if (data.stylesheet) {
 								elm.attr('href', data.stylesheet);
 							} else {
@@ -316,13 +316,13 @@
 
 						var customLinks = [];
 						var linkArray = headContent.match( /<link[^>]*?>/gi );
-						if ( linkArray != null && linkArray.length > 0 ) {
-							for ( var i=0; i<linkArray.length; i++ ) {
-								var link = linkArray[i].toLowerCase();
+						if ( linkArray && linkArray.length > 0 ) {
+							for ( var h = 0; h < linkArray.length; h++ ) {
+								var link = linkArray[h].toLowerCase();
 								if ( ( link.indexOf( 'stylesheet' ) > 0 ) && ( link.indexOf( 'href' ) > 0 ) ) {
-									link = link.replace( "'", "\"" );
-									var hrefStart = link.indexOf( "\"" , link.indexOf( 'href' ) );
-									var href = link.substring( hrefStart+1, link.indexOf( "\"", hrefStart+1 ) );
+									link = link.replace( '\'', '"' );
+									var hrefStart = link.indexOf( '"', link.indexOf( 'href' ) );
+									var href = link.substring( hrefStart + 1, link.indexOf( '"', hrefStart + 1 ) );
 									href = editor.documentBaseURI.toAbsolute( href );
 									customLinks.push( href );
 									editor.contentCSS.push( href );
@@ -332,38 +332,38 @@
 
 						var mergeDotSegments = function( path ) {
 							// Leverage the browser to normalize paths: http://stackoverflow.com/a/14781678
-							var anchor = document.createElement( "a" );
+							var anchor = document.createElement( 'a' );
 							anchor.href = path;
 
-							// Some browsers prepend "/", some don't
+							// Some browsers prepend '/', some don't
 							var pathname = anchor.pathname;
-							if( pathname[0] != "/" ) {
-								pathname = "/" + pathname;
+							if ( pathname[0] !== '/' ) {
+								pathname = '/' + pathname;
 							}
 
-							var normalized = anchor.protocol + "//" + anchor.hostname +
+							var normalized = anchor.protocol + '//' + anchor.hostname +
 								pathname + anchor.search + anchor.hash;
 							return normalized;
 						};
 
 						var editorHead = editor.dom.select( 'head' )[0];
-						if ( editorHead == null ) {
+						if (!editorHead) {
 							return;
 						}
 
 						var unusedHeadNodes = [];
-						for ( var i=0; i<editorHead.childNodes.length; i++ ) {
+						for ( var i = 0; i < editorHead.childNodes.length; i++ ) {
 
 							// remove linked CSS if it has been removed
-							if ( ( editorHead.childNodes[i].tagName.toLowerCase() == 'link' ) && ( editorHead.childNodes[i].getAttribute( 'rel' ) == 'stylesheet' ) ) {
-								var href = editorHead.childNodes[i].href;
-								if ( href != null ) {
+							if ( ( editorHead.childNodes[i].tagName.toLowerCase() === 'link' ) && ( editorHead.childNodes[i].getAttribute( 'rel' ) === 'stylesheet' ) ) {
+								href = editorHead.childNodes[i].href;
+								if (href) {
 									href = href.toLowerCase();
-									if ( ( href.indexOf( '/common/tiny_mce/' ) == -1 ) && ( href.indexOf( '/common/misc/' ) == -1 ) && ( href.indexOf( '/lp/htmleditor/' ) == -1 ) ) {
+									if ( ( href.indexOf( '/common/tiny_mce/' ) === -1 ) && ( href.indexOf( '/common/misc/' ) === -1 ) && ( href.indexOf( '/lp/htmleditor/' ) === -1 ) ) {
 										var keepLink = false;
-										for ( var j=0; j<customLinks.length; j++ ) {
+										for ( var j = 0; j < customLinks.length; j++ ) {
 											var resolvedCustomLink = mergeDotSegments( customLinks[j] );
-											if ( href.indexOf( resolvedCustomLink ) != -1 ) {
+											if ( href.indexOf( resolvedCustomLink ) !== -1 ) {
 												keepLink = true;
 												break;
 											}
@@ -371,19 +371,19 @@
 										if ( !keepLink ) {
 											unusedHeadNodes.push( editorHead.childNodes[i] );
 											var qsIndex = href.indexOf( '?' );
-											if ( qsIndex != -1 ) {
+											if ( qsIndex !== -1 ) {
 												var qs = href.substr( qsIndex + 1 );
 												var qsParams = qs.split( '&' );
 												href = href.substring( 0, qsIndex );
-												if ( qsParams != null && qsParams.length > 0 ) {
+												if ( qsParams && qsParams.length > 0 ) {
 													var qsFirst = true;
-													for ( var k=0; k<qsParams.length; k++ ) {
+													for ( var k = 0; k < qsParams.length; k++ ) {
 														if ( !/^v=/.test( qsParams[k] ) ) {
 															if ( qsFirst ) {
 																href += ( '?' + qsParams[k] );
 																qsFirst = false;
 															} else {
-																href += ( '&' + qsParams[k] ); 
+																href += ( '&' + qsParams[k] );
 															}
 														}
 													}
@@ -395,16 +395,15 @@
 									}
 								}
 							}
-							
 						}
-						for ( var i=0; i<unusedHeadNodes.length; i++ ) {
-							editorHead.removeChild( unusedHeadNodes[i] );
+						for ( var m = 0; m < unusedHeadNodes.length; m++ ) {
+							editorHead.removeChild( unusedHeadNodes[m] );
 						}
 
 						var stylesArray = headContent.match( /<style[^>]*>(.|\n|\r)*?<\/style>/gi ) || [];
 
-						for ( var i=0; i<stylesArray.length; i++ ) {
-							var style = stylesArray[i];
+						for ( var n = 0; n < stylesArray.length; n++ ) {
+							var style = stylesArray[n];
 							if ( style.toLowerCase().indexOf('@import') < 0 && style.toLowerCase().indexOf('text/css') > 0 ) {
 								var tempNode = editor.getDoc().createElement('div');
 								tempNode.innerHTML = style;
@@ -424,7 +423,7 @@
 					}
 
 					function setContent(o) {
-						var startPos, endPos, content = o.content, headerFragment, styles = '', dom = editor.dom, elm;
+						var startPos, endPos, content = o.content, headerFragment, dom = editor.dom, elm;
 
 						if (o.selection) {
 							return;
@@ -437,7 +436,7 @@
 						}
 
 						// Ignore raw updated if we already have a head, this will fix issues with undo/redo keeping the head/foot separate
-						if (o.format == 'raw' && head) {
+						if (o.format === 'raw' && head) {
 							return;
 						}
 
@@ -449,12 +448,12 @@
 						content = content.replace(/<(\/?)BODY/gi, '<$1body');
 						startPos = content.indexOf('<body');
 
-						if (startPos != -1) {
+						if (startPos !== -1) {
 							startPos = content.indexOf('>', startPos);
 							head = low(content.substring(0, startPos + 1));
 
 							endPos = content.indexOf('</body', startPos);
-							if (endPos == -1) {
+							if (endPos === -1) {
 								endPos = content.length;
 							}
 
@@ -562,7 +561,6 @@
 
 					editor.on('BeforeSetContent', setContent);
 					editor.on('GetContent', getContent);
-					
 				});
 			}
 		}
