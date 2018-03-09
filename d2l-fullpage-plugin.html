@@ -316,7 +316,7 @@
 
 						var customLinks = [];
 						var linkArray = headContent.match( /<link[^>]*?>/gi );
-						if ( linkArray !== null && linkArray.length > 0 ) {
+						if ( linkArray && linkArray.length > 0 ) {
 							for ( var h = 0; h < linkArray.length; h++ ) {
 								var link = linkArray[h].toLowerCase();
 								if ( ( link.indexOf( 'stylesheet' ) > 0 ) && ( link.indexOf( 'href' ) > 0 ) ) {
@@ -347,7 +347,7 @@
 						};
 
 						var editorHead = editor.dom.select( 'head' )[0];
-						if ( editorHead === null ) {
+						if (!editorHead) {
 							return;
 						}
 
@@ -357,7 +357,7 @@
 							// remove linked CSS if it has been removed
 							if ( ( editorHead.childNodes[i].tagName.toLowerCase() === 'link' ) && ( editorHead.childNodes[i].getAttribute( 'rel' ) === 'stylesheet' ) ) {
 								href = editorHead.childNodes[i].href;
-								if ( href !== null ) {
+								if (href) {
 									href = href.toLowerCase();
 									if ( ( href.indexOf( '/common/tiny_mce/' ) === -1 ) && ( href.indexOf( '/common/misc/' ) === -1 ) && ( href.indexOf( '/lp/htmleditor/' ) === -1 ) ) {
 										var keepLink = false;
@@ -375,7 +375,7 @@
 												var qs = href.substr( qsIndex + 1 );
 												var qsParams = qs.split( '&' );
 												href = href.substring( 0, qsIndex );
-												if ( qsParams !== null && qsParams.length > 0 ) {
+												if ( qsParams && qsParams.length > 0 ) {
 													var qsFirst = true;
 													for ( var k = 0; k < qsParams.length; k++ ) {
 														if ( !/^v=/.test( qsParams[k] ) ) {
