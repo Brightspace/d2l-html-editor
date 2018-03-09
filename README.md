@@ -33,6 +33,72 @@ Once running, you can preview your element at
 `http://localhost:8080/components/d2l-html-editor/`, where `d2l-html-editor` is the name of the directory containing it.
 
 
+## Usage
+Import
+```html
+<head>
+    <link rel='import' href='../bower_components/d2l-html-editor/d2l-html-editor.html' />
+</head>
+```
+
+HTML
+```html
+<d2l-html-editor
+	editor-id="unique-id"
+    app-root="http://hostname/bower_components/dir/"
+    lang-tag="en-US"
+    content="show this text in editor on load">
+    <div
+        class='d2l-richtext-editor-container'
+        id="unique-id"
+        role="textbox">
+    </div>
+</d2l-html-editor>
+```
+To include a placeholder, ensure `d2l_placeholder` is included in the plugins property. Then, include the placeholder attribute
+```html
+<d2l-html-editor
+	editor-id="unique-id"
+    app-root="http://hostname/bower_components/dir/">
+    <div
+        id="unique-id"
+        placeholder$="Placeholder text">
+    </div>
+</d2l-html-editor>
+```
+
+### Attributes
+* `inline` - Render inline
+* `auto-focus` - Focus when rendered
+* `min-rows` - Minimum rows to display (in rows)
+* `max-rows` - Maximum rows to display (in rows)
+* `total-padding` - Padding inside input area
+* `line-height` - Line-height of text inside input area
+* `editor-id` - A unique Id (must be unique for each editor on a page)
+* `content` - Default value to display in the editor
+* `base-url` - Root directory where TinyMCE is located 
+* `document-base-url` - base URL for all relative URLs in the document
+* `css-url` - URL of CSS file containing styles to include (non-inline only) 
+* `app-root` - Location of the app
+* `lang-available` - Object specifying whether the language is available
+* `lang-tag` - The locale, for example, `en-US`
+* `lang-dir` - Language direction. Either `ltr` (default) or `rtl`.
+* `image-tools-enabled` - Enable image tools
+* `power-paste-enabled` - Enable power paste
+* `power-paste-formatting` - Filter type for powerpaste plugin
+* `a11ychecker-enabled` - Enable a11ychecker
+* `allow-unsafe` - Allow script tags
+* `full-page-enabled` - Enable 'd2l_fullpage' plugin
+* `auto-focus-end` - On autofocus, set cursor to end of input
+* `toolbar` - Override default buttons to show on toolbar. e.g. `'bold | italic underline'` Use `|` to place a divider.
+* `plugins` - Override default plugins to include. e.g. `'autolink lists paste d2l_placeholder'`
+
+### Adding a new plugin behaviors file
+1. Add file to root folder and import in `d2l-html-editor.html`. e.g. `<link rel="import" href="d2l-filter-plugin.html">`
+2. In the `d2l-html-editor.js` file `_getPluginBehavior` function, add a new case to the switch statement
+3. Then ensure the `this.plugins` property includes that plugin name somewhere in the string.
+
+
 ## Testing Your Element
 
 Simply navigate to the `/test` directory of your element to run its tests. If
