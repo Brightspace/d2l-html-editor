@@ -1727,6 +1727,7 @@ Polymer({
 			case 'powerpaste':
 			case 'paste':
 			case 'a11ychecker':
+			case 'emoticons':
 			default:
 				return null;
 		}
@@ -1747,12 +1748,12 @@ Polymer({
 		if (this.inline) {
 			this.toolbar = 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen';
 		} else {
-			this.toolbar = 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled ? ' a11ycheck' : '') + ' d2l_preview | smallscreen';
+			this.toolbar = 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled ? ' a11ycheck' : '') + ' d2l_preview | smallscreen | emoticons';
 		}
 	},
 
 	_setDefaultPlugins: function() {
-		this.plugins = 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled ? ' powerpaste' : ' paste') + (this.a11ycheckerEnabled ? ' a11ychecker' : '');
+		this.plugins = 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled ? ' powerpaste' : ' paste') + (this.a11ycheckerEnabled ? ' a11ychecker' : '') + ' emoticons';
 	},
 
 	initialize: function() {
@@ -1779,7 +1780,7 @@ Polymer({
 		var editor = tinymce.EditorManager.get(this.editorId);
 
 		// prevent save before remove, since it throws an exception when the HTML content contains a table
-		editor.save = function(){};
+		editor.save = function() {};
 		editor.remove();
 
 		this.client = null;
