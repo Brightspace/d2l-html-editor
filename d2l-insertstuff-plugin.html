@@ -170,7 +170,7 @@ Check that file periodically for changes...
 							if (html.substr(scriptEndIndex - 1, 1) === '/') {
 								toIndex = scriptEndIndex + 1;
 							} else {
-								var scriptEndRe = new RegExp('(<\/script>|' + regExp.CloseScript + ')', 'i'); // eslint-disable-line no-useless-escape
+								var scriptEndRe = new RegExp( '(<\\/script>|' + regExp.CloseScript + ')', 'i' );
 								scriptEndIndex = html.search(scriptEndRe);
 								if (scriptEndIndex !== -1) {
 									toIndex = html.indexOf('>', scriptEndIndex) + 1;
