@@ -41,7 +41,7 @@
 										// don't move the focus to the editor before creating an undo
 										// transation since it tries to make a bookmark for the current selection
 										client.getService('convert-to-viewable-html', '0.1').then(function(service) {
-											if ( editor.getParam('d2l_html_editor').allowUnsafe ) {
+											if (editor.getParam('d2l_html_editor').allowUnsafe) {
 												return e.data.code;
 											}
 											return service.filterHtml(e.data.code);

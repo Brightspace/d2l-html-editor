@@ -1,57 +1,57 @@
-
 <link rel="import" href="d2l-html-editor-plugin.html">
 
 <script>
-(function() {
-	'use strict';
-	/*global tinymce:true */
-	/** @polymerBehavior */
-	var FilterBehavior = {
-		plugin: {
-			addPlugin: function(client) {
-				tinymce.PluginManager.add('d2l_filter', function(editor) {
-					editor.on('init', function() {
+	(function() {
+		'use strict';
+		/*global tinymce:true */
+		/** @polymerBehavior */
+		var FilterBehavior = {
+			plugin: {
+				addPlugin: function(client) {
+					tinymce.PluginManager.add('d2l_filter', function(editor) {
+						editor.on('init', function() {
 
-						if (!editor.getParam('d2l_html_editor').content) {
-							return;
-						}
-						var unfilteredContent =  decodeURIComponent(editor.getParam('d2l_html_editor').content);
+							if (!editor.getParam('d2l_html_editor').content) {
+								return;
+							}
+							var unfilteredContent = decodeURIComponent(editor.getParam('d2l_html_editor').content);
 
-						if (unfilteredContent) {
-							client.getService('convert-to-viewable-html', '0.1').then(function(service) {
-								if ( editor.getParam('d2l_html_editor').allowUnsafe ) {
-									return unfilteredContent;
-								}
-								return service.filterHtml(unfilteredContent);
-							}).then(function(filteredContent) {
-								editor.setContent(filteredContent);
-								// This call is necessary for the undo button to work properly, otherwise the undo button
-								// can undo the saved content as well.
-								editor.undoManager.clear();
-								// This call is necessary for the custom JS functons we created for tinyMCE tables to get called
-								//When you first enter an editor, and change the table properties (it won't create a change event
-								//until there is already an undo action in the undomanager)
-								editor.undoManager.add();
+							if (unfilteredContent) {
+								client.getService('convert-to-viewable-html', '0.1').then(function(service) {
+									if (editor.getParam('d2l_html_editor').allowUnsafe) {
+										return unfilteredContent;
+									}
+									return service.filterHtml(unfilteredContent);
+								}).then(function(filteredContent) {
+									editor.setContent(filteredContent);
+									// This call is necessary for the undo button to work properly, otherwise the undo button
+									// can undo the saved content as well.
+									editor.undoManager.clear();
+									// This call is necessary for the custom JS functons we created for tinyMCE tables to get called
+									//When you first enter an editor, and change the table properties (it won't create a change event
+									//until there is already an undo action in the undomanager)
+									editor.undoManager.add();
 
-								// After initial initialization, clear content. The web component may become
-								// detached due to React reordering.	This will cause a re-init, but we want
-								// it to re-init from the current content.	We will look at preventing
-								// initialization on attach/detach in future.	However, detach is currently
-								// the simplest place to clean up the TinyMCE editor.	Probably should include
-								// a property to auto clean up, otherwise would need to explicitly call a clean
-								// up method from React componentWillUnmount.
-								editor.getParam('d2l_html_editor').content = null;
-							});
-						}
+									// After initial initialization, clear content. The web component may become
+									// detached due to React reordering.	This will cause a re-init, but we want
+									// it to re-init from the current content.	We will look at preventing
+									// initialization on attach/detach in future.	However, detach is currently
+									// the simplest place to clean up the TinyMCE editor.	Probably should include
+									// a property to auto clean up, otherwise would need to explicitly call a clean
+									// up method from React componentWillUnmount.
+									editor.getParam('d2l_html_editor').content = null;
+								});
+							}
+						});
 					});
-				});
+				}
 			}
-		}
-	};
-	window.D2LHtmlEditor = window.D2LHtmlEditor || {};
-	window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
-	/** @polymerBehavior */
-	window.D2LHtmlEditor.PolymerBehaviors.Filter = FilterBehavior;
+		};
+		window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+		window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+		/** @polymerBehavior */
+		window.D2LHtmlEditor.PolymerBehaviors.Filter = FilterBehavior;
 
-})();
+	})();
+
 </script>
