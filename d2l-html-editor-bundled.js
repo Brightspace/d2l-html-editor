@@ -1587,6 +1587,14 @@ Polymer({
 		plugins: {
 			type: String,
 			value: null
+		},
+		defaultFullpageFontFamily: {
+			type: String,
+			value: null
+		},
+		defaultFullpageFontSize: {
+			type: String,
+			value: null
 		}
 	},
 
@@ -1894,6 +1902,8 @@ Polymer({
 			plugins: this.plugins,
 			toolbar: this.toolbar,
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+			fullpage_default_font_family: this.defaultFullpageFontFamily,
+			fullpage_default_font_size: this.defaultFullpageFontSize,
 			style_formats: [
 				{title: 'Paragraph', format: 'p'},
 				{title: 'Address', format: 'address'},
