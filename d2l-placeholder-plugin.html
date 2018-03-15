@@ -27,9 +27,7 @@ used under MIT License -->
 							tinymce.DOM.bind(placeholderElement, 'mouseout', removeStyleToContainerOnHoverOut);
 							tinymce.DOM.bind(placeholderElement, 'click', function() { onFocus(placeholderElement); });
 							editor.on('focus', function() { onFocus(placeholderElement); });
-							editor.on('blur', function() { onBlur(placeholderElement); });
-							editor.on('change', function() { onBlur(placeholderElement); });
-							editor.on('setContent', function() { onBlur(placeholderElement); });
+							editor.on('blur change setContent keyup', function() { onBlur(placeholderElement); });
 
 							function onFocus(placeholderElement) {
 								hidePlaceholder(placeholderElement);
@@ -47,7 +45,8 @@ used under MIT License -->
 							}
 
 							function onBlur(placeholderElement) {
-								if (editor.getContent() === '' && !document.activeElement.isEqualNode(editor.getElement())) {
+								if (!document.activeElement.isEqualNode(editor.getElement()) &&
+									(editor.getContent() === '' || editor.getContent({format: 'raw'}) === editor.startContent)) {
 									showPlaceholder(placeholderElement);
 								} else {
 									hidePlaceholder(placeholderElement);
