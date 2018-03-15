@@ -1925,6 +1925,11 @@ Polymer({
 			powerpaste_block_drop : false,
 			paste_as_text: this.powerPasteEnabled ? false : true,
 			paste_text_sticky: this.powerPasteEnabled ? false : true,
+			paste_preprocess: function(plugin, args) {
+				if (!that.powerPasteEnabled) {
+					args.content += ' ';
+				}
+			},
 			images_upload_handler: function(blobInfo, replaceImageUrlFunction){
 				var blob = blobInfo.blob();
 				var filename = blobInfo.filename();
