@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "postinstall": "bower install",
+    "postinstall": "polymer install --variants",
     "test:travis": "npm run test:lint:js && npm run test:unit:travis",
     "test": "npm run test:lint:js",
     "test:lint:js": "eslint *.html",

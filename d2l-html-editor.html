@@ -64,18 +64,18 @@ Example:
 				right: inherit;
 			}
 
-			:host ::content div > p:first-of-type {
+			:host ::slotted div > p:first-of-type {
 				margin-top: 0
 			}
 
-			:host ::content div > p:last-of-type {
+			:host ::slotted div > p:last-of-type {
 				margin-bottom: 0;
 			}
 
 		</style>
 
 		<div id$="[[toolbarId]]" class="toolbar"></div>
-		<content></content>
+		<slot></slot>
 
 	</template>
 
