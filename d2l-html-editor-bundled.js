@@ -1854,7 +1854,7 @@ Polymer({
 			}
 
 			for ( var i=0; i < images.length; i++ ){
-				if ( images[i].src.startsWith("blob:") 
+				if ( images[i].src.startsWith("blob:")
 				&& !images[i].getAttribute("data-mce-selected") 	// if an image is selected in this state it's usually being manipulated by image tools plugin
 				){
 					images[i].setAttribute("data-mce-bogus","all");
@@ -2067,7 +2067,7 @@ Polymer({
 				editor.on('setcontent', function(event) {
 					findTables(editor);
 
-					// The content of the first setcontent event is always "", 
+					// The content of the first setcontent event is always "",
 					// if there is content to be set, it will be in the second setcontent event
 					if (event.content && config.auto_focus && that.autoFocusEnd) {
 						// Set cursor to end of input
@@ -2150,7 +2150,7 @@ Polymer({
 			if ( valenceHost ){
 				// get the root domain name of the valence host
 				var matches = valenceHost.toLowerCase().match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
-				var domainName = matches && matches[1];  
+				var domainName = matches && matches[1];
 				if ( domainName ){
 					config.imagetools_cors_hosts = [domainName];
 				}

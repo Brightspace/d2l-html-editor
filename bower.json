@@ -1,6 +1,6 @@
 {
   "name": "d2l-html-editor",
-  "version": "0.0.107",
+  "version": "0.0.112",
   "authors": [
     "Anonymous <anonymous@example.com>"
   ],
@@ -24,20 +24,14 @@
     "d2l-icons": "Brightspace/d2l-icons-ui#^4.10.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
     "sinon-stub-promise": "substantial/sinon-stub-promise#^3.0.1",
     "web-component-tester": "^6.0.0"
   },
 	"variants": {
     "1.x": {
       "dependencies": {
-        "polymer": "Polymer/polymer#^1.9",
-				"d2l-icons": "Brightspace/d2l-icons-ui#^4.10.0"
-      },
-      "devDependencies": {
-        "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-				"sinon-stub-promise": "substantial/sinon-stub-promise#^3.0.1",
-        "web-component-tester": "^6.0.0"
+        "polymer": "Polymer/polymer#^1.9"
       },
       "resolutions": {
         "webcomponentsjs": "^0.7"

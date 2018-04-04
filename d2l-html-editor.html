@@ -46,35 +46,21 @@ Example:
 				position: relative;
 			}
 
-			.toolbar {
+			:host ::slotted(.toolbar) {
 				position: absolute;
 				top: -2.9rem;
 				z-index: 1001;
 				display: inline-block;
 				right: 0rem;
 			}
-			/*
-			:host[dir="ltr"] .toolbar {
-				right: -1rem;
-			}
-			*/
 
-			:host-context([dir='rtl']) .toolbar {
+			:host-context([dir='rtl']) ::slotted(.toolbar) {
 				left: 0rem;
 				right: inherit;
 			}
 
-			:host ::slotted div > p:first-of-type {
-				margin-top: 0
-			}
-
-			:host ::slotted div > p:last-of-type {
-				margin-bottom: 0;
-			}
-
 		</style>
 
-		<div id$="[[toolbarId]]" class="toolbar"></div>
 		<slot></slot>
 
 	</template>
