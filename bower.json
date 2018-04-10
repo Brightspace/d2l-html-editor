@@ -20,12 +20,25 @@
     "/demo/"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.9.1",
-    "d2l-icons": "Brightspace/d2l-icons-ui#^3.1.0"
+    "polymer": "Polymer/polymer#1.9 - 2",
+    "d2l-icons": "^4.10.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
     "sinon-stub-promise": "substantial/sinon-stub-promise#^3.0.1",
     "web-component-tester": "^6.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "Polymer/polymer#^1.9"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7"
+      }
+    }
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
   }
 }
