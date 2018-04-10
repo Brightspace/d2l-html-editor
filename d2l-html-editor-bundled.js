@@ -1587,6 +1587,14 @@ Polymer({
 		plugins: {
 			type: String,
 			value: null
+		},
+		defaultFullpageFontFamily: {
+			type: String,
+			value: null
+		},
+		defaultFullpageFontSize: {
+			type: String,
+			value: null
 		}
 	},
 
@@ -1895,6 +1903,8 @@ Polymer({
 			plugins: this.plugins,
 			toolbar: this.toolbar,
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+			fullpage_default_font_family: this.defaultFullpageFontFamily,
+			fullpage_default_font_size: this.defaultFullpageFontSize,
 			style_formats: [
 				{title: 'Paragraph', format: 'p'},
 				{title: 'Address', format: 'address'},
@@ -1926,36 +1936,42 @@ Polymer({
 			powerpaste_block_drop : false,
 			paste_as_text: this.powerPasteEnabled ? false : true,
 			paste_text_sticky: this.powerPasteEnabled ? false : true,
-			images_upload_handler: function(blobInfo, replaceImageUrlFunction){
+			paste_preprocess: function(plugin, args) {
+				if (!that.powerPasteEnabled) {
+					// Stops Paste plugin from converting pasted image links to image
+					args.content += ' ';
+				}
+			},
+			images_upload_handler: function(blobInfo, replaceImageUrlFunction) {
 				var blob = blobInfo.blob();
 				var filename = blobInfo.filename();
 				var client = that.ifrauClient;
 
-				var successCallback = function(newUrl ){
+				var successCallback = function(newUrl) {
 					replaceImageUrlFunction(newUrl);
-					setTimeout(updateImageUploadSpinners,1);	// need to wait one frame for the urls to be updated before we get rid of the image spinners
-				}
-				var failCallBack = function(){
+					setTimeout(updateImageUploadSpinners, 1);	// need to wait one frame for the urls to be updated before we get rid of the image spinners
+				};
+				var failCallBack = function() {
 					// fail, but we make the url invalid so the user knows something went wrong
-					successCallback("pasteFailed");
-				}
+					successCallback('pasteFailed');
+				};
 				function getHost(baseUrl) {
 					var host = /https?:\/\/([^\/]+).*/.exec(baseUrl)[1];
 					return host;
 				}
-				that.fire("d2l-html-editor-image-upload-started");
+				that.fire('d2l-html-editor-image-upload-started');
 				superagent.post(valenceHost + '/d2l/api/le/unstable/file/AddTempFile')
 					.use(superagent_auth({trustedHost: getHost(valenceHost)}))
-					.attach('file',blob,filename)
-					.end( function(error,response){
-						if ( !error ){
+					.attach('file', blob, filename)
+					.end(function(error, response) {
+						if (!error) {
 							successCallback(response.body);
 						}
-						else{
+						else {
 							failCallBack();
 						}
 						that.fire('change', {content: that.editor.getContent()});
-						that.fire("d2l-html-editor-image-upload-completed");
+						that.fire('d2l-html-editor-image-upload-completed');
 					});
 			},
 			setup: function(editor) {
