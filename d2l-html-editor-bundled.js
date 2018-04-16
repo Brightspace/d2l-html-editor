@@ -1595,6 +1595,10 @@ Polymer({
 		defaultFullpageFontSize: {
 			type: String,
 			value: null
+		},
+		objectResizing: {
+			type: Boolean,
+			value: true
 		}
 	},
 
@@ -1774,7 +1778,7 @@ Polymer({
 
 		this.editorReady.then(function() {
 			that._configureTinyMce(that.ifrauClient).then(function() {
-				that.ifrauClient.request('valenceHost').then( function(valenceHost){
+				that.ifrauClient.request('valenceHost').then( function(valenceHost) {
 					that._init(valenceHost);
 				});
 			});
@@ -1805,7 +1809,7 @@ Polymer({
 		tinymce.EditorManager.get(this.editorId).setContent(''); // eslint-disable-line no-undef
 	},
 
-	_init: function(valenceHost ) {
+	_init: function(valenceHost) {
 		if (null !== this.baseUrl) {
 			tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
 		}
@@ -1930,6 +1934,7 @@ Polymer({
 			language_url: this.langTag && this.langAvailable.bool ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
 			language: this.langTag && this.langAvailable.bool ? this.langTag : null,
 			directionality: this.langDir,
+			object_resizing: this.objectResizing,
 			powerpaste_word_import: this.powerPasteFormatting,
 			powerpaste_allow_local_images: this.powerPasteEnabled ? true : false,
 			powerpaste_block_drop : false,
@@ -2078,7 +2083,7 @@ Polymer({
 					}
 				});
 
-				editor.on('change redo undo', function( event ) {
+				editor.on('change redo undo', function(event) {
 					updateImageUploadSpinners();
 					findTables(editor);
 					that.fire('change', {content: editor.getContent()});
