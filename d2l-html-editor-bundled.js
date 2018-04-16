@@ -1760,7 +1760,7 @@ Polymer({
 		if (this.inline) {
 			this.toolbar = 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen';
 		} else {
-			this.toolbar = 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled ? ' a11ycheck' : '') + ' d2l_preview | smallscreen | emoticons';
+			this.toolbar = 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled ? ' a11ycheck' : '') + ' d2l_preview | smallscreen';
 		}
 	},
 
