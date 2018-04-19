@@ -390,8 +390,8 @@ Polymer({
 			}
 
 			for ( var i=0; i < images.length; i++ ){
-				if ( images[i].src.startsWith("blob:") 
-				&& !images[i].getAttribute("data-mce-selected") 	// if an image is selected in this state it's usually being manipulated by image tools plugin
+				if ( images[i].src.indexOf("blob:") === 0
+					&& !images[i].getAttribute("data-mce-selected") 	// if an image is selected in this state it's usually being manipulated by image tools plugin
 				){
 					images[i].setAttribute("data-mce-bogus","all");
 					var img = images[i];
