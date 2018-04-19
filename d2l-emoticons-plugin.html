@@ -1,17 +1,15 @@
 <link rel="import" href="d2l-html-editor-plugin.html">
 
 <script>
-	(function () {
+	(function() {
 		'use strict';
-		/*global tinymce:true */
-		/** @polymerBehavior */
 		var EmoticonsBehavior = {
 			plugin: {
-				addPlugin: function () {
-					tinymce.PluginManager.add('d2l_emoticons', function (editor) {
-						const insertEmoticon = function (editor, src, alt) {
-							editor.insertContent(editor.dom.createHTML('img', { src, alt }));
-						};
+				addPlugin: function() {
+					tinymce.PluginManager.add('d2l_emoticons', function(editor) { // eslint-disable-line no-undef
+						function insertEmoticon(editor, src, alt) {
+							editor.insertContent(editor.dom.createHTML('img', { src: src, alt: alt }));
+						}
 
 						var emoticons = [
 							['cool', 'cry', 'embarassed', 'foot-in-mouth'],
@@ -21,13 +19,13 @@
 						];
 
 						function getHtml() {
-							let emoticonsHtml;
-							const pluginUrl = editor.documentBaseUrl + 'bower_components/d2l-html-editor';
+							var emoticonsHtml;
+							var pluginUrl = editor.documentBaseUrl + 'bower_components/d2l-html-editor';
 							emoticonsHtml = '<table role="list" class="mce-grid">';
-							tinymce.each(emoticons, function (row) {
+							tinymce.each(emoticons, function(row) { // eslint-disable-line no-undef
 								emoticonsHtml += '<tr>';
-								tinymce.each(row, function (icon) {
-									const emoticonUrl = pluginUrl + '/img/smiley-' + icon + '.gif';
+								tinymce.each(row, function(icon) { // eslint-disable-line no-undef
+									var emoticonUrl = pluginUrl + '/img/smiley-' + icon + '.gif';
 
 									emoticonsHtml += '<td><a href="#" data-mce-url="' + emoticonUrl + '" data-mce-alt="' + icon + '" tabindex="-1" ' +
 										'role="option" aria-label="' + icon + '"><img src="' +
@@ -47,8 +45,8 @@
 							panel: {
 								autohide: true,
 								html: getHtml(),
-								onclick(e) {
-									const linkElm = editor.dom.getParent(e.target, 'a');
+								onclick: function(e) {
+									var linkElm = editor.dom.getParent(e.target, 'a');
 									if (linkElm) {
 										insertEmoticon(editor, linkElm.getAttribute('data-mce-url'), linkElm.getAttribute('data-mce-alt'));
 										this.hide();
