@@ -21,7 +21,7 @@
 						function getEmoticonsBaseUrl() {
 							var emoticonsCdnVersion = '0.0.1';
 							return 'https://s.brightspace.com/lib/emoticons/' + emoticonsCdnVersion + '/';
-						};
+						}
 
 						function getHtml() {
 							var emoticonsHtml;
@@ -31,8 +31,8 @@
 								tinymce.each(row, function(icon) { // eslint-disable-line no-undef
 									var emoticonsBaseUrl = getEmoticonsBaseUrl();
 									var emoticonUrl = emoticonsBaseUrl + 'smiley-' + icon + '.gif';
-									var localizedEmoticonName = tinymce.EditorManager.i18n.translate(icon + ' emoticon');
-									emoticonsHtml += '<td><a href="#" tabindex="-1" role="option" style="cursor: pointer;" ' + 
+									var localizedEmoticonName = tinymce.EditorManager.i18n.translate(icon + ' emoticon'); // eslint-disable-line no-undef
+									emoticonsHtml += '<td><a href="#" tabindex="-1" role="option" style="cursor: pointer;" ' +
 										'data-mce-url="' + emoticonUrl + '" ' +
 										'data-mce-alt="' + localizedEmoticonName + '" ' +
 										'aria-label="' + localizedEmoticonName + '" ' +
