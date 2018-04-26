@@ -7,8 +7,8 @@
 			plugin: {
 				addPlugin: function() {
 					tinymce.PluginManager.add('d2l_emoticons', function(editor) { // eslint-disable-line no-undef
-						function insertEmoticon(editor, src, alt) {
-							editor.insertContent(editor.dom.createHTML('img', { src: src, alt: alt }));
+						function insertEmoticon(editor, src, alt, dataD2lEmoji) {
+							editor.insertContent(editor.dom.createHTML('img', { src: src, alt: alt, 'data-d2l-emoji': dataD2lEmoji }));
 						}
 
 						var emoticons = [
@@ -18,18 +18,26 @@
 							['tongue-out', 'undecided', 'wink', 'yell']
 						];
 
+						function getEmoticonsBaseUrl() {
+							var emoticonsCdnVersion = '0.0.1';
+							return 'https://s.brightspace.com/lib/emoticons/' + emoticonsCdnVersion + '/';
+						};
+
 						function getHtml() {
 							var emoticonsHtml;
-							var pluginUrl = editor.documentBaseUrl + 'bower_components/d2l-html-editor';
 							emoticonsHtml = '<table role="list" class="mce-grid">';
 							tinymce.each(emoticons, function(row) { // eslint-disable-line no-undef
 								emoticonsHtml += '<tr>';
 								tinymce.each(row, function(icon) { // eslint-disable-line no-undef
-									var emoticonUrl = pluginUrl + '/img/smiley-' + icon + '.gif';
-
-									emoticonsHtml += '<td><a href="#" data-mce-url="' + emoticonUrl + '" data-mce-alt="' + icon + '" tabindex="-1" ' +
-										'role="option" aria-label="' + icon + '"><img src="' +
-										emoticonUrl + '" style="width: 18px; height: 18px" role="presentation" /></a></td>';
+									var emoticonsBaseUrl = getEmoticonsBaseUrl();
+									var emoticonUrl = emoticonsBaseUrl + 'smiley-' + icon + '.gif';
+									var localizedEmoticonName = tinymce.EditorManager.i18n.translate(icon + ' emoticon');
+									emoticonsHtml += '<td><a href="#" tabindex="-1" role="option" style="cursor: pointer;" ' + 
+										'data-mce-url="' + emoticonUrl + '" ' +
+										'data-mce-alt="' + localizedEmoticonName + '" ' +
+										'aria-label="' + localizedEmoticonName + '" ' +
+										'data-d2l-emoji="' + icon + '">' +
+										'<img src="' + emoticonUrl + '" style="width: 18px; height: 18px" role="presentation" /></a></td>';
 								});
 								emoticonsHtml += '</tr>';
 							});
@@ -48,7 +56,7 @@
 								onclick: function(e) {
 									var linkElm = editor.dom.getParent(e.target, 'a');
 									if (linkElm) {
-										insertEmoticon(editor, linkElm.getAttribute('data-mce-url'), linkElm.getAttribute('data-mce-alt'));
+										insertEmoticon(editor, linkElm.getAttribute('data-mce-url'), linkElm.getAttribute('data-mce-alt'), linkElm.getAttribute('data-d2l-emoji'));
 										this.hide();
 									}
 								}
