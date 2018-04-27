@@ -69,5 +69,8 @@ tinymce.addI18n('en_GB',{
 "Adjacent links should be merged.": "Adjacent links should be merged.",
 "Use list markup for lists.": "Use list markup for lists.",
 "Large text must have a contrast ratio of at least 3:1.": "Large text must have a contrast ratio of at least 3:1.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "Visual presentation must have a contrast ratio of at least 4.5:1."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "Visual presentation must have a contrast ratio of at least 4.5:1.",
+
+// d2l-emoticons plugin
+"smiley-cool emoticon": "cool emoticon"
 });

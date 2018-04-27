@@ -1,0 +1,77 @@
+<link rel="import" href="d2l-html-editor-plugin.html">
+
+<script>
+	(function() {
+		'use strict';
+		var EmoticonsBehavior = {
+			plugin: {
+				addPlugin: function() {
+					tinymce.PluginManager.add('d2l_emoticons', function(editor) { // eslint-disable-line no-undef
+						function insertEmoticon(editor, src, alt, dataD2lEmoji) {
+							editor.insertContent(editor.dom.createHTML('img', { src: src, alt: alt, 'data-d2l-emoji': dataD2lEmoji }));
+						}
+
+						var emoticons = [
+							['smiley-cool', 'smiley-cry', 'smiley-embarassed', 'smiley-foot-in-mouth'],
+							['smiley-frown', 'smiley-innocent', 'smiley-kiss', 'smiley-laughing'],
+							['smiley-money-mouth', 'smiley-sealed', 'smiley-smile', 'smiley-surprised'],
+							['smiley-tongue-out', 'smiley-undecided', 'smiley-wink', 'smiley-yell']
+						];
+
+						function getEmoticonsBaseUrl() {
+							var emoticonsCdnVersion = '0.0.1';
+							return 'https://s.brightspace.com/lib/emoticons/' + emoticonsCdnVersion + '/';
+						}
+
+						function getHtml() {
+							var emoticonsBaseUrl = getEmoticonsBaseUrl();
+							var emoticonsHtml;
+							emoticonsHtml = '<table role="list" class="mce-grid">';
+							tinymce.each(emoticons, function(row) { // eslint-disable-line no-undef
+								emoticonsHtml += '<tr>';
+								tinymce.each(row, function(icon) { // eslint-disable-line no-undef
+									var emoticonUrl = emoticonsBaseUrl + icon + '.gif';
+									var localizedEmoticonName = tinymce.EditorManager.i18n.translate(icon + ' emoticon'); // eslint-disable-line no-undef
+									emoticonsHtml += '<td><a href="#" tabindex="-1" role="option" style="cursor: pointer;" ' +
+										'data-mce-url="' + emoticonUrl + '" ' +
+										'data-mce-alt="' + localizedEmoticonName + '" ' +
+										'aria-label="' + localizedEmoticonName + '" ' +
+										'data-d2l-emoji="' + icon + '">' +
+										'<img src="' + emoticonUrl + '" style="width: 18px; height: 18px" role="presentation" /></a></td>';
+								});
+								emoticonsHtml += '</tr>';
+							});
+							emoticonsHtml += '</table>';
+							return emoticonsHtml;
+						}
+
+						editor.addButton('d2l_emoticons', {
+							type: 'panelbutton',
+							icon: 'emoticons',
+							title: 'Emoticons',
+							tooltip: 'Emoticons',
+							panel: {
+								autohide: true,
+								html: getHtml(),
+								onclick: function(e) {
+									var linkElm = editor.dom.getParent(e.target, 'a');
+									if (linkElm) {
+										insertEmoticon(editor, linkElm.getAttribute('data-mce-url'), linkElm.getAttribute('data-mce-alt'), linkElm.getAttribute('data-d2l-emoji'));
+										this.hide();
+									}
+								}
+							}
+						});
+					});
+				}
+			}
+		};
+
+		window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+		window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+		/** @polymerBehavior */
+		window.D2LHtmlEditor.PolymerBehaviors.Emoticons = EmoticonsBehavior;
+
+	})();
+
+</script>
