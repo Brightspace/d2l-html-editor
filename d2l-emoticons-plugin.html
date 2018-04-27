@@ -12,10 +12,10 @@
 						}
 
 						var emoticons = [
-							['cool', 'cry', 'embarassed', 'foot-in-mouth'],
-							['frown', 'innocent', 'kiss', 'laughing'],
-							['money-mouth', 'sealed', 'smile', 'surprised'],
-							['tongue-out', 'undecided', 'wink', 'yell']
+							['smiley-cool', 'smiley-cry', 'smiley-embarassed', 'smiley-foot-in-mouth'],
+							['smiley-frown', 'smiley-innocent', 'smiley-kiss', 'smiley-laughing'],
+							['smiley-money-mouth', 'smiley-sealed', 'smiley-smile', 'smiley-surprised'],
+							['smiley-tongue-out', 'smiley-undecided', 'smiley-wink', 'smiley-yell']
 						];
 
 						function getEmoticonsBaseUrl() {
@@ -30,7 +30,7 @@
 							tinymce.each(emoticons, function(row) { // eslint-disable-line no-undef
 								emoticonsHtml += '<tr>';
 								tinymce.each(row, function(icon) { // eslint-disable-line no-undef
-									var emoticonUrl = emoticonsBaseUrl + 'smiley-' + icon + '.gif';
+									var emoticonUrl = emoticonsBaseUrl + icon + '.gif';
 									var localizedEmoticonName = tinymce.EditorManager.i18n.translate(icon + ' emoticon'); // eslint-disable-line no-undef
 									emoticonsHtml += '<td><a href="#" tabindex="-1" role="option" style="cursor: pointer;" ' +
 										'data-mce-url="' + emoticonUrl + '" ' +

@@ -72,5 +72,5 @@ tinymce.addI18n('en_CA',{
 "Visual presentation must have a contrast ratio of at least 4.5:1.": "Visual presentation must have a contrast ratio of at least 4.5:1.",
 
 // d2l-emoticons plugin
-"cool emoticon": "cool emoticon"
+"smiley-cool emoticon": "cool emoticon"
 });
