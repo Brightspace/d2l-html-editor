@@ -24,12 +24,12 @@
 						}
 
 						function getHtml() {
+							var emoticonsBaseUrl = getEmoticonsBaseUrl();
 							var emoticonsHtml;
 							emoticonsHtml = '<table role="list" class="mce-grid">';
 							tinymce.each(emoticons, function(row) { // eslint-disable-line no-undef
 								emoticonsHtml += '<tr>';
 								tinymce.each(row, function(icon) { // eslint-disable-line no-undef
-									var emoticonsBaseUrl = getEmoticonsBaseUrl();
 									var emoticonUrl = emoticonsBaseUrl + 'smiley-' + icon + '.gif';
 									var localizedEmoticonName = tinymce.EditorManager.i18n.translate(icon + ' emoticon'); // eslint-disable-line no-undef
 									emoticonsHtml += '<td><a href="#" tabindex="-1" role="option" style="cursor: pointer;" ' +
