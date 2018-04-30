@@ -292,7 +292,7 @@ Polymer({
 		if (this.inline) {
 			this.toolbar = 'bold italic underline d2l_image d2l_isf d2l_equation fullscreen';
 		} else {
-			this.toolbar = 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled ? ' a11ycheck' : '') + ' d2l_preview | smallscreen';
+			this.toolbar = 'bold italic underline d2l_textstylerollup | d2l_image d2l_isf d2l_link d2l_emoticons d2l_insertrollup | d2l_equation | bullist d2l_formatrollup | table | forecolor | styleselect | fontselect fontsizeselect | undo redo | d2l_code' + (this.a11ycheckerEnabled ? ' a11ycheck' : '') + ' d2l_preview | smallscreen';
 		}
 	},
 
@@ -311,7 +311,7 @@ Polymer({
 
 		this.editorReady.then(function() {
 			that._configureTinyMce(that.ifrauClient).then(function() {
-				that.ifrauClient.request('valenceHost').then( function(valenceHost) {
+				that.ifrauClient.request('valenceHost').then(function(valenceHost) {
 					that._init(valenceHost);
 				});
 			});
@@ -321,7 +321,7 @@ Polymer({
 	// We cannot cleanup in detached because React seems to cause the web component
 	// to detach/attach during move operations
 	cleanup: function() {
-		var editor = tinymce.EditorManager.get(this.editorId);
+		var editor = tinymce.EditorManager.get(this.editorId); // eslint-disable-line no-undef
 
 		// prevent save before remove, since it throws an exception when the HTML content contains a table
 		editor.save = function() {};
