@@ -26,6 +26,7 @@ tinymce.addI18n('en_CA',{
 "Open in Full Screen Editor": "Open in Full Screen Editor",
 "Add Attributes": "Add Attributes",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside",
+"Emoticons": "Emoticons",
 
 // a11ychecker plugin
 "Accessibility Checker": "Accessibility Checker",

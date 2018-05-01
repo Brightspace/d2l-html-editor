@@ -12,10 +12,8 @@
 						}
 
 						var emoticons = [
-							['smiley-cool', 'smiley-cry', 'smiley-embarassed', 'smiley-foot-in-mouth'],
-							['smiley-frown', 'smiley-innocent', 'smiley-kiss', 'smiley-laughing'],
-							['smiley-money-mouth', 'smiley-sealed', 'smiley-smile', 'smiley-surprised'],
-							['smiley-tongue-out', 'smiley-undecided', 'smiley-wink', 'smiley-yell']
+							['smiley-cool', 'smiley-cry', 'smiley-embarassed', 'smiley-foot-in-mouth', 'smiley-frown', 'smiley-innocent', 'smiley-kiss', 'smiley-laughing'],
+							['smiley-money-mouth', 'smiley-sealed', 'smiley-smile', 'smiley-surprised', 'smiley-tongue-out', 'smiley-undecided', 'smiley-wink', 'smiley-yell']
 						];
 
 						function getEmoticonsBaseUrl() {
@@ -46,10 +44,11 @@
 						}
 
 						editor.addMenuItem('d2l_emoticons', {
-							type: 'panelbutton',
 							text: 'Emoticons',
+							icon: 'emoticons',
 							title: 'Emoticons',
-							panel: {
+							menu: [{
+								type: 'panel',
 								autohide: true,
 								html: getHtml(),
 								onclick: function(e) {
@@ -59,7 +58,7 @@
 										this.hide();
 									}
 								}
-							}
+							}]
 						});
 
 						editor.addButton('d2l_emoticons', {
