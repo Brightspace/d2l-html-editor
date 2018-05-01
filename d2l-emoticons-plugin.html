@@ -45,6 +45,22 @@
 							return emoticonsHtml;
 						}
 
+						editor.addMenuItem('d2l_emoticons', {
+							type: 'panelbutton',
+							title: 'Emoticons',
+							panel: {
+								autohide: true,
+								html: getHtml(),
+								onclick: function(e) {
+									var linkElm = editor.dom.getParent(e.target, 'a');
+									if (linkElm) {
+										insertEmoticon(editor, linkElm.getAttribute('data-mce-url'), linkElm.getAttribute('data-mce-alt'), linkElm.getAttribute('data-d2l-emoji'));
+										this.hide();
+									}
+								}
+							}
+						});
+
 						editor.addButton('d2l_emoticons', {
 							type: 'panelbutton',
 							icon: 'emoticons',
