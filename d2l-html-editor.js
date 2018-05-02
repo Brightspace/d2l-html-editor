@@ -297,7 +297,7 @@ Polymer({
 	},
 
 	_setDefaultPlugins: function() {
-		this.plugins = 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled ? ' powerpaste' : ' paste') + (this.a11ycheckerEnabled ? ' a11ychecker' : '') + ' d2l_emoticons';
+		this.plugins = 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link d2l_emoticons ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled ? ' powerpaste' : ' paste') + (this.a11ycheckerEnabled ? ' a11ychecker' : '');
 	},
 
 	initialize: function() {
@@ -311,7 +311,7 @@ Polymer({
 
 		this.editorReady.then(function() {
 			that._configureTinyMce(that.ifrauClient).then(function() {
-				that.ifrauClient.request('valenceHost').then( function(valenceHost) {
+				that.ifrauClient.request('valenceHost').then(function(valenceHost) {
 					that._init(valenceHost);
 				});
 			});
@@ -321,7 +321,7 @@ Polymer({
 	// We cannot cleanup in detached because React seems to cause the web component
 	// to detach/attach during move operations
 	cleanup: function() {
-		var editor = tinymce.EditorManager.get(this.editorId);
+		var editor = tinymce.EditorManager.get(this.editorId); // eslint-disable-line no-undef
 
 		// prevent save before remove, since it throws an exception when the HTML content contains a table
 		editor.save = function() {};

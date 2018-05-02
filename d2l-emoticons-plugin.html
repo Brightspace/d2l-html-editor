@@ -12,9 +12,8 @@
 						}
 
 						var emoticons = [
-							['smiley-cool', 'smiley-cry', 'smiley-embarassed', 'smiley-foot-in-mouth'],
-							['smiley-frown', 'smiley-innocent', 'smiley-kiss', 'smiley-laughing'],
-							['smiley-money-mouth', 'smiley-sealed', 'smiley-smile', 'smiley-surprised'],
+							['smiley-cool', 'smiley-cry', 'smiley-embarassed', 'smiley-foot-in-mouth', 'smiley-frown', 'smiley-innocent'],
+							['smiley-kiss', 'smiley-laughing', 'smiley-money-mouth', 'smiley-sealed', 'smiley-smile', 'smiley-surprised'],
 							['smiley-tongue-out', 'smiley-undecided', 'smiley-wink', 'smiley-yell']
 						];
 
@@ -37,13 +36,31 @@
 										'data-mce-alt="' + localizedEmoticonName + '" ' +
 										'aria-label="' + localizedEmoticonName + '" ' +
 										'data-d2l-emoji="' + icon + '">' +
-										'<img src="' + emoticonUrl + '" style="width: 18px; height: 18px" role="presentation" /></a></td>';
+										'<img src="' + emoticonUrl + '" style="width: 18px; height: 18px; padding: 5px;" role="presentation" /></a></td>';
 								});
 								emoticonsHtml += '</tr>';
 							});
 							emoticonsHtml += '</table>';
 							return emoticonsHtml;
 						}
+
+						editor.addMenuItem('d2l_emoticons', {
+							text: 'Emoticons',
+							icon: 'emoticons',
+							title: 'Emoticons',
+							menu: [{
+								type: 'panel',
+								html: getHtml(),
+								onclick: function(e) {
+									var linkElm = editor.dom.getParent(e.target, 'a');
+									if (linkElm) {
+										insertEmoticon(editor, linkElm.getAttribute('data-mce-url'), linkElm.getAttribute('data-mce-alt'), linkElm.getAttribute('data-d2l-emoji'));
+										this.parent().hideAll();
+									}
+								},
+								style: 'padding: 5px;'
+							}]
+						});
 
 						editor.addButton('d2l_emoticons', {
 							type: 'panelbutton',
@@ -59,7 +76,8 @@
 										insertEmoticon(editor, linkElm.getAttribute('data-mce-url'), linkElm.getAttribute('data-mce-alt'), linkElm.getAttribute('data-d2l-emoji'));
 										this.hide();
 									}
-								}
+								},
+								style: 'padding-top: 5px; padding-left: 5px;'
 							}
 						});
 					});
