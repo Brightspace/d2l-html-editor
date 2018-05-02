@@ -54,7 +54,7 @@
 									var linkElm = editor.dom.getParent(e.target, 'a');
 									if (linkElm) {
 										insertEmoticon(editor, linkElm.getAttribute('data-mce-url'), linkElm.getAttribute('data-mce-alt'), linkElm.getAttribute('data-d2l-emoji'));
-										this.parent().hide();
+										this.parent().hideAll();
 									}
 								}
 							}]
