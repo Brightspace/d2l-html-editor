@@ -691,6 +691,7 @@ Polymer({
 				var domainName = matches && matches[1];  
 				if ( domainName ){
 					config.imagetools_cors_hosts = [domainName];
+					config.imagetools_credentials_hosts = [domainName];
 				}
 			}
 		}
