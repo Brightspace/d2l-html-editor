@@ -75,7 +75,7 @@ tinymce.addI18n('en_GB',{
 // d2l-emoticons plugin
 "blue funster": "blue funster",
 "celebrate": "celebrate",
-"love": "love",
+"heart": "heart",
 "red funster": "red funster",
 "star": "star",
 "sunshine": "sunshine",
