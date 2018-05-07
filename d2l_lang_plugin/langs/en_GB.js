@@ -73,5 +73,22 @@ tinymce.addI18n('en_GB',{
 "Visual presentation must have a contrast ratio of at least 4.5:1.": "Visual presentation must have a contrast ratio of at least 4.5:1.",
 
 // d2l-emoticons plugin
-"smiley-cool emoticon": "cool emoticon"
+"blue funster": "blue funster",
+"blush": "blush",
+"celebrate": "celebrate",
+"cool": "cool",
+"goofy": "goofy",
+"happy": "happy",
+"joy": "joy",
+"love": "love",
+"love eyes": "love eyes",
+"red funster": "red funster",
+"star": "star",
+"star eyes": "star eyes",
+"sunshine": "sunshine",
+"thinking": "thinking",
+"thumbs up": "thumbs up",
+"wink": "wink",
+"wow": "wow",
+"upside down": "upside down"
 });

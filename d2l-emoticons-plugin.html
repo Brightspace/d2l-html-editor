@@ -12,13 +12,50 @@
 						}
 
 						var emoticons = [
-							['smiley-cool', 'smiley-cry', 'smiley-embarassed', 'smiley-foot-in-mouth', 'smiley-frown', 'smiley-innocent'],
-							['smiley-kiss', 'smiley-laughing', 'smiley-money-mouth', 'smiley-sealed', 'smiley-smile', 'smiley-surprised'],
-							['smiley-tongue-out', 'smiley-undecided', 'smiley-wink', 'smiley-yell']
+							[
+								{ name: 'happy2', langterm: '' },
+								{ name: 'loveeyes2', langterm: '' },
+								{ name: 'joy2', langterm: '' },
+								{ name: 'wow2', langterm: '' },
+								{ name: 'upsidedown2', langterm: '' },
+								{ name: 'wink2', langterm: '' }
+							],
+							[
+								{ name: 'goofy2', langterm: '' },
+								{ name: 'stareyes2', langterm: '' },
+								{ name: 'cool2', langterm: '' },
+								{ name: 'blush2', langterm: '' },
+								{ name: 'thinking2', langterm: '' },
+								{ name: 'thumbsup2', langterm: '' }
+							],
+							[
+								{ name: 'happy1', langterm: '' },
+								{ name: 'loveeyes1', langterm: '' },
+								{ name: 'joy1', langterm: '' },
+								{ name: 'wow1', langterm: '' },
+								{ name: 'upsidedown1', langterm: '' },
+								{ name: 'wink1', langterm: '' }
+							],
+							[
+								{ name: 'goofy1', langterm: '' },
+								{ name: 'stareyes1', langterm: '' },
+								{ name: 'cool1', langterm: '' },
+								{ name: 'blush1', langterm: '' },
+								{ name: 'thinking1', langterm: '' },
+								{ name: 'thumbsup1', langterm: '' }
+							],
+							[
+								{ name: 'star', langterm: 'star' },
+								{ name: 'love', langterm: 'love' },
+								{ name: 'celebrate', langterm: 'celebrate' },
+								{ name: 'sunshine', langterm: 'sunshine' },
+								{ name: 'funsterred', langterm: 'red funster' },
+								{ name: 'funsterblue', langterm: 'blue funster' }
+							]
 						];
 
 						function getEmoticonsBaseUrl() {
-							var emoticonsCdnVersion = '0.0.1';
+							var emoticonsCdnVersion = '1.0.0';
 							return 'https://s.brightspace.com/lib/emoticons/' + emoticonsCdnVersion + '/';
 						}
 
@@ -29,13 +66,14 @@
 							tinymce.each(emoticons, function(row) { // eslint-disable-line no-undef
 								emoticonsHtml += '<tr>';
 								tinymce.each(row, function(icon) { // eslint-disable-line no-undef
-									var emoticonUrl = emoticonsBaseUrl + icon + '.gif';
-									var localizedEmoticonName = tinymce.EditorManager.i18n.translate(icon + ' emoticon'); // eslint-disable-line no-undef
+									var iconName = icon.name;
+									var emoticonUrl = emoticonsBaseUrl + iconName + '.svg';
+									var localizedEmoticonName = tinymce.EditorManager.i18n.translate(icon.langterm); // eslint-disable-line no-undef
 									emoticonsHtml += '<td><a href="#" tabindex="-1" role="option" style="cursor: pointer;" ' +
 										'data-mce-url="' + emoticonUrl + '" ' +
 										'data-mce-alt="' + localizedEmoticonName + '" ' +
 										'aria-label="' + localizedEmoticonName + '" ' +
-										'data-d2l-emoji="' + icon + '">' +
+										'data-d2l-emoji="' + iconName + '">' +
 										'<img src="' + emoticonUrl + '" style="width: 18px; height: 18px; padding: 5px;" role="presentation" /></a></td>';
 								});
 								emoticonsHtml += '</tr>';
