@@ -26,6 +26,7 @@ tinymce.addI18n('fr_CA',{
 "Open in Full Screen Editor": "Ouvrir l'éditeur plein écran",
 "Add Attributes": "Ajouter des attributs",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Appuyez sur Alt + F10 pour afficher la barre d'outils et sur Échap pour la faire disparaître.",
+"Emoticons": "Émoticônes",
 
 // a11ychecker plugin
 "Accessibility Checker": "Vérificateur d'accessibilité",
@@ -70,5 +71,39 @@ tinymce.addI18n('fr_CA',{
 "Adjacent links should be merged.": "Les liens adjacents devraient être fusionnés.",
 "Use list markup for lists.": "Utiliser le balisage de liste pour les listes.",
 "Large text must have a contrast ratio of at least 3:1.": "Le texte en gros caractères doit avoir un rapport de contraste d'au moins 3:1.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "La présentation visuelle doit avoir un rapport de contraste d'au moins 4,5:1."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "La présentation visuelle doit avoir un rapport de contraste d'au moins 4,5:1.",
+
+// d2l-emoticons plugin
+"blue funster": "Funster bleu",
+"celebrate": "célébration",
+"heart": "cœur",
+"red funster": "Funster rouge",
+"star": "étoile",
+"sunshine": "soleil",
+
+"blush with light skin tone": "gêné peau pâle",
+"cool with light skin tone": "cool peau pâle",
+"goofy with light skin tone": "délire peau pâle",
+"happy with light skin tone": "heureux peau pâle",
+"joy with light skin tone": "joyeux peau pâle",
+"love eyes with light skin tone": "amoureux peau pâle",
+"star eyes with light skin tone": "ébloui peau pâle",
+"thinking with light skin tone": "pensif peau pâle",
+"thumbs up with light skin tone": "OK peau pâle",
+"wink with light skin tone": "clin d’œil peau pâle",
+"wow with light skin tone": "wow peau pâle",
+"upside down with light skin tone": "renversé peau pâle",
+
+"blush with dark skin tone": "gêné peau foncée",
+"cool with dark skin tone": "cool peau foncée",
+"goofy with dark skin tone": "délire peau foncée",
+"happy with dark skin tone": "heureux peau foncée",
+"joy with dark skin tone": "joyeux peau foncée",
+"love eyes with dark skin tone": "amoureux peau foncée",
+"star eyes with dark skin tone": "ébloui peau foncée",
+"thinking with dark skin tone": "pensif peau foncée",
+"thumbs up with dark skin tone": "OK peau foncée",
+"wink with dark skin tone": "clin d’œil peau foncée",
+"wow with dark skin tone": "wow peau foncée",
+"upside down with dark skin tone": "renversé peau foncée"
 });
