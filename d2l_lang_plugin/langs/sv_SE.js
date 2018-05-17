@@ -26,6 +26,7 @@ tinymce.addI18n('sv_SE',{
 "Open in Full Screen Editor": "Öppna helskärmsredigering",
 "Add Attributes": "Lägg till egenskaper",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Tryck ALT-F10 för verktygsfält och ESC för att avsluta verktygsfältet när du är i det",
+"Emoticons": "Uttryckssymboler",
 
 // a11ychecker plugin
 "Accessibility Checker": "Åtkomstkontroll",
@@ -70,5 +71,39 @@ tinymce.addI18n('sv_SE',{
 "Adjacent links should be merged.": "Intilliggande länkar ska slås ihop.",
 "Use list markup for lists.": "Använd listmarkering för lista.",
 "Large text must have a contrast ratio of at least 3:1.": "Stor text måste ha ett kontrastförhållande på minst 3:1.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "Visuell presentation måste ha ett kontrastförhållande på minst 4.5:1."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "Visuell presentation måste ha ett kontrastförhållande på minst 4.5:1.",
+
+// d2l-emoticons plugin
+"blue funster": "blå funster",
+"celebrate": "firar",
+"heart": "hjärta",
+"red funster": "röd funster",
+"star": "stjärna",
+"sunshine": "sol",
+
+"blush with light skin tone": "rodnar med ljus hudton",
+"cool with light skin tone": "cool med ljus hudton",
+"goofy with light skin tone": "goofy med ljus hudton",
+"happy with light skin tone": "glad med ljus hudton",
+"joy with light skin tone": "glädjetårar med ljus hudton",
+"love eyes with light skin tone": "hjärtformade ögon med ljus hudton",
+"star eyes with light skin tone": "stjärnögon med ljus hudton",
+"thinking with light skin tone": "tänker med ljus hudton",
+"thumbs up with light skin tone": "tummen upp med ljus hudton",
+"wink with light skin tone": "blinkar med ljus hudton",
+"wow with light skin tone": "wow med ljus hudton",
+"upside down with light skin tone": "upp och ned med ljus hudton",
+
+"blush with dark skin tone": "rodnar med mörk hudton",
+"cool with dark skin tone": "cool med mörk hudton",
+"goofy with dark skin tone": "goofy med mörk hudton",
+"happy with dark skin tone": "glad med mörk hudton",
+"joy with dark skin tone": "glädjetårar med mörk hudton",
+"love eyes with dark skin tone": "hjärtformade ögon med mörk hudton",
+"star eyes with dark skin tone": "stjärnögon med mörk hudton",
+"thinking with dark skin tone": "tänker med mörk hudton",
+"thumbs up with dark skin tone": "tummen upp med mörk hudton",
+"wink with dark skin tone": "blinkar med mörk hudton",
+"wow with dark skin tone": "wow med mörk hudton",
+"upside down with dark skin tone": "upp och ned med mörk hudton"
 });

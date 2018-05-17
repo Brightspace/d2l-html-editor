@@ -26,6 +26,7 @@ tinymce.addI18n('ja',{
 "Open in Full Screen Editor": "フルスクリーンエディタで開く",
 "Add Attributes": "属性の追加",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "ツールバーを表示するには ALT-F10 キーを、ツールバーを終了するにはツールバーにカーソルを置いた状態で ESC キーを押します",
+"Emoticons": "顔文字",
 
 // a11ychecker plugin
 "Accessibility Checker": "アクセシビリティチェック",
@@ -70,5 +71,39 @@ tinymce.addI18n('ja',{
 "Adjacent links should be merged.": "隣接リンクをマージしてください。",
 "Use list markup for lists.": "リストにはリストマークアップを使用します。",
 "Large text must have a contrast ratio of at least 3:1.": "大テキストは 3:1 以上のコントラスト比に設定する必要があります。",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "視覚表示は 4.5:1 以上のコントラスト比に設定する必要があります。"
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "視覚表示は 4.5:1 以上のコントラスト比に設定する必要があります。",
+
+// d2l-emoticons plugin
+"blue funster": "ひょうきん（青）",
+"celebrate": "お祝い",
+"heart": "ハート",
+"red funster": "ひょうきん（赤）",
+"star": "星",
+"sunshine": "太陽",
+
+"blush with light skin tone": "赤面（明るい色）",
+"cool with light skin tone": "クール（明るい色）",
+"goofy with light skin tone": "うっかり（明るい色）",
+"happy with light skin tone": "ハッピー（明るい色）",
+"joy with light skin tone": "喜び（明るい色）",
+"love eyes with light skin tone": "うっとり（明るい色）",
+"star eyes with light skin tone": "目がキラリ（明るい色）",
+"thinking with light skin tone": "考え中（明るい色）",
+"thumbs up with light skin tone": "グッド（明るい色）",
+"wink with light skin tone": "ウインク（明るい色）",
+"wow with light skin tone": "ワオ！（明るい色）",
+"upside down with light skin tone": "さかさま（明るい色）",
+
+"blush with dark skin tone": "赤面（濃い色）",
+"cool with dark skin tone": "クール（濃い色）",
+"goofy with dark skin tone": "うっかり（濃い色）",
+"happy with dark skin tone": "ハッピー（濃い色）",
+"joy with dark skin tone": "喜び（濃い色）",
+"love eyes with dark skin tone": "うっとり（濃い色）",
+"star eyes with dark skin tone": "目がキラリ（濃い色）",
+"thinking with dark skin tone": "考え中（濃い色）",
+"thumbs up with dark skin tone": "グッド（濃い色）",
+"wink with dark skin tone": "ウインク（濃い色）",
+"wow with dark skin tone": "ワオ！（濃い色）",
+"upside down with dark skin tone": "さかさま（濃い色）"
 });

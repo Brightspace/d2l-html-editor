@@ -26,6 +26,7 @@ tinymce.addI18n('ko_KR',{
 "Open in Full Screen Editor": "전체 화면 편집기에서 열기",
 "Add Attributes": "속성 추가",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "도구 모음을 불러오려면 ALT-F10을 누르고, 도구 모음을 끝내려면 도구 모음 내에서 ESC를 누르십시오.",
+"Emoticons": "이모티콘",
 
 // a11ychecker plugin
 "Accessibility Checker": "접근성 검사기",
@@ -70,5 +71,39 @@ tinymce.addI18n('ko_KR',{
 "Adjacent links should be merged.": "인접 링크는 병합해야 합니다.",
 "Use list markup for lists.": "목록에는 목록 마크업을 사용하십시오.",
 "Large text must have a contrast ratio of at least 3:1.": "큰 텍스트의 명암비는 3:1보다 커야 합니다.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "시각 프레젠테이션의 명암비는 4.5:1보다 커야 합니다."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "시각 프레젠테이션의 명암비는 4.5:1보다 커야 합니다.",
+
+// d2l-emoticons plugin
+"blue funster": "파란 펀스터",
+"celebrate": "축하하다",
+"heart": "심장",
+"red funster": "빨간 펀스터",
+"star": "별",
+"sunshine": "햇빛",
+
+"blush with light skin tone": "밝은색 피부와 홍조",
+"cool with light skin tone": "밝은색 피부와 시원함",
+"goofy with light skin tone": "밝은색 피부와 엉뚱함",
+"happy with light skin tone": "밝은색 피부와 행복",
+"joy with light skin tone": "밝은색 피부와 즐거움",
+"love eyes with light skin tone": "밝은색 피부와 사랑에 빠진 눈",
+"star eyes with light skin tone": "밝은색 피부와 반짝거리는 눈",
+"thinking with light skin tone": "밝은색 피부와 생각",
+"thumbs up with light skin tone": "밝은색 피부와 엄지척",
+"wink with light skin tone": "밝은색 피부와 윙크",
+"wow with light skin tone": "밝은색 피부와 와우",
+"upside down with light skin tone": "밝은색 피부와 아래위가 뒤집힘",
+
+"blush with dark skin tone": "어두운색 피부와 홍조",
+"cool with dark skin tone": "어두운색 피부와 시원함",
+"goofy with dark skin tone": "어두운색 피부와 엉뚱함",
+"happy with dark skin tone": "어두운색 피부와 행복",
+"joy with dark skin tone": "어두운색 피부와 즐거움",
+"love eyes with dark skin tone": "어두운색 피부와 사랑에 빠진 눈",
+"star eyes with dark skin tone": "어두운색 피부와 반짝거리는 눈",
+"thinking with dark skin tone": "어두운색 피부와 생각",
+"thumbs up with dark skin tone": "어두운색 피부와 엄지척",
+"wink with dark skin tone": "어두운색 피부와 윙크",
+"wow with dark skin tone": "어두운색 피부와 와우",
+"upside down with dark skin tone": "어두운색 피부와 아래위가 뒤집힘"
 });

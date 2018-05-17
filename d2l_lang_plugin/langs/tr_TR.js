@@ -26,6 +26,7 @@ tinymce.addI18n('tr_TR',{
 "Open in Full Screen Editor": "Tam Ekran Düzenleyicide Aç",
 "Add Attributes": "Öznitelik Ekle",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Araç çubuğuna giriş yapmak için ALT+F10 tuşlarına basın, araç çubuğundayken çıkış yapmak için ESC tuşuna basın",
+"Emoticons": "Simgeler",
 
 // a11ychecker plugin
 "Accessibility Checker": "Erişilebilirlik Denetleyici",
@@ -70,5 +71,39 @@ tinymce.addI18n('tr_TR',{
 "Adjacent links should be merged.": "Yan bağlantılar birleştirilmelidir.",
 "Use list markup for lists.": "Listeler için liste biçimlendirmesini kullanın.",
 "Large text must have a contrast ratio of at least 3:1.": "Geniş metnin kontrast oranı en az 3:1 olmalıdır.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "Görsel sunumun kontrast oranı en az 4,5:1 olmalıdır."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "Görsel sunumun kontrast oranı en az 4,5:1 olmalıdır.",
+
+// d2l-emoticons plugin
+"blue funster": "mavi canavar",
+"celebrate": "kutlama",
+"heart": "kalp",
+"red funster": "kırmızı canavar",
+"star": "yıldız",
+"sunshine": "güneş ışığı",
+
+"blush with light skin tone": "utanmış açık tenli avatar",
+"cool with light skin tone": "havalı açık tenli avatar",
+"goofy with light skin tone": "şaşkın açık tenli avatar",
+"happy with light skin tone": "mutlu açık tenli avatar",
+"joy with light skin tone": "neşeli açık tenli avatar",
+"love eyes with light skin tone": "gözlerinden kalp çıkan açık tenli avatar",
+"star eyes with light skin tone": "gözlerinden yıldız çıkan açık tenli avatar",
+"thinking with light skin tone": "düşünceli açık tenli avatar",
+"thumbs up with light skin tone": "onaylayan açık tenli el",
+"wink with light skin tone": "göz kırpan açık tenli avatar",
+"wow with light skin tone": "şaşıran açık tenli avatar",
+"upside down with light skin tone": "ters duran açık tenli avatar",
+
+"blush with dark skin tone": "utanmış koyu tenli avatar",
+"cool with dark skin tone": "havalı koyu tenli avatar",
+"goofy with dark skin tone": "şaşkın koyu tenli avatar",
+"happy with dark skin tone": "mutlu koyu tenli avatar",
+"joy with dark skin tone": "neşeli koyu tenli avatar",
+"love eyes with dark skin tone": "gözlerinden kalp çıkan koyu tenli avatar",
+"star eyes with dark skin tone": "gözlerinden yıldız çıkan koyu tenli avatar",
+"thinking with dark skin tone": "düşünceli koyu tenli avatar",
+"thumbs up with dark skin tone": "onaylayan koyu tenli el",
+"wink with dark skin tone": "göz kırpan koyu tenli avatar",
+"wow with dark skin tone": "şaşıran koyu tenli avatar",
+"upside down with dark skin tone": "ters duran koyu tenli avatar"
 });

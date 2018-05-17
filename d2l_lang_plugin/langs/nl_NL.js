@@ -26,6 +26,7 @@ tinymce.addI18n('nl_NL',{
 "Open in Full Screen Editor": "Openen in editor op volledig scherm",
 "Add Attributes": "Kenmerken toevoegen",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Druk op ALT+F10 om de taakbalk te tonen en druk op Esc om de taakbalk vervolgens te sluiten",
+"Emoticons": "Emoticons",
 
 // a11ychecker plugin
 "Accessibility Checker": "Toegankelijkheidscontrole",
@@ -70,5 +71,39 @@ tinymce.addI18n('nl_NL',{
 "Adjacent links should be merged.": "Naast elkaar geplaatste koppelingen moeten worden samengevoegd.",
 "Use list markup for lists.": "Gebruik lijstmarkeringen voor lijsten.",
 "Large text must have a contrast ratio of at least 3:1.": "Grote tekst moet een contrastverhouding van ten minste 3:1 hebben.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "Visuele presentatie moet een contrastverhouding van ten minste 4,5:1 hebben."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "Visuele presentatie moet een contrastverhouding van ten minste 4,5:1 hebben.",
+
+// d2l-emoticons plugin
+"blue funster": "blauwe Funster",
+"celebrate": "vieren",
+"heart": "hart",
+"red funster": "rode Funster",
+"star": "ster",
+"sunshine": "zonnenschijn",
+
+"blush with light skin tone": "blozen met lichte huidtint",
+"cool with light skin tone": "cool met lichte huidtint",
+"goofy with light skin tone": "dwaas met lichte huidtint",
+"happy with light skin tone": "blij met lichte huidtint",
+"joy with light skin tone": "gelukkig met lichte huidtint",
+"love eyes with light skin tone": "verliefde ogen met lichte huidtint",
+"star eyes with light skin tone": "sterogen met lichte huidtint",
+"thinking with light skin tone": "denken met lichte huidtint",
+"thumbs up with light skin tone": "duim omhoog met lichte huidtint",
+"wink with light skin tone": "knipoog met lichte huidtint",
+"wow with light skin tone": "wauw met lichte huidtint",
+"upside down with light skin tone": "op zijn kop met lichte huidtint",
+
+"blush with dark skin tone": "blozen met donkere huidtint",
+"cool with dark skin tone": "cool met donkere huidtint",
+"goofy with dark skin tone": "dwaas met donkere huidtint",
+"happy with dark skin tone": "blij met donkere huidtint",
+"joy with dark skin tone": "gelukkig met donkere huidtint",
+"love eyes with dark skin tone": "verliefde ogen met donkere huidtint",
+"star eyes with dark skin tone": "sterogen met donkere huidtint",
+"thinking with dark skin tone": "denken met donkere huidtint",
+"thumbs up with dark skin tone": "duim omhoog met donkere huidtint",
+"wink with dark skin tone": "knipoog met donkere huidtint",
+"wow with dark skin tone": "wauw met donkere huidtint",
+"upside down with dark skin tone": "op zijn kop met donkere huidtint"
 });

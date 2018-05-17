@@ -26,6 +26,7 @@ tinymce.addI18n('pt_BR',{
 "Open in Full Screen Editor": "Abrir no Editor de tela cheia",
 "Add Attributes": "Adicionar atributos",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Pressione ALT-F10 para entrar na barra de ferramentas e, para sair, pressione ESC",
+"Emoticons": "Emoticons",
 
 // a11ychecker plugin
 "Accessibility Checker": "Verificador de Acessibilidade",
@@ -70,5 +71,39 @@ tinymce.addI18n('pt_BR',{
 "Adjacent links should be merged.": "Links adjacentes devem ser mesclados.",
 "Use list markup for lists.": "Use marcação de lista para listas.",
 "Large text must have a contrast ratio of at least 3:1.": "Texto grande deve ter uma proporção de contraste de, pelo menos, 3:1.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "Apresentação visual deve ter uma proporção de contraste de, pelo menos, 4,5:1."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "Apresentação visual deve ter uma proporção de contraste de, pelo menos, 4,5:1.",
+
+// d2l-emoticons plugin
+"blue funster": "monstro azul",
+"celebrate": "celebração",
+"heart": "coração",
+"red funster": "monstro vermelho",
+"star": "estrela",
+"sunshine": "sol brilhando",
+
+"blush with light skin tone": "envergonhado com pele clara",
+"cool with light skin tone": "descolado com pele clara",
+"goofy with light skin tone": "doidinho com pele clara",
+"happy with light skin tone": "feliz com pele clara",
+"joy with light skin tone": "gargalhando com pele clara",
+"love eyes with light skin tone": "apaixonado com pele clara",
+"star eyes with light skin tone": "fascinado com pele clara",
+"thinking with light skin tone": "pensativo com pele clara",
+"thumbs up with light skin tone": "joia com pele clara",
+"wink with light skin tone": "piscando com pele clara",
+"wow with light skin tone": "surpreso com pele clara",
+"upside down with light skin tone": "sorrindo de ponta cabeça com pele clara",
+
+"blush with dark skin tone": "envergonhado com pele escura",
+"cool with dark skin tone": "descolado com pele escura",
+"goofy with dark skin tone": "doidinho com pele escura",
+"happy with dark skin tone": "feliz com pele escura",
+"joy with dark skin tone": "gargalhando com pele escura",
+"love eyes with dark skin tone": "apaixonado com pele escura",
+"star eyes with dark skin tone": "fascinado com pele escura",
+"thinking with dark skin tone": "pensativo com pele escura",
+"thumbs up with dark skin tone": "joia com pele escura",
+"wink with dark skin tone": "piscando com pele escura",
+"wow with dark skin tone": "surpreso com pele escura",
+"upside down with dark skin tone": "sorrindo de ponta cabeça com pele escura"
 });
