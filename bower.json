@@ -1,6 +1,6 @@
 {
   "name": "d2l-html-editor",
-  "version": "0.0.123",
+  "version": "0.0.124",
   "authors": [
     "Anonymous <anonymous@example.com>"
   ],
@@ -27,5 +27,8 @@
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
     "sinon-stub-promise": "substantial/sinon-stub-promise#^3.0.1",
     "web-component-tester": "^6.0.0"
+  },
+  "resolutions": {
+    "iron-iconset-svg": "^2.1.0"
   }
 }
