@@ -460,6 +460,7 @@ Polymer({
 			fixed_toolbar_container: '#' + this.toolbarId,
 			inline: this.inline ? true : false,
 			extended_valid_elements: 'span[*]' + this.allowUnsafe ? ',script[type|src]' : '',
+			allow_html_in_named_anchor: true,
 			document_base_url: this.documentBaseUrl + '/',
 			content_css: contentCss,
 			skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
