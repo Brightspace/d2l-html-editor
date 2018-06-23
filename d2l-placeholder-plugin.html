@@ -45,7 +45,7 @@ used under MIT License -->
 							}
 
 							function onBlur(placeholderElement) {
-								if (!document.activeElement.isEqualNode(editor.getElement()) &&
+								if (!(document.activeElement && document.activeElement.isEqualNode && document.activeElement.isEqualNode(editor.getElement())) &&
 									(editor.getContent() === '' || editor.getContent({format: 'raw'}) === editor.startContent)) {
 									showPlaceholder(placeholderElement);
 								} else {
