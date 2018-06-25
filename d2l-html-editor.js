@@ -374,9 +374,11 @@ Polymer({
 		if (this.langAvailable.bool === undefined || this.langAvailable.bool === null) {
 			this._checkIfLangExists(this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js');
 		}
-		var contentCss = this.inline ? '' : this.cssUrl + ',';
-		contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
-
+		var contentCss = '';
+		if (!this.inline) {
+			contentCss += this.cssUrl + ',';
+			contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
+		}
 
 		var updateImageUploadSpinners=function(){
 			if (!tinymce.activeEditor){
