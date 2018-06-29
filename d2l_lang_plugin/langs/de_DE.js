@@ -26,6 +26,7 @@ tinymce.addI18n('de_DE',{
 "Open in Full Screen Editor": "Im Vollbildmodus-Editor öffnen",
 "Add Attributes": "Attribute hinzufügen",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Drücken Sie ALT-F10, um die Symbolleiste zu öffnen, und drücken Sie die ESC-Taste, um die Symbolleiste wieder zu schließen.",
+"Emoticons": "Emoticons",
 
 // a11ychecker plugin
 "Accessibility Checker": "Zugriffsprüfung",
@@ -70,5 +71,39 @@ tinymce.addI18n('de_DE',{
 "Adjacent links should be merged.": "Nebeneinanderstehende Links sollten zusammengeführt werden.",
 "Use list markup for lists.": "Verwenden von Listen-Markup für Listen.",
 "Large text must have a contrast ratio of at least 3:1.": "Große Schrift muss ein Kontrastverhältnis von mindestens 3:1 haben.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "Visuelle Präsentation muss ein Kontrastverhältnis von mindestens 4,5:1 haben."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "Visuelle Präsentation muss ein Kontrastverhältnis von mindestens 4,5:1 haben.",
+
+// d2l-emoticons plugin
+"blue funster": "Funster blau",
+"celebrate": "Feiern",
+"heart": "Herz",
+"red funster": "Funster rot",
+"star": "Stern",
+"sunshine": "Sonnenschein",
+
+"blush with light skin tone": "Erröten mit heller Haut",
+"cool with light skin tone": "Cool mit heller Haut",
+"goofy with light skin tone": "Albern mit heller Haut",
+"happy with light skin tone": "Glücklich mit heller Haut",
+"joy with light skin tone": "Freude mit heller Haut",
+"love eyes with light skin tone": "Liebesaugen mit heller Haut",
+"star eyes with light skin tone": "Sternaugen mit heller Haut",
+"thinking with light skin tone": "Nachdenken mit heller Haut",
+"thumbs up with light skin tone": "Daumen hoch mit heller Haut",
+"wink with light skin tone": "Zwinkern mit heller Haut",
+"wow with light skin tone": "Wow mit heller Haut",
+"upside down with light skin tone": "Auf dem Kopf mit heller Haut",
+
+"blush with dark skin tone": "Erröten mit dunkler Haut",
+"cool with dark skin tone": "Cool mit dunkler Haut",
+"goofy with dark skin tone": "Albern mit dunkler Haut",
+"happy with dark skin tone": "Glücklich mit dunkler Haut",
+"joy with dark skin tone": "Freude mit dunkler Haut",
+"love eyes with dark skin tone": "Liebesaugen mit dunkler Haut",
+"star eyes with dark skin tone": "Sternaugen mit dunkler Haut",
+"thinking with dark skin tone": "Nachdenken mit dunkler Haut",
+"thumbs up with dark skin tone": "Daumen hoch mit dunkler Haut",
+"wink with dark skin tone": "Zwinkern mit dunkler Haut",
+"wow with dark skin tone": "Wow mit dunkler Haut",
+"upside down with dark skin tone": "Auf dem Kopf mit dunkler Haut"
 });

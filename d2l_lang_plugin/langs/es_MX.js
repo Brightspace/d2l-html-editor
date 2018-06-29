@@ -26,6 +26,7 @@ tinymce.addI18n('es_MX',{
 "Open in Full Screen Editor": "Abrir en el editor de pantalla completa",
 "Add Attributes": "Agregar atributos",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Presione ALT-F10 para ver la barra de herramientas y presione ESC para salir de la barra de herramientas",
+"Emoticons": "Emoticonos",
 
 // a11ychecker plugin
 "Accessibility Checker": "Verificador de accesibilidad",
@@ -70,5 +71,39 @@ tinymce.addI18n('es_MX',{
 "Adjacent links should be merged.": "Los enlaces adyacentes deberían combinarse.",
 "Use list markup for lists.": "Utilice el marcado de listas para las listas.",
 "Large text must have a contrast ratio of at least 3:1.": "Los textos grandes deben tener una relación de contraste de al menos 3:1.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "La presentación visual debe tener una relación de contraste de al menos 4.5:1."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "La presentación visual debe tener una relación de contraste de al menos 4.5:1.",
+
+// d2l-emoticons plugin
+"blue funster": "Funster azul",
+"celebrate": "celebración",
+"heart": "corazón",
+"red funster": "Funster rojo",
+"star": "estrella",
+"sunshine": "sol",
+
+"blush with light skin tone": "sonrojado con tono de piel claro",
+"cool with light skin tone": "genial con tono de piel claro",
+"goofy with light skin tone": "tonto con tono de piel claro",
+"happy with light skin tone": "feliz con tono de piel claro",
+"joy with light skin tone": "alegre con tono de piel claro",
+"love eyes with light skin tone": "ojos de corazón con tono de piel claro",
+"star eyes with light skin tone": "ojos de estrella con tono de piel claro",
+"thinking with light skin tone": "pensando con tono de piel claro",
+"thumbs up with light skin tone": "pulgar hacia arriba con tono de piel claro",
+"wink with light skin tone": "guiño con tono de piel claro",
+"wow with light skin tone": "sorprendido con tono de piel claro",
+"upside down with light skin tone": "boca abajo con tono de piel claro",
+
+"blush with dark skin tone": "sonrojado con tono de piel oscuro",
+"cool with dark skin tone": "genial con tono de piel oscuro",
+"goofy with dark skin tone": "tonto con tono de piel oscuro",
+"happy with dark skin tone": "feliz con tono de piel oscuro",
+"joy with dark skin tone": "alegre con tono de piel oscuro",
+"love eyes with dark skin tone": "ojos de corazón con tono de piel oscuro",
+"star eyes with dark skin tone": "ojos de estrella con tono de piel oscuro",
+"thinking with dark skin tone": "pensando con tono de piel oscuro",
+"thumbs up with dark skin tone": "pulgar hacia arriba con tono de piel oscuro",
+"wink with dark skin tone": "guiño con tono de piel oscuro",
+"wow with dark skin tone": "sorprendido con tono de piel oscuro",
+"upside down with dark skin tone": "boca abajo con tono de piel oscuro"
 });

@@ -26,6 +26,7 @@ tinymce.addI18n('zh_TW',{
 "Open in Full Screen Editor": "在全螢幕編輯器中開啟",
 "Add Attributes": "新增屬性",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "按下 ALT-F10 可存取工具列，按下 ESC 可退出工具列",
+"Emoticons": "表情符號",
 
 // a11ychecker plugin
 "Accessibility Checker": "協助工具檢查程式",
@@ -70,5 +71,39 @@ tinymce.addI18n('zh_TW',{
 "Adjacent links should be merged.": "應合併相鄰連結。",
 "Use list markup for lists.": "使用清單的清單標記。",
 "Large text must have a contrast ratio of at least 3:1.": "大型文字必須具有至少 3:1 的對比率。",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "視覺化簡報必須具有至少 4.5:1 的對比率。"
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "視覺化簡報必須具有至少 4.5:1 的對比率。",
+
+// d2l-emoticons plugin
+"blue funster": "藍色淘氣鬼",
+"celebrate": "慶祝",
+"heart": "愛心",
+"red funster": "紅色淘氣鬼",
+"star": "星星",
+"sunshine": "陽光",
+
+"blush with light skin tone": "臉紅 (淺膚色)",
+"cool with light skin tone": "酷 (淺膚色)",
+"goofy with light skin tone": "諧趣 (淺膚色)",
+"happy with light skin tone": "開心 (淺膚色)",
+"joy with light skin tone": "樂壞了 (淺膚色)",
+"love eyes with light skin tone": "眼冒愛心 (淺膚色)",
+"star eyes with light skin tone": "眼神發亮 (淺膚色)",
+"thinking with light skin tone": "思考中 (淺膚色)",
+"thumbs up with light skin tone": "讚 (淺膚色)",
+"wink with light skin tone": "眨眼 (淺膚色)",
+"wow with light skin tone": "驚呆了 (淺膚色)",
+"upside down with light skin tone": "上下顛倒 (淺膚色)",
+
+"blush with dark skin tone": "臉紅 (深膚色)",
+"cool with dark skin tone": "酷 (深膚色)",
+"goofy with dark skin tone": "諧趣 (深膚色)",
+"happy with dark skin tone": "開心 (深膚色)",
+"joy with dark skin tone": "樂壞了 (深膚色)",
+"love eyes with dark skin tone": "眼冒愛心 (深膚色)",
+"star eyes with dark skin tone": "眼神發亮 (深膚色)",
+"thinking with dark skin tone": "思考中 (深膚色)",
+"thumbs up with dark skin tone": "讚 (深膚色)",
+"wink with dark skin tone": "眨眼 (深膚色)",
+"wow with dark skin tone": "驚呆了 (深膚色)",
+"upside down with dark skin tone": "上下顛倒 (深膚色)"
 });

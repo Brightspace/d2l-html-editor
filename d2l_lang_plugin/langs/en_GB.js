@@ -26,6 +26,7 @@ tinymce.addI18n('en_GB',{
 "Open in Full Screen Editor": "Open in Full Screen Editor",
 "Add Attributes": "Add Attributes",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside",
+"Emoticons": "Emoticons",
 
 // a11ychecker plugin
 "Accessibility Checker": "Accessibility Checker",
@@ -69,5 +70,39 @@ tinymce.addI18n('en_GB',{
 "Adjacent links should be merged.": "Adjacent links should be merged.",
 "Use list markup for lists.": "Use list markup for lists.",
 "Large text must have a contrast ratio of at least 3:1.": "Large text must have a contrast ratio of at least 3:1.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "Visual presentation must have a contrast ratio of at least 4.5:1."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "Visual presentation must have a contrast ratio of at least 4.5:1.",
+
+// d2l-emoticons plugin
+"blue funster": "blue funster",
+"celebrate": "celebrate",
+"heart": "heart",
+"red funster": "red funster",
+"star": "star",
+"sunshine": "sunshine",
+
+"blush with light skin tone": "blush with light skin tone",
+"cool with light skin tone": "cool with light skin tone",
+"goofy with light skin tone": "goofy with light skin tone",
+"happy with light skin tone": "happy with light skin tone",
+"joy with light skin tone": "joy with light skin tone",
+"love eyes with light skin tone": "love eyes with light skin tone",
+"star eyes with light skin tone": "star eyes with light skin tone",
+"thinking with light skin tone": "thinking with light skin tone",
+"thumbs up with light skin tone": "thumbs up with light skin tone",
+"wink with light skin tone": "wink with light skin tone",
+"wow with light skin tone": "wow with light skin tone",
+"upside down with light skin tone": "upside down with light skin tone",
+
+"blush with dark skin tone": "blush with dark skin tone",
+"cool with dark skin tone": "cool with dark skin tone",
+"goofy with dark skin tone": "goofy with dark skin tone",
+"happy with dark skin tone": "happy with dark skin tone",
+"joy with dark skin tone": "joy with dark skin tone",
+"love eyes with dark skin tone": "love eyes with dark skin tone",
+"star eyes with dark skin tone": "star eyes with dark skin tone",
+"thinking with dark skin tone": "thinking with dark skin tone",
+"thumbs up with dark skin tone": "thumbs up with dark skin tone",
+"wink with dark skin tone": "wink with dark skin tone",
+"wow with dark skin tone": "wow with dark skin tone",
+"upside down with dark skin tone": "upside down with dark skin tone"
 });

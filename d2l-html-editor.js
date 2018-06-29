@@ -126,6 +126,10 @@ Polymer({
 		defaultFullpageFontSize: {
 			type: String,
 			value: null
+		},
+		objectResizing: {
+			type: Boolean,
+			value: true
 		}
 	},
 
@@ -253,6 +257,8 @@ Polymer({
 				return window.D2LHtmlEditor.PolymerBehaviors.Filter;
 			case 'd2l_placeholder':
 				return window.D2LHtmlEditor.PolymerBehaviors.Placeholder;
+			case 'd2l_emoticons':
+				return window.D2LHtmlEditor.PolymerBehaviors.Emoticons;
 			case 'autolink':
 			case 'table':
 			case 'fullscreen':
@@ -291,7 +297,7 @@ Polymer({
 	},
 
 	_setDefaultPlugins: function() {
-		this.plugins = 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled ? ' powerpaste' : ' paste') + (this.a11ycheckerEnabled ? ' a11ychecker' : '');
+		this.plugins = 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link d2l_emoticons ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled ? ' powerpaste' : ' paste') + (this.a11ycheckerEnabled ? ' a11ychecker' : '');
 	},
 
 	initialize: function() {
@@ -305,7 +311,7 @@ Polymer({
 
 		this.editorReady.then(function() {
 			that._configureTinyMce(that.ifrauClient).then(function() {
-				that.ifrauClient.request('valenceHost').then( function(valenceHost){
+				that.ifrauClient.request('valenceHost').then(function(valenceHost) {
 					that._init(valenceHost);
 				});
 			});
@@ -315,10 +321,10 @@ Polymer({
 	// We cannot cleanup in detached because React seems to cause the web component
 	// to detach/attach during move operations
 	cleanup: function() {
-		var editor = tinymce.EditorManager.get(this.editorId);
+		var editor = tinymce.EditorManager.get(this.editorId); // eslint-disable-line no-undef
 
 		// prevent save before remove, since it throws an exception when the HTML content contains a table
-		editor.save = function(){};
+		editor.save = function() {};
 		editor.remove();
 
 		this.client = null;
@@ -336,7 +342,7 @@ Polymer({
 		tinymce.EditorManager.get(this.editorId).setContent(''); // eslint-disable-line no-undef
 	},
 
-	_init: function(valenceHost ) {
+	_init: function(valenceHost) {
 		if (null !== this.baseUrl) {
 			tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
 		}
@@ -368,9 +374,11 @@ Polymer({
 		if (this.langAvailable.bool === undefined || this.langAvailable.bool === null) {
 			this._checkIfLangExists(this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js');
 		}
-		var contentCss = this.inline ? '' : this.cssUrl + ',';
-		contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
-
+		var contentCss = '';
+		if (!this.inline) {
+			contentCss += this.cssUrl + ',';
+			contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
+		}
 
 		var updateImageUploadSpinners=function(){
 			if (!tinymce.activeEditor){
@@ -385,8 +393,8 @@ Polymer({
 			}
 
 			for ( var i=0; i < images.length; i++ ){
-				if ( images[i].src.startsWith("blob:")
-				&& !images[i].getAttribute("data-mce-selected") 	// if an image is selected in this state it's usually being manipulated by image tools plugin
+				if ( images[i].src.indexOf("blob:") === 0
+					&& !images[i].getAttribute("data-mce-selected") 	// if an image is selected in this state it's usually being manipulated by image tools plugin
 				){
 					images[i].setAttribute("data-mce-bogus","all");
 					var img = images[i];
@@ -453,6 +461,7 @@ Polymer({
 			fixed_toolbar_container: '#' + this.toolbarId,
 			inline: this.inline ? true : false,
 			extended_valid_elements: 'span[*]' + this.allowUnsafe ? ',script[type|src]' : '',
+			allow_html_in_named_anchor: true,
 			document_base_url: this.documentBaseUrl + '/',
 			content_css: contentCss,
 			skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
@@ -461,6 +470,7 @@ Polymer({
 			language_url: this.langTag && this.langAvailable.bool ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
 			language: this.langTag && this.langAvailable.bool ? this.langTag : null,
 			directionality: this.langDir,
+			object_resizing: this.objectResizing,
 			powerpaste_word_import: this.powerPasteFormatting,
 			powerpaste_allow_local_images: this.powerPasteEnabled ? true : false,
 			powerpaste_block_drop : false,
@@ -609,7 +619,7 @@ Polymer({
 					}
 				});
 
-				editor.on('change redo undo', function( event ) {
+				editor.on('change redo undo', function(event) {
 					updateImageUploadSpinners();
 					findTables(editor);
 					that.fire('change', {content: editor.getContent()});
@@ -684,6 +694,7 @@ Polymer({
 				var domainName = matches && matches[1];
 				if ( domainName ){
 					config.imagetools_cors_hosts = [domainName];
+					config.imagetools_credentials_hosts = [domainName];
 				}
 			}
 		}

@@ -92,6 +92,9 @@ To include a placeholder, ensure `d2l_placeholder` is included in the plugins pr
 * `auto-focus-end` - On autofocus, set cursor to end of input
 * `toolbar` - Override default buttons to show on toolbar. e.g. `'bold | italic underline'` Use `|` to place a divider.
 * `plugins` - Override default plugins to include. e.g. `'autolink lists paste d2l_placeholder'`
+* `default-fullpage-font-family` - Default fullpage font family
+* `default-fullpage-font-size` - Default fullpage font size
+* `object-resizing` - Enables/Disables inline resizing controls of tables and images
 
 ### Adding a new plugin behaviors file
 1. Add file to root folder and import in `d2l-html-editor.html`. e.g. `<link rel="import" href="d2l-filter-plugin.html">`

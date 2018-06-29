@@ -26,6 +26,7 @@ tinymce.addI18n('ar_SA',{
 "Open in Full Screen Editor": "فتح المحرر في وضع ملء الشاشة",
 "Add Attributes": "إضافة سمات",
 "Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside": "اضغط على ALT-F10 لفتح شريط الأدوات، واضغط على ESC للخروج من شريط الأدوات عندما يكون مفتوحًا",
+"Emoticons": "الوجوه التعبيرية",
 
 // a11ychecker plugin
 "Accessibility Checker": "أداة التحقق من الوصول",
@@ -70,5 +71,39 @@ tinymce.addI18n('ar_SA',{
 "Adjacent links should be merged.": "يجب دمج الارتباطات المجاورة.",
 "Use list markup for lists.": "استخدم علامات القائمة للقوائم.",
 "Large text must have a contrast ratio of at least 3:1.": "يجب أن يتمتع النص الكبير بنسبة تباين لا تقل عن 3:1.",
-"Visual presentation must have a contrast ratio of at least 4.5:1.": "يجب أن يتمتع العرض التقديمي المرئي بنسبة تباين لا تقل عن 4.5:1."
+"Visual presentation must have a contrast ratio of at least 4.5:1.": "يجب أن يتمتع العرض التقديمي المرئي بنسبة تباين لا تقل عن 4.5:1.",
+
+// d2l-emoticons plugin
+"blue funster": "وجه ظريف أزرق",
+"celebrate": "احتفال",
+"heart": "قلب",
+"red funster": "وجه ظريف أحمر",
+"star": "نجمة",
+"sunshine": "شمس مشرقة",
+
+"blush with light skin tone": "خجول مع لون بشرة فاتح",
+"cool with light skin tone": "ابتسامة مثيرة مع لون بشرة فاتح",
+"goofy with light skin tone": "أحمق مع لون بشرة فاتح",
+"happy with light skin tone": "سعيد مع لون بشرة فاتح",
+"joy with light skin tone": "ضاحك مع لون بشرة فاتح",
+"love eyes with light skin tone": "عينان على شكل قلب مع لون بشرة فاتح",
+"star eyes with light skin tone": "عينان على شكل نجمة مع لون بشرة فاتح",
+"thinking with light skin tone": "تفكير مع لون بشرة فاتح",
+"thumbs up with light skin tone": "تشجيع مع لون بشرة فاتح",
+"wink with light skin tone": "غمزة مع لون بشرة فاتح",
+"wow with light skin tone": "تعجّب مع لون بشرة فاتح",
+"upside down with light skin tone": "مقلوب مع لون بشرة فاتح",
+
+"blush with dark skin tone": "خجول مع لون بشرة غامق",
+"cool with dark skin tone": "ابتسامة مثيرة مع لون بشرة غامق",
+"goofy with dark skin tone": "أحمق مع لون بشرة غامق",
+"happy with dark skin tone": "سعيد مع لون بشرة غامق",
+"joy with dark skin tone": "ضاحك مع لون بشرة غامق",
+"love eyes with dark skin tone": "عينان على شكل قلب مع لون بشرة غامق",
+"star eyes with dark skin tone": "عينان على شكل نجمة مع لون بشرة غامق",
+"thinking with dark skin tone": "تفكير مع لون بشرة غامق",
+"thumbs up with dark skin tone": "تشجيع مع لون بشرة غامق",
+"wink with dark skin tone": "غمزة مع لون بشرة غامق",
+"wow with dark skin tone": "تعجّب مع لون بشرة غامق",
+"upside down with dark skin tone": "مقلوب مع لون بشرة غامق"
 });
