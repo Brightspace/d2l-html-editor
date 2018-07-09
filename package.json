@@ -1,17 +1,17 @@
 {
   "name": "d2l-html-editor",
-  "version": "0.0.127",
+  "version": "0.1.0",
   "description": "An element providing a starting point for your own reusable Polymer elements.",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "postinstall": "bower install",
+    "postinstall": "polymer install --variants",
     "test:travis": "npm run test:lint:js && npm run test:unit:travis",
     "test": "npm run test:lint:js",
     "test:lint:js": "eslint *.html",
-    "test:lint:wc": "polylint --input d2l-html-editor.html",
+    "test:lint:wc": "polymer lint --i *.html",
     "test:unit:local": "polymer test --skip-plugin sauce",
     "test:unit:travis": "polymer test --skip-plugin local",
     "build" : "browserify d2l-html-editor.js -o d2l-html-editor-bundled.js"
@@ -30,11 +30,7 @@
     "eslint": "^4.15.0",
     "eslint-config-brightspace": "^0.4.0",
     "eslint-plugin-html": "^4.0.1",
-    "polylint": "^2.10.1",
     "superagent-d2l-session-auth": "^1.0.2",
     "polymer-cli": "^1.5.7"
-  },
-  "dependencies": {
-    "bower": "^1.7.9"
   }
 }

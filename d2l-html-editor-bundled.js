@@ -1,4 +1,4 @@
-(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function (global){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -2077,7 +2077,7 @@ Polymer({
 				editor.on('setcontent', function(event) {
 					findTables(editor);
 
-					// The content of the first setcontent event is always "", 
+					// The content of the first setcontent event is always "",
 					// if there is content to be set, it will be in the second setcontent event
 					if (event.content && config.auto_focus && that.autoFocusEnd) {
 						// Set cursor to end of input
@@ -2160,7 +2160,7 @@ Polymer({
 			if ( valenceHost ){
 				// get the root domain name of the valence host
 				var matches = valenceHost.toLowerCase().match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
-				var domainName = matches && matches[1];  
+				var domainName = matches && matches[1];
 				if ( domainName ){
 					config.imagetools_cors_hosts = [domainName];
 					config.imagetools_credentials_hosts = [domainName];
@@ -3493,7 +3493,7 @@ module.exports._resetFallback = function resetFallback () {
       },
 
       lowestElement: function getBestHeight() {
-        return Math.max(getHeight.bodyOffset(), getMaxElement('bottom',getAllElements()));
+        return Math.max(getHeight.bodyOffset() || getHeight.documentElementOffset(), getMaxElement('bottom',getAllElements()));
       },
 
       taggedElement: function getTaggedElementsHeight() {
