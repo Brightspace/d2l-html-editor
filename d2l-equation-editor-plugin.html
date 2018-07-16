@@ -75,6 +75,7 @@ Check that file periodically for changes...
 					classString += ' mathmlequation';
 					removeAnnotation = true;
 				} else {
+					//TODO: Chemistry equation??
 					if (annotationMatch[1] === 'wiris') {
 						classString += ' graphicalequation';
 						title = tinymce.EditorManager.i18n.translate('Graphical');
@@ -201,12 +202,19 @@ Check that file periodically for changes...
 				editor.buttons.d2l_equation.button_object.aria('label', tinymce.EditorManager.i18n.translate('Graphical equation'));
 				editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-graphical-equation';
 			} else if (editor.buttons.d2l_equation.setting === 2) {
+				editor.buttons.d2l_equation.button_object.title('Chemistry equation');
+				editor.buttons.d2l_equation.button_object.settings.tooltip = 'Chemistry equation';
+				editor.buttons.d2l_equation.button_object.icon('d2l_chemistry_equation');
+				editor.buttons.d2l_equation.button_object.aria('label', tinymce.EditorManager.i18n.translate('Chemistry equation'));
+				editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-chemistry-equation';
+				//TODO: translate chemistry equation string
+			} else if (editor.buttons.d2l_equation.setting === 3) {
 				editor.buttons.d2l_equation.button_object.title('MathML equation');
 				editor.buttons.d2l_equation.button_object.settings.tooltip = 'MathML equation';
 				editor.buttons.d2l_equation.button_object.icon('d2l_mml');
 				editor.buttons.d2l_equation.button_object.aria('label', tinymce.EditorManager.i18n.translate('MathML equation'));
 				editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-mml-equation';
-			} else if (editor.buttons.d2l_equation.setting === 3) {
+			} else if (editor.buttons.d2l_equation.setting === 4) {
 				editor.buttons.d2l_equation.button_object.title('LaTeX equation');
 				editor.buttons.d2l_equation.button_object.settings.tooltip = 'LaTeX equation';
 				editor.buttons.d2l_equation.button_object.icon('d2l_latex');
@@ -240,11 +248,17 @@ Check that file periodically for changes...
 					}
 				} else if (setting === 2) {
 					if (isEnabled) {
+						editor.menuItems.chemistry_editor.disabled = false;
+					} else {
+						editor.menuItems.chemistry_editor.disabled = true;
+					}
+				} else if (setting === 3) {
+					if (isEnabled) {
 						editor.menuItems.mml_editor.disabled = false;
 					} else {
 						editor.menuItems.mml_editor.disabled = true;
 					}
-				} else if (setting === 3) {
+				} else if (setting === 4) {
 					if (isEnabled) {
 						editor.menuItems.latex_editor.disabled = false;
 					} else {
@@ -272,11 +286,17 @@ Check that file periodically for changes...
 					}
 				} else if (setting === 2) {
 					if (isActive) {
+						editor.menuItems.chemistry_editor.active = true;
+					} else {
+						editor.menuItems.chemistry_editor.active = false;
+					}
+				} else if (setting === 3) {
+					if (isActive) {
 						editor.menuItems.mml_editor.active = true;
 					} else {
 						editor.menuItems.mml_editor.active = false;
 					}
-				} else if (setting === 3) {
+				} else if (setting === 4) {
 					if (isActive) {
 						editor.menuItems.latex_editor.active = true;
 					} else {
@@ -298,7 +318,7 @@ Check that file periodically for changes...
 				setting,
 				i;
 
-			for (i = 1; i <= 3; i++) {
+			for (i = 1; i <= 4; i++) {
 				isEnabled = true;
 				isActive = false;
 				setting = i;
@@ -316,7 +336,8 @@ Check that file periodically for changes...
 								editor.buttons.d2l_equation.button_object.active(true);
 							}
 						}
-					} else if (setting === 2 && e.node.getAttribute('data-d2l-mathml').indexOf('mathml') > -1) {
+					} else if (setting === 2 && e.node.getAttribute('data-d2l-mathml').indexOf('wiris') > -1) {
+						//TODO: check if condiiton should check for 'wiris' if it is a chemistry equation
 						isEnabled = true;
 						isActive = isEnabled;
 						if (isEnabled) {
@@ -327,7 +348,18 @@ Check that file periodically for changes...
 								editor.buttons.d2l_equation.button_object.active(true);
 							}
 						}
-					} else if (setting === 3 && e.node.getAttribute('data-d2l-mathml').indexOf('latex') > -1) {
+					} else if (setting === 3 && e.node.getAttribute('data-d2l-mathml').indexOf('mathml') > -1) {
+						isEnabled = true;
+						isActive = isEnabled;
+						if (isEnabled) {
+							if (changeSetting(editor, setting) === true) {
+								changeButton(editor);
+							}
+							if (editor.buttons.d2l_equation.button_object !== null) {
+								editor.buttons.d2l_equation.button_object.active(true);
+							}
+						}
+					} else if (setting === 4 && e.node.getAttribute('data-d2l-mathml').indexOf('latex') > -1) {
 						isEnabled = true;
 						isActive = isEnabled;
 						if (isEnabled) {
@@ -380,6 +412,26 @@ Check that file periodically for changes...
 							}
 						});
 
+						editor.addMenuItem('chemistry_editor', {
+							active: false,
+							disabled: false,
+							icon: 'd2l_chemistry_equation',
+							text: 'Chemistry equation',
+							serviceId: 'fra-html-editor-chemistry-equation',
+							button_object: null,
+							onPostRender: function() {
+								editor.menuItems.graphical_editor.button_object = this;
+							},
+							onclick: function() {
+								var setting = 2;
+								var changeButtonState = changeSetting(editor, setting);
+								if (changeButtonState === true) {
+									changeButton(editor);
+								}
+								window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
+							}
+						});
+
 						editor.addMenuItem('mml_editor', {
 							active: false,
 							disabled: false,
@@ -391,7 +443,7 @@ Check that file periodically for changes...
 								editor.menuItems.mml_editor.button_object = this;
 							},
 							onclick: function() {
-								var setting = 2;
+								var setting = 3;
 								var changeButtonState = changeSetting(editor, setting);
 								if (changeButtonState === true) {
 									changeButton(editor);
@@ -411,7 +463,7 @@ Check that file periodically for changes...
 								editor.menuItems.latex_editor.button_object = this;
 							},
 							onclick: function() {
-								var setting = 3;
+								var setting = 4;
 								var changeButtonState = changeSetting(editor, setting);
 								if (changeButtonState === true) {
 									changeButton(editor);
@@ -430,12 +482,13 @@ Check that file periodically for changes...
 							serviceId: 'fra-html-editor-graphical-equation',
 							menu: [
 								editor.menuItems['graphical_editor'],
+								editor.menuItems['chemistry_editor'],
 								editor.menuItems['mml_editor'],
 								editor.menuItems['latex_editor']
 							],
 							onPostRender: function() {
 								editor.buttons.d2l_equation.button_object = this;
-								if (editor.buttons.d2l_equation.setting !== 2 || editor.buttons.d2l_equation.setting !== 3) {
+								if (editor.buttons.d2l_equation.setting !== 2 || editor.buttons.d2l_equation.setting !== 3 || editor.buttons.d2l_equation.setting !== 4) {
 									changeButton(editor);
 								}
 							},
