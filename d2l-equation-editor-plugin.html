@@ -402,25 +402,27 @@ Check that file periodically for changes...
 							}
 						});
 
-						editor.addMenuItem('chemistry_editor', {
-							active: false,
-							disabled: false,
-							icon: 'd2l_chemistry_equation',
-							text: 'Chemistry equation',
-							serviceId: 'fra-html-editor-chemistry-equation',
-							button_object: null,
-							onPostRender: function() {
-								editor.menuItems.graphical_editor.button_object = this;
-							},
-							onclick: function() {
-								var setting = 2;
-								var changeButtonState = changeSetting(editor, setting);
-								if (changeButtonState === true) {
-									changeButton(editor);
+						if (editor.getParam('d2l_html_editor').chemistryEditorEnabled) {
+							editor.addMenuItem('chemistry_editor', {
+								active: false,
+								disabled: false,
+								icon: 'd2l_chemistry_equation',
+								text: 'Chemistry equation',
+								serviceId: 'fra-html-editor-chemistry-equation',
+								button_object: null,
+								onPostRender: function() {
+									editor.menuItems.graphical_editor.button_object = this;
+								},
+								onclick: function() {
+									var setting = 2;
+									var changeButtonState = changeSetting(editor, setting);
+									if (changeButtonState === true) {
+										changeButton(editor);
+									}
+									window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
 								}
-								window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
-							}
-						});
+							});
+						}
 
 						editor.addMenuItem('mml_editor', {
 							active: false,
