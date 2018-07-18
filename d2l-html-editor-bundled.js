@@ -1599,6 +1599,10 @@ Polymer({
 		objectResizing: {
 			type: Boolean,
 			value: true
+		},
+		chemistryEditorEnabled: {
+			type: Number,
+			value: 0
 		}
 	},
 
