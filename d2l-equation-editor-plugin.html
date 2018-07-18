@@ -75,8 +75,8 @@ Check that file periodically for changes...
 					classString += ' mathmlequation';
 					removeAnnotation = true;
 				} else {
-					//TODO: Chemistry equation??
 					if (annotationMatch[1] === 'wiris') {
+						// This matches both graphical equation and chemistry equation (same behavior as legacy editor)
 						classString += ' graphicalequation';
 						title = tinymce.EditorManager.i18n.translate('Graphical');
 					} else if (annotationMatch[1] === 'latex') {
@@ -207,7 +207,6 @@ Check that file periodically for changes...
 				editor.buttons.d2l_equation.button_object.icon('d2l_chemistry_equation');
 				editor.buttons.d2l_equation.button_object.aria('label', tinymce.EditorManager.i18n.translate('Chemistry equation'));
 				editor.buttons.d2l_equation.button_object.settings.serviceId = 'fra-html-editor-chemistry-equation';
-				//TODO: translate chemistry equation string
 			} else if (editor.buttons.d2l_equation.setting === 3) {
 				editor.buttons.d2l_equation.button_object.title('MathML equation');
 				editor.buttons.d2l_equation.button_object.settings.tooltip = 'MathML equation';
@@ -337,17 +336,8 @@ Check that file periodically for changes...
 							}
 						}
 					} else if (setting === 2 && e.node.getAttribute('data-d2l-mathml').indexOf('wiris') > -1) {
-						//TODO: check if condiiton should check for 'wiris' if it is a chemistry equation
 						isEnabled = true;
-						isActive = isEnabled;
-						if (isEnabled) {
-							if (changeSetting(editor, setting) === true) {
-								changeButton(editor);
-							}
-							if (editor.buttons.d2l_equation.button_object !== null) {
-								editor.buttons.d2l_equation.button_object.active(true);
-							}
-						}
+						isActive = false;
 					} else if (setting === 3 && e.node.getAttribute('data-d2l-mathml').indexOf('mathml') > -1) {
 						isEnabled = true;
 						isActive = isEnabled;
