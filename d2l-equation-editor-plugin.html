@@ -303,11 +303,7 @@ Check that file periodically for changes...
 					}
 				}
 			} else {
-				if (isActive) {
-					editor.buttons.d2l_equation.button_object.menu._items[setting - 1].active(true);
-				} else {
-					editor.buttons.d2l_equation.button_object.menu._items[setting - 1].active(false);
-				}
+				console.warn('Unsupported equation editor menu item'); // eslint-disable-line no-console
 			}
 		}
 
@@ -336,6 +332,9 @@ Check that file periodically for changes...
 							}
 						}
 					} else if (setting === 2 && e.node.getAttribute('data-d2l-mathml').indexOf('wiris') > -1) {
+						if (!editor.getParam('d2l_html_editor').chemistryEditorEnabled) {
+							continue;
+						}
 						isEnabled = true;
 						isActive = false;
 					} else if (setting === 3 && e.node.getAttribute('data-d2l-mathml').indexOf('mathml') > -1) {
@@ -411,7 +410,7 @@ Check that file periodically for changes...
 								serviceId: 'fra-html-editor-chemistry-equation',
 								button_object: null,
 								onPostRender: function() {
-									editor.menuItems.graphical_editor.button_object = this;
+									editor.menuItems.chemistry_editor.button_object = this;
 								},
 								onclick: function() {
 									var setting = 2;
