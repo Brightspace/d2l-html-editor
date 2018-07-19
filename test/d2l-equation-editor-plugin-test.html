@@ -42,12 +42,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           client = {
             connect: function() {},
             getService: function() {}
-          }
+          };
 
           service = {
             config: function() {},
             click: function() {}
-          }
+          };
 
           var servicePromise = sinon.stub(client, 'getService').returnsPromise();
           servicePromise.resolves(service);
@@ -56,6 +56,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           window.D2LHtmlEditor.PolymerBehaviors.EquationEditor.plugin.addPlugin(client); // .then(function() {
             tinymce.init({
+              d2l_html_editor: this,
               inline: true,
               convert_urls: false,
       				relative_urls: false,
@@ -82,7 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           editor.setContent('');
           document.getElementById('html-editor').blur();
           tinymce.EditorManager.execCommand('mceRemoveEditor', true, 'html-editor'); // eslint-disable-line no-undef
-        })
+        });
 
         describe('click handling', function() {
 
