@@ -312,21 +312,18 @@ Check that file periodically for changes...
 		}
 
 		function nodeChange(e, editor) {
-			var isEnabled,
-				isActive,
-				setting,
-				i;
+			var hasActiveItem = false;
 
-			for (i = 1; i <= 4; i++) {
-				isEnabled = true;
-				isActive = false;
-				setting = i;
+			for (var i = 1; i <= 4; i++) {
+				var isEnabled = true;
+				var isActive = false;
+				var setting = i;
 				if (!e.node && e.element) e.node = e.element;
 
 				if (!e.isCollapsed && e.node.nodeName === 'IMG' && (e.node.className.indexOf('equation') > -1)) {
 					if (setting === 1 && e.node.getAttribute('data-d2l-mathml').indexOf('wiris') > -1) {
 						isEnabled = true;
-						isActive = isEnabled;
+						isActive = isEnabled && !hasActiveItem;
 						if (isEnabled) {
 							if (changeSetting(editor, setting) === true) {
 								changeButton(editor);
@@ -337,10 +334,10 @@ Check that file periodically for changes...
 						}
 					} else if (setting === 2 && e.node.getAttribute('data-d2l-mathml').indexOf('wiris') > -1) {
 						isEnabled = true;
-						isActive = false;
+						isActive = isEnabled && !hasActiveItem;
 					} else if (setting === 3 && e.node.getAttribute('data-d2l-mathml').indexOf('mathml') > -1) {
 						isEnabled = true;
-						isActive = isEnabled;
+						isActive = isEnabled && !hasActiveItem;
 						if (isEnabled) {
 							if (changeSetting(editor, setting) === true) {
 								changeButton(editor);
@@ -351,7 +348,7 @@ Check that file periodically for changes...
 						}
 					} else if (setting === 4 && e.node.getAttribute('data-d2l-mathml').indexOf('latex') > -1) {
 						isEnabled = true;
-						isActive = isEnabled;
+						isActive = isEnabled && !hasActiveItem;
 						if (isEnabled) {
 							if (changeSetting(editor, setting) === true) {
 								changeButton(editor);
@@ -372,6 +369,7 @@ Check that file periodically for changes...
 				setIsEnabledByNode(editor, isEnabled, setting);
 				setIsActiveByNode(editor, isActive, setting);
 
+				hasActiveItem = hasActiveItem || isActive;
 			}
 		}
 
@@ -380,126 +378,173 @@ Check that file periodically for changes...
 		var EquationEditorBehavior = {
 			plugin: {
 				addPlugin: function(client) {
-					tinymce.PluginManager.add('d2l_equation', function(editor) {
-
-						editor.addMenuItem('graphical_editor', {
-							active: false,
-							disabled: false,
-							icon: 'd2l_graphical_equation',
-							text: 'Graphical equation',
-							serviceId: 'fra-html-editor-graphical-equation',
-							button_object: null,
-							onPostRender: function() {
-								editor.menuItems.graphical_editor.button_object = this;
-							},
-							onclick: function() {
-								var setting = 1;
-								var changeButtonState = changeSetting(editor, setting);
-								if (changeButtonState === true) {
-									changeButton(editor);
-								}
-								window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
-							}
+					return new Promise(function(resolve) {
+						var graphicalEditorPromise = new Promise(function(resolve) {
+							client.getService('fra-html-editor-graphical-equation', '0.1').then(function(service) {
+								return service.config().then(function(config) {
+									resolve(config.isEnabled);
+								});
+							}, function() {
+								resolve(false);
+							});
 						});
 
-						editor.addMenuItem('chemistry_editor', {
-							active: false,
-							disabled: false,
-							hidden: !editor.getParam('d2l_html_editor').chemistryEditorEnabled,
-							icon: 'd2l_chemistry_equation',
-							text: 'Chemistry equation',
-							serviceId: 'fra-html-editor-chemistry-equation',
-							button_object: null,
-							onPostRender: function() {
-								editor.menuItems.chemistry_editor.button_object = this;
-							},
-							onclick: function() {
-								var setting = 2;
-								var changeButtonState = changeSetting(editor, setting);
-								if (changeButtonState === true) {
-									changeButton(editor);
-								}
-								window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
-							}
+						var chemistryEditorPromise = new Promise(function(resolve) {
+							client.getService('fra-html-editor-chemistry-equation', '0.1').then(function(service) {
+								return service.config().then(function(config) {
+									resolve(config.isEnabled);
+								});
+							}, function() {
+								resolve(false);
+							});
 						});
 
-						editor.addMenuItem('mml_editor', {
-							active: false,
-							disabled: false,
-							icon: 'd2l_mml',
-							text: 'MathML equation',
-							serviceId: 'fra-html-editor-mml-equation',
-							button_object: null,
-							onPostRender: function() {
-								editor.menuItems.mml_editor.button_object = this;
-							},
-							onclick: function() {
-								var setting = 3;
-								var changeButtonState = changeSetting(editor, setting);
-								if (changeButtonState === true) {
-									changeButton(editor);
-								}
-								window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
-							}
+						var mmlEditorPromise = new Promise(function(resolve) {
+							client.getService('fra-html-editor-mml-equation', '0.1').then(function(service) {
+								return service.config().then(function(config) {
+									resolve(config.isEnabled);
+								});
+							}, function() {
+								resolve(false);
+							});
 						});
 
-						editor.addMenuItem('latex_editor', {
-							active: false,
-							disabled: false,
-							icon: 'd2l_latex',
-							text: 'LaTeX equation',
-							serviceId: 'fra-html-editor-latex-equation',
-							button_object: null,
-							onPostRender: function() {
-								editor.menuItems.latex_editor.button_object = this;
-							},
-							onclick: function() {
-								var setting = 4;
-								var changeButtonState = changeSetting(editor, setting);
-								if (changeButtonState === true) {
-									changeButton(editor);
-								}
-								window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
-							}
+						var latexEditorPromise = new Promise(function(resolve) {
+							client.getService('fra-html-editor-latex-equation', '0.1').then(function(service) {
+								return service.config().then(function(config) {
+									resolve(config.isEnabled);
+								});
+							}, function() {
+								resolve(false);
+							});
 						});
 
-						editor.addButton('d2l_equation', {
-							title: 'Graphical equation',
-							tooltip: 'Graphical equation',
-							icon: 'd2l_graphical_equation',
-							type: 'splitbutton',
-							setting: 1,
-							button_object: null,
-							serviceId: 'fra-html-editor-graphical-equation',
-							menu: [
-								editor.menuItems['graphical_editor'],
-								editor.menuItems['chemistry_editor'],
-								editor.menuItems['mml_editor'],
-								editor.menuItems['latex_editor']
-							],
-							onPostRender: function() {
-								editor.buttons.d2l_equation.button_object = this;
-								if (editor.buttons.d2l_equation.setting !== 2 || editor.buttons.d2l_equation.setting !== 3 || editor.buttons.d2l_equation.setting !== 4) {
-									changeButton(editor);
-								}
-							},
-							onclick: function() {
-								window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
-							}
-						});
+						Promise.all([graphicalEditorPromise, chemistryEditorPromise, mmlEditorPromise, latexEditorPromise]).then(function(res) {
+							tinymce.PluginManager.add('d2l_equation', function(editor) {
+								editor.addMenuItem('graphical_editor', {
+									active: false,
+									disabled: false,
+									hidden: !res[0],
+									icon: 'd2l_graphical_equation',
+									text: 'Graphical equation',
+									serviceId: 'fra-html-editor-graphical-equation',
+									button_object: null,
+									onPostRender: function() {
+										editor.menuItems.graphical_editor.button_object = this;
+									},
+									onclick: function() {
+										var setting = 1;
+										var changeButtonState = changeSetting(editor, setting);
+										if (changeButtonState === true) {
+											changeButton(editor);
+										}
+										window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
+									}
+								});
 
-						editor.on('NodeChange', function(e) {
-							nodeChange(e, editor);
-						});
+								editor.addMenuItem('chemistry_editor', {
+									active: false,
+									disabled: false,
+									hidden: !res[1],
+									icon: 'd2l_chemistry_equation',
+									text: 'Chemistry equation',
+									serviceId: 'fra-html-editor-chemistry-equation',
+									button_object: null,
+									onPostRender: function() {
+										editor.menuItems.chemistry_editor.button_object = this;
+									},
+									onclick: function() {
+										var setting = 2;
+										var changeButtonState = changeSetting(editor, setting);
+										if (changeButtonState === true) {
+											changeButton(editor);
+										}
+										window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
+									}
+								});
 
-						editor.on('BeforeSetContent', function(e) {
-							convertToImages(e);
-						});
+								editor.addMenuItem('mml_editor', {
+									active: false,
+									disabled: false,
+									hidden: !res[2],
+									icon: 'd2l_mml',
+									text: 'MathML equation',
+									serviceId: 'fra-html-editor-mml-equation',
+									button_object: null,
+									onPostRender: function() {
+										editor.menuItems.mml_editor.button_object = this;
+									},
+									onclick: function() {
+										var setting = 3;
+										var changeButtonState = changeSetting(editor, setting);
+										if (changeButtonState === true) {
+											changeButton(editor);
+										}
+										window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
+									}
+								});
 
-						editor.on('PostProcess', function(e) {
-							if (e.get) {
-								convertToMath(e);
-							}
+								editor.addMenuItem('latex_editor', {
+									active: false,
+									disabled: false,
+									hidden: !res[3],
+									icon: 'd2l_latex',
+									text: 'LaTeX equation',
+									serviceId: 'fra-html-editor-latex-equation',
+									button_object: null,
+									onPostRender: function() {
+										editor.menuItems.latex_editor.button_object = this;
+									},
+									onclick: function() {
+										var setting = 4;
+										var changeButtonState = changeSetting(editor, setting);
+										if (changeButtonState === true) {
+											changeButton(editor);
+										}
+										window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
+									}
+								});
+
+								editor.addButton('d2l_equation', {
+									title: 'Graphical equation',
+									tooltip: 'Graphical equation',
+									icon: 'd2l_graphical_equation',
+									type: 'splitbutton',
+									setting: 1,
+									button_object: null,
+									serviceId: 'fra-html-editor-graphical-equation',
+									menu: [
+										editor.menuItems['graphical_editor'],
+										editor.menuItems['chemistry_editor'],
+										editor.menuItems['mml_editor'],
+										editor.menuItems['latex_editor']
+									],
+									onPostRender: function() {
+										editor.buttons.d2l_equation.button_object = this;
+										if (editor.buttons.d2l_equation.setting !== 2 || editor.buttons.d2l_equation.setting !== 3 || editor.buttons.d2l_equation.setting !== 4) {
+											changeButton(editor);
+										}
+									},
+									onclick: function() {
+										window.D2LHtmlEditor.PolymerBehaviors.Plugin.callIfrauService(client, this.settings.serviceId, editor, command);
+									}
+								});
+
+								editor.on('NodeChange', function(e) {
+									nodeChange(e, editor);
+								});
+
+								editor.on('BeforeSetContent', function(e) {
+									convertToImages(e);
+								});
+
+								editor.on('PostProcess', function(e) {
+									if (e.get) {
+										convertToMath(e);
+									}
+								});
+							});
+							resolve();
 						});
 					});
 				}
