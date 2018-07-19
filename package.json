@@ -12,9 +12,9 @@
     "test": "npm run test:lint:js",
     "test:lint:js": "eslint *.html",
     "test:lint:wc": "polymer lint --i *.html",
-    "test:unit:local": "polymer test --skip-plugin sauce",
+    "test:unit:local": "cross-env LAUNCHPAD_BROWSERS=chrome polymer test --skip-plugin sauce",
     "test:unit:travis": "polymer test --skip-plugin local",
-    "build" : "browserify d2l-html-editor.js -o d2l-html-editor-bundled.js"
+    "build": "browserify d2l-html-editor.js -o d2l-html-editor-bundled.js"
   },
   "repository": {
     "type": "git",
@@ -27,10 +27,11 @@
   },
   "homepage": "https://github.com/Brightspace/d2l-html-editor#readme",
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint": "^4.15.0",
     "eslint-config-brightspace": "^0.4.0",
     "eslint-plugin-html": "^4.0.1",
-    "superagent-d2l-session-auth": "^1.0.2",
-    "polymer-cli": "^1.5.7"
+    "polymer-cli": "^1.5.7",
+    "superagent-d2l-session-auth": "^1.0.2"
   }
 }
