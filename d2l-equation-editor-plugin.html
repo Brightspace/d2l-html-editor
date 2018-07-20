@@ -312,18 +312,17 @@ Check that file periodically for changes...
 		}
 
 		function nodeChange(e, editor) {
-			var hasActiveItem = false;
-
 			for (var i = 1; i <= 4; i++) {
 				var isEnabled = true;
 				var isActive = false;
 				var setting = i;
+
 				if (!e.node && e.element) e.node = e.element;
 
 				if (!e.isCollapsed && e.node.nodeName === 'IMG' && (e.node.className.indexOf('equation') > -1)) {
 					if (setting === 1 && e.node.getAttribute('data-d2l-mathml').indexOf('wiris') > -1) {
 						isEnabled = true;
-						isActive = isEnabled && !hasActiveItem;
+						isActive = isEnabled;
 						if (isEnabled) {
 							if (changeSetting(editor, setting) === true) {
 								changeButton(editor);
@@ -334,10 +333,10 @@ Check that file periodically for changes...
 						}
 					} else if (setting === 2 && e.node.getAttribute('data-d2l-mathml').indexOf('wiris') > -1) {
 						isEnabled = true;
-						isActive = isEnabled && !hasActiveItem;
+						isActive = isEnabled;
 					} else if (setting === 3 && e.node.getAttribute('data-d2l-mathml').indexOf('mathml') > -1) {
 						isEnabled = true;
-						isActive = isEnabled && !hasActiveItem;
+						isActive = isEnabled;
 						if (isEnabled) {
 							if (changeSetting(editor, setting) === true) {
 								changeButton(editor);
@@ -348,7 +347,7 @@ Check that file periodically for changes...
 						}
 					} else if (setting === 4 && e.node.getAttribute('data-d2l-mathml').indexOf('latex') > -1) {
 						isEnabled = true;
-						isActive = isEnabled && !hasActiveItem;
+						isActive = isEnabled;
 						if (isEnabled) {
 							if (changeSetting(editor, setting) === true) {
 								changeButton(editor);
@@ -368,8 +367,6 @@ Check that file periodically for changes...
 
 				setIsEnabledByNode(editor, isEnabled, setting);
 				setIsActiveByNode(editor, isActive, setting);
-
-				hasActiveItem = hasActiveItem || isActive;
 			}
 		}
 
