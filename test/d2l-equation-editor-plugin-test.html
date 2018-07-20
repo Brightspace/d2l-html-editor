@@ -42,12 +42,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           client = {
             connect: function() {},
             getService: function() {}
-          }
+          };
 
           service = {
             config: function() {},
             click: function() {}
-          }
+          };
 
           var servicePromise = sinon.stub(client, 'getService').returnsPromise();
           servicePromise.resolves(service);
@@ -82,25 +82,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           editor.setContent('');
           document.getElementById('html-editor').blur();
           tinymce.EditorManager.execCommand('mceRemoveEditor', true, 'html-editor'); // eslint-disable-line no-undef
-        })
+        });
 
         describe('click handling', function() {
-
-          it('loads graphical equation', function(done) {
-
-            var clickPromise = sinon.stub(service, 'click').returnsPromise();
-            clickPromise.resolves('<math title="" xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mstyle><mn>3</mn><mo>/</mo><mn>4</mn></mstyle><annotation encoding="wiris">{"version":"1.1","math":"&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo&gt;/&lt;/mo&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;/math&gt;"}</annotation></semantics></math>');
-
-            var button = editor.theme.panel.find('toolbar *')[1];
-
-            button.fire('click', {target: button.getEl().firstChild});
-
-            setTimeout(function() {
-              assert.equal(editor.getContent(),
-                '<math title="" xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mstyle><mn>3</mn><mo>/</mo><mn>4</mn></mstyle><annotation encoding="wiris">{"version":"1.1","math":"&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo&gt;/&lt;/mo&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;/math&gt;"}</annotation></semantics></math>')
-              done();
-            }, 20);
-          });
 
           it('selects current mathml', function(done) {
 
@@ -109,7 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             editor.selection.select(editor.dom.select('img')[0]);
 
             var stub = sinon.stub(service, 'click');
-            stub.returnsPromise().resolves('');
+            stub.returnsPromise().resolves('<math title="" xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mstyle><mn>3</mn><mo>/</mo><mn>4</mn></mstyle><annotation encoding="wiris">{"version":"1.1","math":"&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo&gt;/&lt;/mo&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;/math&gt;"}</annotation></semantics></math>');
 
             var button = editor.theme.panel.find('toolbar *')[1];
 
@@ -117,6 +101,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             setTimeout(function() {
               assert(stub.calledWith('<math title="" xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mstyle><mn>3</mn><mo>/</mo><mn>4</mn></mstyle><annotation encoding="wiris">{"version":"1.1","math":"&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo&gt;/&lt;/mo&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;/math&gt;"}</annotation></semantics></math>'));
+              assert.equal(editor.getContent(),
+                '<math title="" xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><semantics><mstyle><mn>3</mn><mo>/</mo><mn>4</mn></mstyle><annotation encoding="wiris">{"version":"1.1","math":"&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;mo&gt;/&lt;/mo&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;/math&gt;"}</annotation></semantics></math>');
+             
               done();
             }, 20);
           });
