@@ -653,7 +653,8 @@ Polymer({
 					title: 'Close Full Screen Editor',
 					icon: 'd2l_smallscreen',
 					onclick: function() {
-						editor.execCommand('mceFullScreen');
+						// This command steals focus from the html-editor-title-container
+						//editor.execCommand('mceFullScreen');
 						that.fire('restore');
 					},
 					onPostRender: function() {
@@ -663,7 +664,8 @@ Polymer({
 
 				if (!this.inline) {
 					editor.on('init', function() {
-						editor.execCommand('mceFullScreen');
+						// This command steals focus from the html-editor-title-container
+						//editor.execCommand('mceFullScreen');
 						editor.getBody().setAttribute('aria-label', tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
 						var container = editor.getContainer();
 						var langTag = container.parentElement.getAttribute('lang-tag');
