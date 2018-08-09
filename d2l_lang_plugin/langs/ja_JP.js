@@ -1,6 +1,6 @@
 ﻿//D2L specific strings
 
-tinymce.addI18n('ja',{
+tinymce.addI18n('ja_JP',{
 "Add Image": "イメージの追加",
 "Insert Stuff": "素材の挿入",
 "More Text Styles": "その他のテキストスタイル",
