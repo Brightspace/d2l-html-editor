@@ -9,6 +9,7 @@ tinymce.addI18n('tr_TR',{
 "Add Link": "Bağlantı Ekle",
 "Graphical equation": "Grafik denklemi",
 "Graphical": "Grafik",
+"Chemistry equation": "Kimya denklemi",
 "MathML equation": "MathML denklemi",
 "MathML": "MathML",
 "LaTeX equation": "LaTeX denklemi",

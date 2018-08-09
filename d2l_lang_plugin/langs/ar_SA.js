@@ -9,6 +9,7 @@ tinymce.addI18n('ar_SA',{
 "Add Link": "إضافة ارتباط",
 "Graphical equation": "معادلة رسومية",
 "Graphical": "رسومية",
+"Chemistry equation": "معادلة في الكيمياء",
 "MathML equation": "معادلة MathML",
 "MathML": "MathML",
 "LaTeX equation": "معادلة LaTeX",
