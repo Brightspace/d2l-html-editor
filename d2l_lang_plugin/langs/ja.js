@@ -9,6 +9,7 @@ tinymce.addI18n('ja',{
 "Add Link": "リンクの追加",
 "Graphical equation": "グラフィカル数式",
 "Graphical": "グラフィカル",
+"Chemistry equation": "化学方程式",
 "MathML equation": "MathML 数式",
 "MathML": "MathML",
 "LaTeX equation": "LaTeX 数式",

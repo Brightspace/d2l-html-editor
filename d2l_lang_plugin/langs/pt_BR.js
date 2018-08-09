@@ -9,6 +9,7 @@ tinymce.addI18n('pt_BR',{
 "Add Link": "Adicionar Link",
 "Graphical equation": "Equação gráfica",
 "Graphical": "Gráfica",
+"Chemistry equation": "Equação química",
 "MathML equation": "Equação MathML",
 "MathML": "MathML",
 "LaTeX equation": "Equação LaTeX",
