@@ -9,6 +9,7 @@ tinymce.addI18n('ko_KR',{
 "Add Link": "링크 추가",
 "Graphical equation": "그래픽 수식",
 "Graphical": "그래픽",
+"Chemistry equation": "화학 방정식",
 "MathML equation": "MathML 수식",
 "MathML": "MathML",
 "LaTeX equation": "LaTeX 수식",
