@@ -286,19 +286,20 @@ Check that file periodically for changes...
 				if (!e.node && e.element) e.node = e.element;
 
 				if (!e.isCollapsed && e.node.nodeName === 'IMG' && (e.node.className.indexOf('equation') > -1)) {
-					if (setting === 1 && decodeURIComponent(e.node.getAttribute('data-d2l-mathml')).indexOf('encoding="wiris"') > -1) {
+					var data = decodeURIComponent(e.node.getAttribute('data-d2l-mathml'));
+					if (setting === 1 && data && data.indexOf('encoding="wiris"') > -1) {
 						isHidden = getEquationMenuItem(editor, setting).hidden;
 						isActive = !activeSetting && !isHidden;
 						activeSetting = isActive ? setting : activeSetting;
-					} else if (setting === 2 && decodeURIComponent(e.node.getAttribute('data-d2l-mathml')).indexOf('encoding="wiris-chemistry"') > -1) {
+					} else if (setting === 2 && data && data.indexOf('encoding="wiris-chemistry"') > -1) {
 						isHidden = getEquationMenuItem(editor, setting).hidden;
 						isActive = !activeSetting && !isHidden;
 						activeSetting = isActive ? setting : activeSetting;
-					} else if (setting === 3 && e.node.getAttribute('data-d2l-mathml').indexOf('encoding') === -1) {
+					} else if (setting === 3 && data && data.indexOf('encoding') === -1) {
 						isHidden = getEquationMenuItem(editor, setting).hidden;
 						isActive = !activeSetting && !isHidden;
 						activeSetting = isActive ? setting : activeSetting;
-					} else if (setting === 4 && decodeURIComponent(e.node.getAttribute('data-d2l-mathml')).indexOf('encoding="latex"') > -1) {
+					} else if (setting === 4 && data && data.indexOf('encoding="latex"') > -1) {
 						isHidden = getEquationMenuItem(editor, setting).hidden;
 						isActive = !activeSetting && !isHidden;
 						activeSetting = isActive ? setting : activeSetting;
