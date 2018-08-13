@@ -76,9 +76,11 @@ Check that file periodically for changes...
 					removeAnnotation = true;
 				} else {
 					if (annotationMatch[1] === 'wiris') {
-						// This matches both graphical equation and chemistry equation (same behavior as legacy editor)
 						classString += ' graphicalequation';
 						title = tinymce.EditorManager.i18n.translate('Graphical');
+					} else if (annotationMatch[1] === 'wiris-chemistry') {
+						classString += ' chemistryequation';
+						title = tinymce.EditorManager.i18n.translate('Chemistry equation');
 					} else if (annotationMatch[1] === 'latex') {
 						classString += ' latexequation';
 						title = tinymce.EditorManager.i18n.translate('LaTeX');
@@ -230,6 +232,9 @@ Check that file periodically for changes...
 		function changeSetting(editor, setting) {
 			if (editor.buttons.d2l_equation.setting !== setting) {
 				editor.buttons.d2l_equation.setting = setting;
+				if (editor.buttons.d2l_equation.button_object !== null) {
+					editor.buttons.d2l_equation.button_object.active(false);
+				}
 				return true;
 			}
 			return false;
@@ -274,50 +279,52 @@ Check that file periodically for changes...
 		}
 
 		function nodeChange(e, editor) {
-			var activeSetting;
-			for (var i = 4; i >= 1; i--) {
-				var isActive = false;
-				var isEnabled = true;
+			for (var i = 1; i <= 4; i++) {
 				var setting = i;
-				var isHidden;
+				var isEnabled = false;
+				var isActive = false;
 
 				if (!e.node && e.element) e.node = e.element;
-
 				if (!e.isCollapsed && e.node.nodeName === 'IMG' && (e.node.className.indexOf('equation') > -1)) {
-					if (setting === 1 && e.node.getAttribute('data-d2l-mathml').indexOf('wiris') > -1) {
-						isHidden = getEquationMenuItem(editor, setting).hidden;
-						isActive = !activeSetting && !isHidden;
-						activeSetting = isActive ? setting : activeSetting;
-					} else if (setting === 2 && e.node.getAttribute('data-d2l-mathml').indexOf('wiris') > -1) {
-						isHidden = getEquationMenuItem(editor, setting).hidden;
-						isActive = !activeSetting && !isHidden;
-						activeSetting = isActive ? setting : activeSetting;
-					} else if (setting === 3 && e.node.getAttribute('data-d2l-mathml').indexOf('mathml') > -1) {
-						isHidden = getEquationMenuItem(editor, setting).hidden;
-						isActive = !activeSetting && !isHidden;
-						activeSetting = isActive ? setting : activeSetting;
-					} else if (setting === 4 && e.node.getAttribute('data-d2l-mathml').indexOf('latex') > -1) {
-						isHidden = getEquationMenuItem(editor, setting).hidden;
-						isActive = !activeSetting && !isHidden;
-						activeSetting = isActive ? setting : activeSetting;
-					} else {
-						isEnabled = false;
+					// Expected Behavior
+					// Graphical equation - enabled: Graphical and Chemistry. active: Graphical
+					// Chemistry equation - enabled: Graphical and Chemistry. active: Chemistry
+					// Mathml - enabled: Mathml. active: Mathml
+					// Latex - enabled: Latex. active: Latex
+					var data = decodeURIComponent(e.node.getAttribute('data-d2l-mathml')) || '';
+					var isGraphicalEquation = data.indexOf('encoding="wiris"') > -1;
+					var isChemistryEquation = data.indexOf('encoding="wiris-chemistry"') > -1;
+					var isMathmlEquation = data.indexOf('encoding') === -1;
+					var isLatexEquation = data.indexOf('encoding="latex"') > -1;
+
+					if (setting === 1 && (isGraphicalEquation || isChemistryEquation)) {
+						isEnabled = !getEquationMenuItem(editor, setting).hidden;
+						isActive = isEnabled && isGraphicalEquation;
+					} else if (setting === 2 && (isChemistryEquation || isGraphicalEquation)) {
+						isEnabled = !getEquationMenuItem(editor, setting).hidden;
+						isActive = isEnabled && isChemistryEquation;
+					} else if (setting === 3 && isMathmlEquation) {
+						isEnabled = isActive = !getEquationMenuItem(editor, setting).hidden;
+					} else if (setting === 4 && isLatexEquation) {
+						isEnabled = isActive = !getEquationMenuItem(editor, setting).hidden;
 					}
 				} else {
+					isEnabled = true;
 					if (editor.buttons.d2l_equation.button_object !== null) {
 						editor.buttons.d2l_equation.button_object.active(false);
 					}
 				}
-				setIsActiveByNode(editor, isActive, setting);
-				setIsEnabledByNode(editor, isEnabled, setting);
-			}
 
-			if (activeSetting) {
-				if (changeSetting(editor, activeSetting)) {
-					changeButton(editor);
-				}
-				if (editor.buttons.d2l_equation.button_object !== null) {
-					editor.buttons.d2l_equation.button_object.active(true);
+				setIsEnabledByNode(editor, isEnabled, setting);
+				setIsActiveByNode(editor, isActive, setting);
+
+				if (isActive) {
+					if (changeSetting(editor, setting)) {
+						changeButton(editor);
+					}
+					if (editor.buttons.d2l_equation.button_object !== null) {
+						editor.buttons.d2l_equation.button_object.active(true);
+					}
 				}
 			}
 		}
