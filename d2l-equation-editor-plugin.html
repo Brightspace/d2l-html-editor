@@ -232,6 +232,9 @@ Check that file periodically for changes...
 		function changeSetting(editor, setting) {
 			if (editor.buttons.d2l_equation.setting !== setting) {
 				editor.buttons.d2l_equation.setting = setting;
+				if (editor.buttons.d2l_equation.button_object !== null) {
+					editor.buttons.d2l_equation.button_object.active(false);
+				}
 				return true;
 			}
 			return false;
