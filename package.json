@@ -1,6 +1,6 @@
 {
   "name": "d2l-html-editor",
-  "version": "0.0.127",
+  "version": "0.0.131",
   "description": "An element providing a starting point for your own reusable Polymer elements.",
   "main": "index.js",
   "directories": {
