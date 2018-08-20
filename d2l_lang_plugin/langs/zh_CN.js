@@ -9,6 +9,7 @@ tinymce.addI18n('zh_CN',{
 "Add Link": "添加链接",
 "Graphical equation": "图形等式",
 "Graphical": "图形",
+"Chemistry equation": "化学反应式",
 "MathML equation": "MathML 等式",
 "MathML": "MathML",
 "LaTeX equation": "LaTeX 等式",

@@ -9,6 +9,7 @@ tinymce.addI18n('nl_NL',{
 "Add Link": "Koppeling toevoegen",
 "Graphical equation": "Grafische vergelijking",
 "Graphical": "Grafisch",
+"Chemistry equation": "Scheikundige vergelijking",
 "MathML equation": "MathML-vergelijking",
 "MathML": "MathML",
 "LaTeX equation": "LaTeX-vergelijking",
