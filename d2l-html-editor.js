@@ -458,7 +458,6 @@ Polymer({
 			statusbar: false,
 			fixed_toolbar_container: '#' + this.toolbarId,
 			inline: this.inline ? true : false,
-			extended_valid_elements: 'span[*]' + this.allowUnsafe ? ',script[type|src]' : '',
 			allow_html_in_named_anchor: true,
 			document_base_url: this.documentBaseUrl + '/',
 			content_css: contentCss,
@@ -683,6 +682,12 @@ Polymer({
 				}
 			}
 		};
+
+		if( this.allowUnsafe ) {
+			config.valid_elements = '*[*]';
+		} else {
+			config.extended_valid_elements = 'span[*]';
+		}
 
 		if ( this.imageToolsEnabled ){
 			config.plugins += ' image imagetools';
