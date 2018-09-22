@@ -3,7 +3,7 @@
 <script>
 (function() {
 	'use strict';
-
+	/*global tinymce:true */
 	function createTinyMceFormatString(fontFamilies) {
 		var fontFormats = fontFamilies.reduce(function(formats, font) {
 			if (font.Value) {
@@ -17,6 +17,10 @@
 	}
 
 	function addPlugin(client, pluginConfig) {
+		// Add an empty plugin so this plugin can be configured using the plugins list
+		tinymce.PluginManager.add('d2l_fontfamily', function() {
+		});
+
 		return client.getService('fra-html-editor-font-family', '0.1').then(function(service) {
 			return service.config().then(function(config) {
 				if (config.isEnabled) {

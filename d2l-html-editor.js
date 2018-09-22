@@ -139,9 +139,13 @@ Polymer({
 	 */
 	element: null,
 
+	client: function() {
+		return window.ifrauclient ? window.ifrauclient : window.D2LHtmlEditor.client;
+	},
+
 	// Element Lifecycle
 	registered: function() {
-		var client = window.ifrauclient({
+		var client = this.client()({
 			syncFont: false,
 			syncLang: false,
 			resizeFrame: false,
@@ -213,8 +217,6 @@ Polymer({
 			var pluginBehavior = this._getPluginBehavior(plugin);
 			return pluginBehavior ? pluginBehavior.plugin : null;
 		}, this);
-		// FontFamily not specified in this.plugins, but should be included in config
-		pluginDefinitions.push(window.D2LHtmlEditor.PolymerBehaviors.FontFamily.plugin);
 
 		var plugins = [];
 		pluginDefinitions.forEach(function(plugin) {
@@ -259,6 +261,8 @@ Polymer({
 				return window.D2LHtmlEditor.PolymerBehaviors.Placeholder;
 			case 'd2l_emoticons':
 				return window.D2LHtmlEditor.PolymerBehaviors.Emoticons;
+			case 'd2l_fontfamily':
+				return window.D2LHtmlEditor.PolymerBehaviors.FontFamily;
 			case 'autolink':
 			case 'table':
 			case 'fullscreen':
@@ -297,7 +301,7 @@ Polymer({
 	},
 
 	_setDefaultPlugins: function() {
-		this.plugins = 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link d2l_emoticons ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled ? ' powerpaste' : ' paste') + (this.a11ycheckerEnabled ? ' a11ychecker' : '');
+		this.plugins = 'd2l_attributes d2l_preview d2l_image d2l_isf d2l_link d2l_emoticons d2l_fontfamily ' + (this.fullpageEnabled ? 'd2l_fullpage ' : '') + 'autolink table fullscreen directionality hr textcolor colorpicker d2l_code d2l_replacestring charmap link lists d2l_formatrollup d2l_textstylerollup d2l_insertrollup d2l_equation d2l_xsplconverter d2l_filter d2l_placeholder' + (this.powerPasteEnabled ? ' powerpaste' : ' paste') + (this.a11ycheckerEnabled ? ' a11ychecker' : '');
 	},
 
 	initialize: function() {
@@ -626,7 +630,10 @@ Polymer({
 
 				editor.on('focusin', function(e) {
 					that.fire('focus', e);
-					setTimeout(fixButtonLabels, 2000, editor);  // give time for buttons to load
+					// give time for buttons to load
+					setTimeout(function() {
+						fixButtonLabels(editor);
+					}, 2000);
 				});
 
 				editor.on('focusout', function(e) {
