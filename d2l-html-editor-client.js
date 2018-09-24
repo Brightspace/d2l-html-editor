@@ -4,7 +4,7 @@
 	function request(type) {
 		switch (type) {
 			case 'valenceHost':
-				return Promise.resolve(window.origin);
+				return Promise.resolve(window.location.origin);
 		}
 	}
 
