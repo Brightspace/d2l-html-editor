@@ -1,6 +1,6 @@
 {
   "name": "d2l-html-editor",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "authors": [
     "Anonymous <anonymous@example.com>"
   ],
@@ -21,7 +21,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#1.9 - 2",
-    "d2l-icons": "^4.14.0"
+    "d2l-icons": "^5.1.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
