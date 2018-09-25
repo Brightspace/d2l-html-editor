@@ -40,6 +40,8 @@
 									// a property to auto clean up, otherwise would need to explicitly call a clean
 									// up method from React componentWillUnmount.
 									editor.getParam('d2l_html_editor').content = null;
+								}).catch(function() {
+									console.warn('d2l_filter_plugin not enabled'); // eslint-disable-line
 								});
 							}
 						});
