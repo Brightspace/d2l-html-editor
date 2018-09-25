@@ -9,7 +9,10 @@
 	}
 
 	function convertToViewableHtml() {
-		return {
+		if (!D2L.LP) {
+			return Promise.reject('not enabled');
+		}
+		return Promise.resolve({
 			filterHtml: function(html) {
 				return new Promise(function(resolve, reject) {
 					var params = {
@@ -31,7 +34,7 @@
 					);
 				});
 			}
-		};
+		});
 	}
 
 	function loadService(serviceType) {
@@ -39,18 +42,18 @@
 			case 'convert-to-viewable-html':
 				return convertToViewableHtml();
 			default:
-				return {
+				return Promise.resolve({
 					config: function() {
 						return Promise.resolve({
 							isEnabled: false
 						});
 					}
-				};
+				});
 		}
 	}
 
 	function getService(serviceType /*, version*/) {
-		return Promise.resolve(loadService(serviceType));
+		return loadService(serviceType);
 	}
 
 	function connect() {
