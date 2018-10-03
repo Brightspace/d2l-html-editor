@@ -1,7 +1,7 @@
 var superagent_auth = require('superagent-d2l-session-auth');
 var superagent= require('superagent');
 
-
+/*global tinymce:true */
 Polymer({
 
 	is: 'd2l-html-editor',
@@ -17,6 +17,10 @@ Polymer({
 	 * @see tinymce config
 	 */
 	properties: {
+		key: {
+			type: String,
+			observer: '_keyChanged',
+		},
 		inline: {
 			type: Number,
 			value: 1
@@ -54,7 +58,9 @@ Polymer({
 			type: String,
 			computed: 'computeToolbarId(editorId)'
 		},
-		content: String,
+		content: {
+			type: String
+		},
 		baseUrl: {
 			type: String,
 			value: null
@@ -325,7 +331,7 @@ Polymer({
 	// We cannot cleanup in detached because React seems to cause the web component
 	// to detach/attach during move operations
 	cleanup: function() {
-		var editor = tinymce.EditorManager.get(this.editorId); // eslint-disable-line no-undef
+		var editor = tinymce.EditorManager.get(this.editorId);
 
 		// prevent save before remove, since it throws an exception when the HTML content contains a table
 		editor.save = function() {};
@@ -335,15 +341,22 @@ Polymer({
 	},
 
 	focus: function() {
-		tinymce.EditorManager.get(this.editorId).focus(); // eslint-disable-line no-undef
+		tinymce.EditorManager.get(this.editorId).focus();
 	},
 
 	getContent: function(args) {
-		return tinymce.EditorManager.get(this.editorId).getContent(args); // eslint-disable-line no-undef
+		return tinymce.EditorManager.get(this.editorId).getContent(args);
 	},
 
 	clearContent: function(content, args) {
-		tinymce.EditorManager.get(this.editorId).setContent(''); // eslint-disable-line no-undef
+		tinymce.EditorManager.get(this.editorId).setContent('');
+	},
+
+	_keyChanged: function(key, oldKey) {
+		Polymer.RenderStatus.afterNextRender(this, function() {
+			var decodedContent = decodeURIComponent(this.content);
+			tinymce.EditorManager.get(this.editorId).setContent(decodedContent);
+		}.bind(this));
 	},
 
 	_init: function(valenceHost) {
@@ -523,11 +536,11 @@ Polymer({
 					if (node.nodeType === 1) {
 
 						if (node.hasAttribute('aria-label')) {
-							node.setAttribute('aria-label', tinymce.EditorManager.i18n.translate(node.getAttribute('aria-label'))); // eslint-disable-line no-undef
+							node.setAttribute('aria-label', tinymce.EditorManager.i18n.translate(node.getAttribute('aria-label')));
 						}
 
 						if (node.hasAttribute('alt')) {
-							node.setAttribute('alt', tinymce.EditorManager.i18n.translate(node.getAttribute('alt'))); // eslint-disable-line no-undef
+							node.setAttribute('alt', tinymce.EditorManager.i18n.translate(node.getAttribute('alt')));
 						}
 
 						node = node.firstElementChild;
@@ -670,13 +683,13 @@ Polymer({
 				if (!this.inline) {
 					editor.on('init', function() {
 						editor.execCommand('mceFullScreen');
-						editor.getBody().setAttribute('aria-label', tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
+						editor.getBody().setAttribute('aria-label', tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside'));
 						var container = editor.getContainer();
 						var langTag = container.parentElement.getAttribute('lang-tag');
 						editor.getDoc().querySelector('html').setAttribute('lang', langTag ? langTag : 'en-us');
 
 						var titleNode = document.createElement('title');
-						var textNode = document.createTextNode(tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside')); // eslint-disable-line no-undef
+						var textNode = document.createTextNode(tinymce.EditorManager.i18n.translate('Press ALT-F10 for toolbar, and press ESC to exit toolbar once inside'));
 						titleNode.appendChild(textNode);
 
 						var headElement = editor.getDoc().querySelector('head');
@@ -711,7 +724,7 @@ Polymer({
 			}
 		}
 
-		tinymce.init(this._extend(this.pluginConfig, config)); // eslint-disable-line no-undef
+		tinymce.init(this._extend(this.pluginConfig, config));
 
 		// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
 		this.autoFocus = 0;
