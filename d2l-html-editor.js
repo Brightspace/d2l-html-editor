@@ -197,6 +197,32 @@ Polymer({
 			var lowerCaseEnd = this.langTag.substr(3);
 			var upperCaseEnd = lowerCaseEnd.toUpperCase();
 			this.langTag = start + '_' + upperCaseEnd;
+		} else {
+			this.langTag = this._convertFromFallback(this.langTag);
+		}
+	},
+
+	_convertFromFallback: function(langTag) {
+		var defaults = {
+			'ar': 'ar_SA',
+			'de': 'de_DE',
+			'en': 'en_US',
+			'es': 'es_MX',
+			'fr': 'fr_CA',
+			'ja': 'ja_JP',
+			'ko': 'ko_KR',
+			'nb': 'nb_NO',
+			'nl': 'nl_NL',
+			'pt': 'pt_BR',
+			'sv': 'sv_SE',
+			'tr': 'tr_TR',
+			'zh': 'zh_CN'
+		};
+
+		if (defaults[langTag]) {
+			return defaults[langTag];
+		} else {
+			return langTag;
 		}
 	},
 
