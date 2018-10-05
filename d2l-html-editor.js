@@ -190,24 +190,40 @@ Polymer({
 		this.cleanup();
 	},
 
-	//converts the d2l lang tag into a format that fits with tinyMCE lang files
 	_changeLangTag: function() {
-		if (this.langTag.indexOf('-') > -1) {
-			var start = this.langTag.substring(0, 2);
-			var lowerCaseEnd = this.langTag.substr(3);
-			var upperCaseEnd = lowerCaseEnd.toUpperCase();
-			this.langTag = start + '_' + upperCaseEnd;
-		}
+		var langTag = this._checkIfLangExists(this.langTag)
+			|| this._checkIfLangExists(window.document.getElementsByTagName('html')[0].getAttribute('lang'))
+			|| this._checkIfLangExists(window.document.getElementsByTagName('html')[0].getAttribute('data-lang-default'))
+			|| this._checkIfLangExists('en_US');
+
+		this.langAvailable.bool = !!langTag;
+		this.langTag = langTag;
 	},
 
-	_checkIfLangExists: function(url) {
+	//converts the d2l lang tag into a format that fits with tinyMCE lang files
+	_formatLangTag: function(langTag) {
+		if (langTag && langTag.indexOf('-') > -1) {
+			var start = langTag.substring(0, 2);
+			var lowerCaseEnd = langTag.substr(3);
+			var upperCaseEnd = lowerCaseEnd.toUpperCase();
+			return start + '_' + upperCaseEnd;
+		}
+		return langTag;
+	},
+
+	_checkIfLangExists: function(langTag) {
+		var formattedLang = this._formatLangTag(langTag);
+		if (!formattedLang) {
+			return null;
+		}
+		var url = this.appRoot + '../d2l-html-editor/langs/' + formattedLang + '.js';
 		var http = new XMLHttpRequest();
 		http.open('HEAD', url, false);
 		http.send();
 		if (Math.floor(http.status / 100) !== 4 && Math.floor(http.status / 100) !== 5) {
-			this.langAvailable.bool = true;
+			return formattedLang;
 		} else {
-			this.langAvailable.bool = false;
+			return null;
 		}
 	},
 
@@ -371,7 +387,6 @@ Polymer({
 		this.element.style.overflowY = 'auto';
 		this.element.style.minHeight = this.minHeight;
 		this.element.style.maxHeight = this.maxHeight;
-		this._changeLangTag();
 
 		this._initTinyMCE(valenceHost);
 	},
@@ -389,7 +404,7 @@ Polymer({
 		var that = this;
 
 		if (this.langAvailable.bool === undefined || this.langAvailable.bool === null) {
-			this._checkIfLangExists(this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js');
+			this._changeLangTag();
 		}
 		var contentCss = '';
 		if (!this.inline) {
