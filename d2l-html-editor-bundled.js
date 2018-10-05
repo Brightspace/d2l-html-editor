@@ -1801,11 +1801,11 @@ Polymer({
 	// to detach/attach during move operations
 	cleanup: function() {
 		var editor = tinymce.EditorManager.get(this.editorId);
-
+		if (editor) {
 		// prevent save before remove, since it throws an exception when the HTML content contains a table
-		editor.save = function() {};
-		editor.remove();
-
+			editor.save = function() {};
+			editor.remove();
+		}
 		this.client = null;
 	},
 
