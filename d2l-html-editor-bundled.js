@@ -1685,15 +1685,25 @@ Polymer({
 		if (!formattedLang) {
 			return null;
 		}
-		var url = this.appRoot + '../d2l-html-editor/langs/' + formattedLang + '.js';
-		var http = new XMLHttpRequest();
-		http.open('HEAD', url, false);
-		http.send();
-		if (Math.floor(http.status / 100) !== 4 && Math.floor(http.status / 100) !== 5) {
+
+		var baseLang = formattedLang.split('_')[0];
+
+		if (this._tryResolve(formattedLang)) {
 			return formattedLang;
+		} else if (baseLang !== formattedLang && this._tryResolve(baseLang)) {
+			return baseLang;
 		} else {
 			return null;
 		}
+
+	},
+
+	_tryResolve: function(langTag) {
+		var url = this.appRoot + '../d2l-html-editor/langs/' + langTag + '.js';
+		var http = new XMLHttpRequest();
+		http.open('HEAD', url, false);
+		http.send();
+		return Math.floor(http.status / 100) !== 4 && Math.floor(http.status / 100) !== 5;
 	},
 
 	_configurePlugins: function(client) {
