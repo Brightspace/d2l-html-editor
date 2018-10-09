@@ -1,4 +1,4 @@
-tinymce.addI18n('fi',{
+tinymce.addI18n('fi_FI',{
     "Cut": "Leikkaa",
     "Heading 5": "Otsikko 5",
     "Header 2": "Alatunniste 2",

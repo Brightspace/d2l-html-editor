@@ -1,4 +1,4 @@
-tinymce.addI18n('da',{
+tinymce.addI18n('da_DK',{
     "Cut": "Klip",
     "Heading 5": "Overskrift 5",
     "Header 2": "Sidehoved 2",
