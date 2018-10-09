@@ -31,6 +31,7 @@ tinymce.addI18n('en_CA',{
 
 // a11ychecker plugin
 "Accessibility Checker": "Accessibility Checker",
+"Check Accessibility": "Check Accessibility",
 "No accessibility issues detected.": "No accessibility issues detected.",
 "Issue ": "Issue ",
 " of ": " of ",
