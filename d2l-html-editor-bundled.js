@@ -1685,7 +1685,7 @@ Polymer({
 		if (!formattedLang) {
 			return null;
 		}
-		var url = this.appRoot + '../d2l-html-editor/langs/' + formattedLang + '.js';
+		var url = this.appRoot + '../d2l-html-editor/langs/' + formattedLang + '.js?checkExists';
 		var http = new XMLHttpRequest();
 		http.open('HEAD', url, false);
 		http.send();
