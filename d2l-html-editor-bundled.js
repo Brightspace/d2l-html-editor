@@ -1659,14 +1659,20 @@ Polymer({
 		this.cleanup();
 	},
 
-	_changeLangTag: function() {
-		var langTag = this._checkIfLangExists(this.langTag)
-			|| this._checkIfLangExists(window.document.getElementsByTagName('html')[0].getAttribute('lang'))
-			|| this._checkIfLangExists(window.document.getElementsByTagName('html')[0].getAttribute('data-lang-default'))
-			|| this._checkIfLangExists('en_US');
+	_findValidLangTag: function() {
+		var formattedLangTag = this._formatLangTag(this.langTag);
+		var htmlLangAttr = this._formatLangTag(window.document.getElementsByTagName('html')[0].getAttribute('lang'));
+		var htmlDefaultLangAttr = this._formatLangTag(window.document.getElementsByTagName('html')[0].getAttribute('data-lang-default'));
 
-		this.langAvailable.bool = !!langTag;
-		this.langTag = langTag;
+		if (this._checkIfLangExists(formattedLangTag)) {
+			this.langTag = formattedLangTag;
+		} else if (this._checkIfLangExists(htmlLangAttr)) {
+			this.langTag = htmlLangAttr;
+		} else if (this._checkIfLangExists(htmlDefaultLangAttr)) {
+			this.langTag = htmlDefaultLangAttr;
+		} else {
+			this.langTag = 'en_US';
+		}
 	},
 
 	//converts the d2l lang tag into a format that fits with tinyMCE lang files
@@ -1681,19 +1687,24 @@ Polymer({
 	},
 
 	_checkIfLangExists: function(langTag) {
-		var formattedLang = this._formatLangTag(langTag);
-		if (!formattedLang) {
-			return null;
+		if (langTag) {
+			if (langTag in this.langAvailable) {
+				return this.langAvailable[langTag];
+			} else {
+				var langExists = this._checkIfLangFileExists(langTag);
+				this.langAvailable[langTag] = langExists;
+				return langExists;
+			}
 		}
-		var url = this.appRoot + '../d2l-html-editor/langs/' + formattedLang + '.js?checkExists';
+		return false;
+	},
+
+	_checkIfLangFileExists: function(langTag) {
+		var url = this.appRoot + '../d2l-html-editor/langs/' + langTag + '.js?checkExists';
 		var http = new XMLHttpRequest();
 		http.open('HEAD', url, false);
 		http.send();
-		if (Math.floor(http.status / 100) !== 4 && Math.floor(http.status / 100) !== 5) {
-			return formattedLang;
-		} else {
-			return null;
-		}
+		return Math.floor(http.status / 100) !== 4 && Math.floor(http.status / 100) !== 5;
 	},
 
 	_configurePlugins: function(client) {
@@ -1872,9 +1883,8 @@ Polymer({
 	_initTinyMCE: function(valenceHost) {
 		var that = this;
 
-		if (this.langAvailable.bool === undefined || this.langAvailable.bool === null) {
-			this._changeLangTag();
-		}
+		this._findValidLangTag();
+
 		var contentCss = '';
 		if (!this.inline) {
 			contentCss += this.cssUrl + ',';
@@ -1938,7 +1948,7 @@ Polymer({
 			d2l_html_editor: that,
 			selector: '#' + this.editorId,
 
-			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable.bool ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
+			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable[this.langTag] ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
 			plugins: this.plugins,
 			toolbar: this.toolbar,
 			fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
@@ -1967,8 +1977,8 @@ Polymer({
 			skin_url: this.appRoot + '../d2l-html-editor/skin-4.3.7',
 			convert_urls: false,
 			relative_urls: false,
-			language_url: this.langTag && this.langAvailable.bool ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
-			language: this.langTag && this.langAvailable.bool ? this.langTag : null,
+			language_url: this.langTag && this.langAvailable[this.langTag] ? this.appRoot + '../d2l-html-editor/langs/' + this.langTag + '.js' : null,
+			language: this.langTag && this.langAvailable[this.langTag] ? this.langTag : null,
 			directionality: this.langDir,
 			object_resizing: this.objectResizing,
 			powerpaste_word_import: this.powerPasteFormatting,
