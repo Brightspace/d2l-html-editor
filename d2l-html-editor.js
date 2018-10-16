@@ -191,14 +191,11 @@ Polymer({
 	},
 
 	_findValidLangTag: function() {
-		var langTag = this.langTag;
-		var formattedLangTag = this._formatLangTag(langTag);
+		var formattedLangTag = this._formatLangTag(this.langTag);
 		var htmlLangAttr = this._formatLangTag(window.document.getElementsByTagName('html')[0].getAttribute('lang'));
 		var htmlDefaultLangAttr = this._formatLangTag(window.document.getElementsByTagName('html')[0].getAttribute('data-lang-default'));
 
-		if (this._checkIfLangExists(langTag)) {
-			this.langTag = langTag;
-		} else if (this._checkIfLangExists(formattedLangTag)) {
+		if (this._checkIfLangExists(formattedLangTag)) {
 			this.langTag = formattedLangTag;
 		} else if (this._checkIfLangExists(htmlLangAttr)) {
 			this.langTag = htmlLangAttr;
