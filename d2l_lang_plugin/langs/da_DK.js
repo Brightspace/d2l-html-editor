@@ -31,7 +31,7 @@ tinymce.addI18n('da_DK', {
 
     // a11ychecker plugin
     "Accessibility Checker": "Tilgængelighedskontrol",
-    "Check Accessibility": "Kontroller tilgængelighed",
+    "Check Accessibility": "Kontrollér tilgængelighed",
     "No accessibility issues detected.": "Ingen tilgængelighedsproblemer fundet.",
     "Issue ": "Udsted ",
     " of ": " af ",

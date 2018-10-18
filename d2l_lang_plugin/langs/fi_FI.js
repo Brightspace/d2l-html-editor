@@ -31,7 +31,7 @@ tinymce.addI18n('fi_FI', {
 
     // a11ychecker plugin
     "Accessibility Checker": "Helppokäyttöisyyden tarkistaminen",
-    "Check Accessibility": "Tarkista helppokäyttöisyys",
+    "Check Accessibility": "Tarkista käytettävyys",
     "No accessibility issues detected.": "Helppokäyttöisyysongelmia ei havaittu.",
     "Issue ": "Ongelma ",
     " of ": " / ",
