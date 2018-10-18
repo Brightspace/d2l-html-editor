@@ -17,6 +17,10 @@ Polymer({
 	 * @see tinymce config
 	 */
 	properties: {
+		d2lPluginSettings: {
+			type: String,
+			observer: '_d2lPluginSettingsChanged',
+		},
 		key: {
 			type: String,
 			observer: '_keyChanged',
@@ -373,6 +377,10 @@ Polymer({
 			var decodedContent = decodeURIComponent(this.content);
 			tinymce.EditorManager.get(this.editorId).setContent(decodedContent);
 		}.bind(this));
+	},
+
+	_d2lPluginSettingsChanged: function(pluginSettings) {
+		this.ifrauClient.pluginSettings = pluginSettings;
 	},
 
 	_init: function(valenceHost) {

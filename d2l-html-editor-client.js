@@ -9,19 +9,16 @@
 		}
 	}
 
-	function insertStuff() {
+	function insertStuff(pluginSettings) {
 		return Promise.resolve({
 			config: function() {
 				return Promise.resolve({
-					isEnabled: true
+					isEnabled: pluginSettings.hasOwnProperty('d2l_isf')
 				});
 			},
 			click: function(openerId) {
 				return new Promise(function(resolve, reject) {
-					var nav = new D2L.Nav();
-					var location = new D2L.LP.Web.Http.UrlLocation('/d2l/common/dialogs/isf/selectItem.d2l')
-						.WithQueryString('ou', nav.GetParam('ou'))
-						.WithQueryString('filterMode', 'Strict');
+					var location = new D2L.LP.Web.Http.UrlLocation(pluginSettings.d2l_isf.endpoint);
 					var openEvent = D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
 						new D2L.LP.Web.UI.Html.AbsoluteHtmlId.Create(openerId),
 						location,
@@ -81,12 +78,12 @@
 		});
 	}
 
-	function loadService(serviceType) {
+	function loadService(serviceType, pluginSettings) {
 		switch (serviceType) {
 			case 'convert-to-viewable-html':
 				return convertToViewableHtml();
 			case 'fra-html-editor-isf':
-				return insertStuff();
+				return insertStuff(pluginSettings);
 			default:
 				return Promise.resolve({
 					config: function() {
@@ -98,20 +95,20 @@
 		}
 	}
 
-	function getService(serviceType /*, version*/) {
-		return loadService(serviceType);
-	}
-
 	function connect() {
 		return Promise.resolve();
 	}
 
-	function client() {
-		return {
-			connect: connect,
-			request: request,
-			getService: getService
+	function Client() {
+		this.connect = connect;
+		this.request = request;
+		this.getService = function getService(serviceType /*, version*/) {
+			return loadService(serviceType, this.pluginSettings || {});
 		};
+	}
+
+	function client() {
+		return new Client();
 	}
 
 	window.D2LHtmlEditor = window.D2LHtmlEditor || {};
