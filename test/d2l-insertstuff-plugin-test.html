@@ -133,6 +133,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         });
 
+        describe('image tag processing', function() {
+          it('adds default styte to image', function() {
+            editor.setContent('<img src="/course1/image.jpg"/>');
+
+            assert.equal(editor.getContent(),
+              '<img style="max-width: 100%;" src="/course1/image.jpg" data-d2l-editor-default-img-style="true" />');
+          });
+        });
+
         describe('click handling', function() {
 
           it('converts embed to image', function(done) {

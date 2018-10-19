@@ -4,7 +4,7 @@
 	/*
 
 Code based on the LMS file:
-https://git.dev.d2l/projects/CORE/repos/lp/commits/a5ce570b2719f53a70f1e861d997015ed740a60b
+https://git.dev.d2l/projects/CORE/repos/lp/browse/framework/web/D2L.LP.Web.UI/Desktop/Controls/HtmlEditor/Components/Actions/Isf/IsfAction.js?until=2f7aad3f2fae90304bf185b9f0e5556115ae9fdf&untilPath=framework%2Fweb%2FD2L.LP.Web.UI%2FDesktop%2FControls%2FHtmlEditor%2FComponents%2FActions%2FIsf%2FIsfAction.js
 Check that file periodically for changes...
 
 */
@@ -137,6 +137,29 @@ Check that file periodically for changes...
 
 			return html;
 
+		}
+
+		function setDefaultImageStyle(context) {
+			if (context.content === null || context.content.length <= 0) {
+				return;
+			}
+
+			var node = new DOMParser().parseFromString(context.content, 'text/html');
+			if (!node || !node.body || !node.body.firstElementChild) {
+				return;
+			}
+
+			var img = node.body.firstElementChild;
+			if (!img || img.nodeName.toUpperCase() !== 'IMG'
+				|| img.hasAttribute('width') || img.hasAttribute('height')
+				|| img.style.width || img.style.height) {
+				return;
+			}
+
+			img.style.maxWidth = '100%';
+			img.setAttribute('data-d2l-editor-default-img-style', 'true');
+
+			context.content = img.outerHTML;
 		}
 
 		function convertToImages(context, isWindowModeOpaque) {
@@ -287,6 +310,18 @@ Check that file periodically for changes...
 
 				context.content = sb.ToString();
 			}
+			if (isDaylightEnabled) {
+				setDefaultImageStyle(context);
+			}
+		}
+
+		function isDaylightEnabled() {
+			// Note: This won't work when used in a FRA, so the default will be to always set the default image style
+			// which seems like a reasonable default
+			if (!document || !document.body || !document.body.classList) {
+				return true;
+			}
+			return document.body.classList.contains('daylight');
 		}
 
 		function convertToElements(context) {
