@@ -2,10 +2,12 @@
 	'use strict';
 	/*global tinymce:true */
 
-	function request(type) {
+	function request(type, pluginSettings) {
 		switch (type) {
 			case 'valenceHost':
 				return Promise.resolve(window.location.origin);
+			case 'orgUnit':
+				return Promise.resolve(pluginSettings.orgUnit || {});
 		}
 	}
 
@@ -49,7 +51,7 @@
 		});
 	}
 
-	function convertToViewableHtml() {
+	function convertToViewableHtml(pluginSettings) {
 		if (!D2L.LP) {
 			return Promise.reject('not enabled');
 		}
@@ -68,8 +70,7 @@
 
 					D2L.LP.Web.UI.Rpc.Connect(
 						D2L.LP.Web.UI.Rpc.Verbs.POST,
-						new D2L.LP.Web.Http.UrlLocation('/d2l/lp/htmleditor/converttoabsolute'),
-						// .WithQueryString('ou', orgUnitId),
+						new D2L.LP.Web.Http.UrlLocation(pluginSettings.d2l_filter.endpoint),
 						params,
 						options
 					);
@@ -81,7 +82,7 @@
 	function loadService(serviceType, pluginSettings) {
 		switch (serviceType) {
 			case 'convert-to-viewable-html':
-				return convertToViewableHtml();
+				return convertToViewableHtml(pluginSettings);
 			case 'fra-html-editor-isf':
 				return insertStuff(pluginSettings);
 			default:
@@ -101,8 +102,10 @@
 
 	function Client() {
 		this.connect = connect;
-		this.request = request;
-		this.getService = function getService(serviceType /*, version*/) {
+		this.request = function(type) {
+			return request(type, this.pluginSettings || {});
+		};
+		this.getService = function(serviceType /*, version*/) {
 			return loadService(serviceType, this.pluginSettings || {});
 		};
 	}
