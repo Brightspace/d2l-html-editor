@@ -380,14 +380,17 @@ Polymer({
 		return tinymce.EditorManager.get(this.editorId).getContent(args);
 	},
 
-	clearContent: function(content, args) {
+	clearContent: function() {
 		tinymce.EditorManager.get(this.editorId).setContent('');
 	},
 
-	_keyChanged: function(key, oldKey) {
+	_keyChanged: function() {
 		Polymer.RenderStatus.afterNextRender(this, function() {
-			var decodedContent = decodeURIComponent(this.content);
-			tinymce.EditorManager.get(this.editorId).setContent(decodedContent);
+			var editor = tinymce.EditorManager.get(this.editorId);
+			if (editor) {
+				var decodedContent = decodeURIComponent(this.content);
+				editor.setContent(decodedContent);
+			}
 		}.bind(this));
 	},
 
