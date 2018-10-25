@@ -384,7 +384,15 @@ Polymer({
 		tinymce.EditorManager.get(this.editorId).setContent('');
 	},
 
-	_keyChanged: function() {
+	_keyChanged: function(newKey, oldKey) {
+		// Only process key change events where we have an old key meaning
+		// the editor is being re-rendered with different data - usually in a dom-repeat.
+		// If we don't have an old key then this is an initial render and we let the
+		// default initialization mechanism do it's thing.
+		if (!oldKey) {
+			return;
+		}
+
 		Polymer.RenderStatus.afterNextRender(this, function() {
 			var editor = tinymce.EditorManager.get(this.editorId);
 			if (editor) {
