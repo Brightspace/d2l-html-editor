@@ -402,7 +402,9 @@ Polymer({
 	},
 
 	_d2lPluginSettingsChanged: function(pluginSettings) {
-		this.ifrauClient.pluginSettings = pluginSettings;
+		if (this.ifrauClient.configureSettings) {
+			this.ifrauClient.configureSettings(pluginSettings);
+		}
 	},
 
 	_init: function(valenceHost) {

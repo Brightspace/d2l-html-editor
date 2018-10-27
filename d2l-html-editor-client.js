@@ -96,15 +96,22 @@
 		}
 	}
 
-	function connect() {
-		return Promise.resolve();
-	}
-
 	function Client() {
-		this.connect = connect;
+		this.connected = new Promise(function(resolve) {
+			this.configureSettings = function(settings) {
+				this.pluginSettings = settings;
+				resolve();
+			}
+		}.bind(this));
+
+		this.connect = function() {
+			return this.connected;
+		};
+
 		this.request = function(type) {
 			return request(type, this.pluginSettings || {});
 		};
+
 		this.getService = function(serviceType /*, version*/) {
 			return loadService(serviceType, this.pluginSettings || {});
 		};
