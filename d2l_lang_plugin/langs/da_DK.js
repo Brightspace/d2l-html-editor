@@ -73,7 +73,9 @@ tinymce.addI18n('da_DK', {
     "Use list markup for lists.": "Brug listekode for lister.",
     "Large text must have a contrast ratio of at least 3:1.": "Stor tekst skal have et kontrastforhold på mindst 3:1.",
     "Visual presentation must have a contrast ratio of at least 4.5:1.": "Visuel præsentation skal have et kontrastforhold på mindst 4,5:1.",
-    
+    "Next": "Næste",
+    "Close": "Luk",
+
     // d2l-emoticons plugin
     "blue funster": "blå funster",
     "celebrate": "fest",

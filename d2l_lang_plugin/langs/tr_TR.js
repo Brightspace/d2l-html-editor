@@ -73,6 +73,8 @@ tinymce.addI18n('tr_TR',{
 "Use list markup for lists.": "Listeler için liste biçimlendirmesini kullanın.",
 "Large text must have a contrast ratio of at least 3:1.": "Geniş metnin kontrast oranı en az 3:1 olmalıdır.",
 "Visual presentation must have a contrast ratio of at least 4.5:1.": "Görsel sunumun kontrast oranı en az 4,5:1 olmalıdır.",
+"Next": "İleri",
+"Close": "Kapat",
 
 // d2l-emoticons plugin
 "blue funster": "mavi canavar",

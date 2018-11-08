@@ -73,6 +73,8 @@ tinymce.addI18n('fr_CA',{
 "Use list markup for lists.": "Utiliser le balisage de liste pour les listes.",
 "Large text must have a contrast ratio of at least 3:1.": "Le texte en gros caractères doit avoir un rapport de contraste d'au moins 3:1.",
 "Visual presentation must have a contrast ratio of at least 4.5:1.": "La présentation visuelle doit avoir un rapport de contraste d'au moins 4,5:1.",
+"Next": "Suivant",
+"Close": "Fermer",
 
 // d2l-emoticons plugin
 "blue funster": "Funster bleu",
