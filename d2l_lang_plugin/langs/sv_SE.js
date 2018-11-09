@@ -73,6 +73,8 @@ tinymce.addI18n('sv_SE',{
 "Use list markup for lists.": "Använd listmarkering för lista.",
 "Large text must have a contrast ratio of at least 3:1.": "Stor text måste ha ett kontrastförhållande på minst 3:1.",
 "Visual presentation must have a contrast ratio of at least 4.5:1.": "Visuell presentation måste ha ett kontrastförhållande på minst 4.5:1.",
+"Next": "Nästa",
+"Close": "Stäng",
 
 // d2l-emoticons plugin
 "blue funster": "blå funster",

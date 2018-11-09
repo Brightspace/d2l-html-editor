@@ -73,6 +73,8 @@ tinymce.addI18n('zh_TW',{
 "Use list markup for lists.": "使用清單的清單標記。",
 "Large text must have a contrast ratio of at least 3:1.": "大型文字必須具有至少 3:1 的對比率。",
 "Visual presentation must have a contrast ratio of at least 4.5:1.": "視覺化簡報必須具有至少 4.5:1 的對比率。",
+"Next": "下一個",
+"Close": "關閉",
 
 // d2l-emoticons plugin
 "blue funster": "藍色淘氣鬼",

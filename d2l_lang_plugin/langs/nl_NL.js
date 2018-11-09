@@ -73,6 +73,8 @@ tinymce.addI18n('nl_NL',{
 "Use list markup for lists.": "Gebruik lijstmarkeringen voor lijsten.",
 "Large text must have a contrast ratio of at least 3:1.": "Grote tekst moet een contrastverhouding van ten minste 3:1 hebben.",
 "Visual presentation must have a contrast ratio of at least 4.5:1.": "Visuele presentatie moet een contrastverhouding van ten minste 4,5:1 hebben.",
+"Next": "Volgende",
+"Close": "Sluiten",
 
 // d2l-emoticons plugin
 "blue funster": "blauwe Funster",

@@ -73,6 +73,8 @@ tinymce.addI18n('ar_SA',{
 "Use list markup for lists.": "استخدم علامات القائمة للقوائم.",
 "Large text must have a contrast ratio of at least 3:1.": "يجب أن يتمتع النص الكبير بنسبة تباين لا تقل عن 3:1.",
 "Visual presentation must have a contrast ratio of at least 4.5:1.": "يجب أن يتمتع العرض التقديمي المرئي بنسبة تباين لا تقل عن 4.5:1.",
+"Next": "التالي",
+"Close": "إغلاق",
 
 // d2l-emoticons plugin
 "blue funster": "وجه ظريف أزرق",

@@ -73,6 +73,8 @@ tinymce.addI18n('ko_KR',{
 "Use list markup for lists.": "목록에는 목록 마크업을 사용하십시오.",
 "Large text must have a contrast ratio of at least 3:1.": "큰 텍스트의 명암비는 3:1보다 커야 합니다.",
 "Visual presentation must have a contrast ratio of at least 4.5:1.": "시각 프레젠테이션의 명암비는 4.5:1보다 커야 합니다.",
+"Next": "다음",
+"Close": "닫기",
 
 // d2l-emoticons plugin
 "blue funster": "파란 펀스터",
