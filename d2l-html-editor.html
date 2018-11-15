@@ -19,6 +19,9 @@
 <link rel="import" href="d2l-fullpage-plugin.html">
 <link rel="import" href="d2l-emoticons-plugin.html">
 <link rel="stylesheet" href="d2l-icons.css">
+<link rel="import" href="d2l-html-editor-icons-styles.html">
+<link rel="import" href="d2l-html-editor-skin-styles.html">
+<link rel="import" href="d2l-html-editor-content-styles.html">
 <link rel="stylesheet" href="d2l-equation-editor.css">
 <link rel="stylesheet" href="d2l-placeholder.css">
 <link rel="stylesheet" href="d2l-powerpaste-spinner.css">
@@ -40,6 +43,9 @@ Example:
 	<template>
 
 		<style include="d2l-insertstuff-styles"></style>
+		<style include="d2l-html-editor-icons"></style>
+		<style include="d2l-html-editor-skin"></style>
+		<style include="d2l-html-editor-content"></style>
 
 		<style>
 			:host {
@@ -66,8 +72,11 @@ Example:
 			}
 
 		</style>
+		<div id="[[editorId]]-toolbar" class="toolbar"></div>
+		<div id="[[editorId]]">
+			<slot></slot>
+		</div>
 
-		<slot></slot>
 
 	</template>
 

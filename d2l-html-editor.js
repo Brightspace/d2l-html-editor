@@ -415,7 +415,7 @@ Polymer({
 		// In React 15 Polymer dom APIs for distributed light DOM children
 		// seem to be broken - this will probably not work in Shadow DOM
 		// this.element = Polymer.dom(this).querySelector('#' + this.editorId);
-		this.element = this.querySelector('#' + this.editorId);
+		this.element = Polymer.dom(this.root).querySelector('#' + this.editorId);
 		this.element.style.overflowY = 'auto';
 		this.element.style.minHeight = this.minHeight;
 		this.element.style.maxHeight = this.maxHeight;
@@ -498,8 +498,7 @@ Polymer({
 
 		var config = {
 			d2l_html_editor: that,
-			selector: '#' + this.editorId,
-
+			target: this.element,
 			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable[this.langTag] ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
 			plugins: this.plugins,
 			toolbar: this.toolbar,
@@ -521,7 +520,8 @@ Polymer({
 			browser_spellcheck: true,
 			menubar: false,
 			statusbar: false,
-			fixed_toolbar_container: '#' + this.toolbarId,
+			// fixed_toolbar_container: '#' + this.toolbarId,
+			// fixed_toolbar_container: Polymer.dom(this.root).querySelector('#' + this.toolbarId),
 			inline: this.inline ? true : false,
 			allow_html_in_named_anchor: true,
 			document_base_url: this.documentBaseUrl + '/',
