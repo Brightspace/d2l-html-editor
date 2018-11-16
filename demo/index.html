@@ -36,30 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   	</custom-style>
   </head>
   <body>
-
-    <p>An example of <code>&lt;d2l-html-editor&gt;</code>:</p>
-
-    <!-- <d2l-html-editor
-      editor-id="test"
-    >
-      <div id="test-toolbar" hidden class="toolbar"></div>
-      <div id="test">
-        How now brown cow
-      </div>
-    </d2l-html-editor> -->
-    <p></p>
-    <button>Init Editor</button>
-
-    <d2l-editor-wrapper prop1="Wrap an editor"></d2l-editor-wrapper>
-
-    <script>
-    var button = document.getElementsByTagName('button')[0];
-    button.addEventListener('click', function() {
-      var editor = document.getElementsByTagName('d2l-html-editor')[0];
-      editor.appRoot = editor.resolveUrl('../root/');
-      editor.d2lPluginSettings = {};
-    });
-    </script>
-
+    <d2l-editor-wrapper prop1="demo1"></d2l-editor-wrapper>
+    <d2l-editor-wrapper prop1="demo2"></d2l-editor-wrapper>
   </body>
 </html>

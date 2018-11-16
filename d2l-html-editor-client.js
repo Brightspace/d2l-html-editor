@@ -18,11 +18,11 @@
 					isEnabled: pluginSettings.hasOwnProperty('d2l_isf')
 				});
 			},
-			click: function(openerId) {
+			click: function(opener) {
 				return new Promise(function(resolve, reject) {
 					var location = new D2L.LP.Web.Http.UrlLocation(pluginSettings.d2l_isf.endpoint);
 					var openEvent = D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
-						new D2L.LP.Web.UI.Html.AbsoluteHtmlId.Create(openerId),
+						opener,
 						location,
 						'GetSelectedItem',
 						'', /* resizeCallback*/

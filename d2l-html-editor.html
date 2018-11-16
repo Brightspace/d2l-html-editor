@@ -1,4 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../d2l-inputs/d2l-input-shared-styles.html">
+
 <link rel="import" href="tinymce-import.html">
 <link rel="import" href="d2l-insertstuff-plugin.html">
 <link rel="import" href="d2l-insertstuff-styles.html">
@@ -42,6 +44,7 @@ Example:
 
 	<template>
 
+		<style include="d2l-input-styles"></style>
 		<style include="d2l-insertstuff-styles"></style>
 		<style include="d2l-html-editor-icons"></style>
 		<style include="d2l-html-editor-skin"></style>
@@ -71,9 +74,55 @@ Example:
 				right: inherit;
 			}
 
+			.d2l-richtext-editor-container {
+				@apply --d2l-input;
+				@apply --d2l-input-textarea;
+				border-color: transparent;
+				box-shadow: none;
+				border-radius: 0;
+				transition-property: none;
+			}
+
+			.d2l-richtext-editor-container:hover,
+			.d2l-richtext-editor-container:focus,
+			.d2l-richtext-editor-container:active,
+			.d2l-richtext-editor-container.html-editor-container-hover {
+				@apply --d2l-input-hover-focus;
+			}
+
+			:host(.invalid) > .d2l-richtext-editor-container {
+				@apply --d2l-input-invalid;
+			}
+
+			.d2l-richtext-editor-container > p:last-of-type {
+			  margin-bottom: 0;
+			}
+
+			.d2l-richtext-editor-container > p:first-of-type {
+			  margin-top: 0;
+			}
+
+			.d2l-richtext-editor-container * {
+			  max-width: 100%;
+			}
+			/* .d2l-richtext-editor-container p:only-of-type {
+			  margin: 0;
+			} */
+
+			:host(.invalid) > .d2l-richtext-editor-container:hover,
+			:host(.invalid) > .d2l-richtext-editor-container:focus {
+				@apply --d2l-input-invalid;
+			}
+
+			@media (max-width: 615px), (max-device-width: 960px) {
+				.d2l-richtext-editor-container {
+					height: 3.9rem;
+				}
+			}
+
 		</style>
 		<div id="[[editorId]]-toolbar" class="toolbar"></div>
-		<div id="[[editorId]]">
+		<div id="[[editorId]]" class="d2l-richtext-editor-container">
 			<slot></slot>
 		</div>
 
