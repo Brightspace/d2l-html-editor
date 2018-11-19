@@ -415,7 +415,11 @@ Polymer({
 		// In React 15 Polymer dom APIs for distributed light DOM children
 		// seem to be broken - this will probably not work in Shadow DOM
 		// this.element = Polymer.dom(this).querySelector('#' + this.editorId);
-		this.element = Polymer.dom(this.root).querySelector('#' + this.editorId);
+		// var editor1 = Polymer.dom(this).querySelector('#' + this.editorId);
+		// var editor2 = Polymer.dom(this.root).querySelector('#' + this.editorId);
+		// var editor3 = this.querySelector('#' + this.editorId);
+
+		this.element = this.querySelector('#' + this.editorId);
 		this.element.style.overflowY = 'auto';
 		this.element.style.minHeight = this.minHeight;
 		this.element.style.maxHeight = this.maxHeight;
