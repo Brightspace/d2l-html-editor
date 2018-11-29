@@ -141,6 +141,10 @@ Polymer({
 		objectResizing: {
 			type: Boolean,
 			value: true
+		},
+		disabled: {
+			type: Boolean,
+			observer: '_disabledChanged'
 		}
 	},
 
@@ -148,9 +152,17 @@ Polymer({
 	 * Textarea where tinymce is instantiate
 	 * @return {HTMLElement}
 	 */
-	element: null,
-
-	client: function() {
+  element: null,
+  
+  _disabledChanged: function(disabled) {
+		if (disabled) {
+			this.editor && this.editor.setMode('readonly');
+		} else {
+			this.editor && this.editor.setMode('design');
+		}
+	},
+  
+  client: function() {
 		return window.ifrauclient ? window.ifrauclient : window.D2LHtmlEditor.client;
 	},
 
