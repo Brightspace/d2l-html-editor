@@ -1993,7 +1993,7 @@ Polymer({
 			browser_spellcheck: true,
 			menubar: false,
 			statusbar: false,
-			// fixed_toolbar_container: '#' + this.toolbarId,
+			fixed_toolbar_container: '#' + this.toolbarId,
 			// fixed_toolbar_container: Polymer.dom(this.root).querySelector('#' + this.toolbarId),
 			inline: this.inline ? true : false,
 			allow_html_in_named_anchor: true,
