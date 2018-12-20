@@ -49,7 +49,7 @@ Example:
 				position: relative;
 			}
 
-			.toolbar {
+			:host ::slotted(.toolbar) {
 				position: absolute;
 				top: -2.9rem;
 				z-index: 1001;
@@ -57,12 +57,12 @@ Example:
 				right: 0;
 			}
 
-			:host-context([dir='rtl']) .toolbar {
+			:host-context([dir='rtl']) ::slotted(.toolbar) {
 				left: 0;
 				right: inherit;
 			}
 
-			:host(:dir(rtl)) .toolbar {
+			:host(:dir(rtl)) ::slotted(.toolbar) {
 				left: 0;
 				right: inherit;
 			}
