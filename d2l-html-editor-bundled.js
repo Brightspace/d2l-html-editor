@@ -1609,6 +1609,10 @@ Polymer({
 		objectResizing: {
 			type: Boolean,
 			value: true
+		},
+		disabled: {
+			type: Boolean,
+			observer: '_disabledChanged'
 		}
 	},
 
@@ -1617,6 +1621,14 @@ Polymer({
 	 * @return {HTMLElement}
 	 */
 	element: null,
+
+	_disabledChanged: function(disabled) {
+		if (disabled) {
+			this.editor && this.editor.setMode('readonly');
+		} else {
+			this.editor && this.editor.setMode('design');
+		}
+	},
 
 	client: function() {
 		return window.ifrauclient ? window.ifrauclient : window.D2LHtmlEditor.client;
@@ -1881,13 +1893,6 @@ Polymer({
 			tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
 		}
 
-		// In React 15 Polymer dom APIs for distributed light DOM children
-		// seem to be broken - this will probably not work in Shadow DOM
-		// this.element = Polymer.dom(this).querySelector('#' + this.editorId);
-		// var editor1 = Polymer.dom(this).querySelector('#' + this.editorId);
-		// var editor2 = Polymer.dom(this.root).querySelector('#' + this.editorId);
-		// var editor3 = this.querySelector('#' + this.editorId);
-
 		this.element = this.querySelector('#' + this.editorId);
 		this.element.style.overflowY = 'auto';
 		this.element.style.minHeight = this.minHeight;
@@ -1994,7 +1999,6 @@ Polymer({
 			menubar: false,
 			statusbar: false,
 			fixed_toolbar_container: '#' + this.toolbarId,
-			// fixed_toolbar_container: Polymer.dom(this.root).querySelector('#' + this.toolbarId),
 			inline: this.inline ? true : false,
 			allow_html_in_named_anchor: true,
 			document_base_url: this.documentBaseUrl + '/',

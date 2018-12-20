@@ -73,6 +73,8 @@ tinymce.addI18n('ja_JP',{
 "Use list markup for lists.": "リストにはリストマークアップを使用します。",
 "Large text must have a contrast ratio of at least 3:1.": "大テキストは 3:1 以上のコントラスト比に設定する必要があります。",
 "Visual presentation must have a contrast ratio of at least 4.5:1.": "視覚表示は 4.5:1 以上のコントラスト比に設定する必要があります。",
+"Next": "次へ",
+"Close": "閉じる",
 
 // d2l-emoticons plugin
 "blue funster": "ひょうきん（青）",
