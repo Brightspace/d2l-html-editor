@@ -101,7 +101,7 @@
 			this.configureSettings = function(settings) {
 				this.pluginSettings = settings;
 				resolve();
-			}
+			};
 		}.bind(this));
 
 		this.connect = function() {

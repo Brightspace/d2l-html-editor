@@ -1,7 +1,7 @@
+/*global tinymce:true require */
 var superagent_auth = require('superagent-d2l-session-auth');
-var superagent= require('superagent');
+var superagent = require('superagent');
 
-/*global tinymce:true */
 Polymer({
 
 	is: 'd2l-html-editor',
@@ -424,9 +424,6 @@ Polymer({
 			tinyMCE.baseURL = this.baseUrl; // eslint-disable-line
 		}
 
-		// In React 15 Polymer dom APIs for distributed light DOM children
-		// seem to be broken - this will probably not work in Shadow DOM
-		// this.element = Polymer.dom(this).querySelector('#' + this.editorId);
 		this.element = this.querySelector('#' + this.editorId);
 		this.element.style.overflowY = 'auto';
 		this.element.style.minHeight = this.minHeight;
@@ -455,47 +452,47 @@ Polymer({
 			contentCss += this.appRoot + '../d2l-html-editor/d2l-insertstuff.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-equation-editor.css' + ',' + this.appRoot + '../d2l-html-editor/d2l-placeholder.css';
 		}
 
-		var updateImageUploadSpinners=function(){
-			if (!tinymce.activeEditor){
+		var updateImageUploadSpinners = function() {
+			if (!tinymce.activeEditor) {
 				return;
 			}
 			var body = tinymce.activeEditor.getBody();
 			var images = body.getElementsByTagName('img');
-			var imageSpinnersDiv = body.querySelector("#d2l-html-editor-image-upload-spinners");
-			if ( imageSpinnersDiv ){
+			var imageSpinnersDiv = body.querySelector('#d2l-html-editor-image-upload-spinners');
+			if (imageSpinnersDiv) {
 				imageSpinnersDiv.parentNode.removeChild(imageSpinnersDiv);
 				imageSpinnersDiv = null;
 			}
 
-			for ( var i=0; i < images.length; i++ ){
-				if ( images[i].src.indexOf("blob:") === 0
-					&& !images[i].getAttribute("data-mce-selected") 	// if an image is selected in this state it's usually being manipulated by image tools plugin
-				){
-					images[i].setAttribute("data-mce-bogus","all");
+			for (var i = 0; i < images.length; i++) {
+				if (images[i].src.indexOf('blob:') === 0
+					&& !images[i].getAttribute('data-mce-selected') 	// if an image is selected in this state it's usually being manipulated by image tools plugin
+				) {
+					images[i].setAttribute('data-mce-bogus', 'all');
 					var img = images[i];
 					var width = img.clientWidth;
 					var height = img.clientHeight;
 					var x = img.offsetLeft;
 					var y = img.offsetTop;
-					var minDim = Math.min(width,height);
-					minDim = Math.min(69,minDim);
+					var minDim = Math.min(width, height);
+					minDim = Math.min(69, minDim);
 					var html = images[i].outerHTML;
 
-					html = '<div data-mce-bogus="all" style="position:absolute;user-select:none;top:' + y + 'px;left:'+x+'px;height:' + height + 'px;width:'+ width+'px;">' +
+					html = '<div data-mce-bogus="all" style="position:absolute;user-select:none;top:' + y + 'px;left:' + x + 'px;height:' + height + 'px;width:' + width + 'px;">' +
 						'<div data-mce-bogus="all" class="powerpaste-spinner-shim" ></div>' +
-						'<div data-mce-bogus="all" class="powerpaste-spinner-bg" style="font-size:' + minDim/2 + 'px;'
-						+ 'top:'+ (height/2-minDim/2) + 'px;'
-						+ 'left:' + (width/2-minDim/2) + 'px">' +
-						'<div data-mce-bogus="all" class="powerpaste-spinner-slice1">&nbsp;</div><div class="powerpaste-spinner-slice2">&nbsp;</div><div class="powerpaste-spinner-slice3">&nbsp;</div><div class="powerpaste-spinner-slice4">&nbsp;</div><div class="powerpaste-spinner-slice5">&nbsp;</div>'+
+						'<div data-mce-bogus="all" class="powerpaste-spinner-bg" style="font-size:' + minDim / 2 + 'px;'
+						+ 'top:' + (height / 2 - minDim / 2) + 'px;'
+						+ 'left:' + (width / 2 - minDim / 2) + 'px">' +
+						'<div data-mce-bogus="all" class="powerpaste-spinner-slice1">&nbsp;</div><div class="powerpaste-spinner-slice2">&nbsp;</div><div class="powerpaste-spinner-slice3">&nbsp;</div><div class="powerpaste-spinner-slice4">&nbsp;</div><div class="powerpaste-spinner-slice5">&nbsp;</div>' +
 						'</div></div>';
 					var div = document.createElement('div');
 					div.innerHTML = html;
-					div.setAttribute("data-mce-bogus","all");
+					div.setAttribute('data-mce-bogus', 'all');
 
-					if ( !imageSpinnersDiv ){
+					if (!imageSpinnersDiv) {
 						imageSpinnersDiv = document.createElement('div');
-						imageSpinnersDiv.setAttribute("data-mce-bogus","all");
-						imageSpinnersDiv.setAttribute("id","d2l-html-editor-image-upload-spinners")
+						imageSpinnersDiv.setAttribute('data-mce-bogus', 'all');
+						imageSpinnersDiv.setAttribute('id', 'd2l-html-editor-image-upload-spinners');
 						body.appendChild(imageSpinnersDiv);
 					}
 
@@ -503,15 +500,14 @@ Polymer({
 					imageSpinnersDiv = div;
 				}
 				else {
-					images[i].removeAttribute("data-mce-bogus");
+					images[i].removeAttribute('data-mce-bogus');
 				}
 			}
 		};
 
 		var config = {
 			d2l_html_editor: that,
-			selector: '#' + this.editorId,
-
+			target: this.element,
 			external_plugins: this.langTag && this.langTag !== 'en_US' && this.langAvailable[this.langTag] ? {'d2l_lang': this.appRoot + '../d2l-html-editor/d2l_lang_plugin/d2l-lang-plugin.js'} : null,
 			plugins: this.plugins,
 			toolbar: this.toolbar,
@@ -559,7 +555,6 @@ Polymer({
 			images_upload_handler: function(blobInfo, replaceImageUrlFunction) {
 				var blob = blobInfo.blob();
 				var filename = blobInfo.filename();
-				var client = that.ifrauClient;
 
 				var successCallback = function(newUrl) {
 					replaceImageUrlFunction(newUrl);
@@ -570,7 +565,7 @@ Polymer({
 					successCallback('pasteFailed');
 				};
 				function getHost(baseUrl) {
-					var host = /https?:\/\/([^\/]+).*/.exec(baseUrl)[1];
+					var host = /https?:\/\/([^/]+).*/.exec(baseUrl)[1];
 					return host;
 				}
 				that.fire('d2l-html-editor-image-upload-started');
@@ -625,7 +620,7 @@ Polymer({
 					var cont = document.getElementById(editor.id).parentElement;
 
 					var btnDivs = cont.getElementsByClassName('mce-btn');
-					length = btnDivs ? btnDivs.length : -1;
+					var length = btnDivs ? btnDivs.length : -1;
 					for (var i = 0; i < length; i ++) {
 						btnDivs[i].removeAttribute('aria-labelledby');
 					}
@@ -657,7 +652,7 @@ Polymer({
 
 				function updateTableAttributes(tables) {
 					var attributeValue, tableBorder;
-					length = tables ? tables.length : -1;
+					var length = tables ? tables.length : -1;
 					for (var i = 0; i < length; i ++) {
 						attributeValue = tables[i].getAttribute('style');
 						tableBorder = parseFloat(tables[i].getAttribute('border'));
@@ -693,7 +688,7 @@ Polymer({
 					}
 				});
 
-				editor.on('change redo undo', function(event) {
+				editor.on('change redo undo', function() {
 					updateImageUploadSpinners();
 					findTables(editor);
 					that.fire('change', {content: editor.getContent()});
@@ -763,19 +758,19 @@ Polymer({
 			}
 		};
 
-		if( this.allowUnsafe ) {
+		if (this.allowUnsafe) {
 			config.valid_elements = '*[*]';
 		} else {
 			config.extended_valid_elements = 'span[*]';
 		}
 
-		if ( this.imageToolsEnabled ){
+		if (this.imageToolsEnabled) {
 			config.plugins += ' image imagetools';
-			if ( valenceHost ){
+			if (valenceHost) {
 				// get the root domain name of the valence host
-				var matches = valenceHost.toLowerCase().match(/^https?\:\/\/([^\/:?#]+)(?:[\/:?#]|$)/i);
+				var matches = valenceHost.toLowerCase().match(/^https?:\/\/([^/:?#]+)(?:[/:?#]|$)/i);
 				var domainName = matches && matches[1];
-				if ( domainName ){
+				if (domainName) {
 					config.imagetools_cors_hosts = [domainName];
 					config.imagetools_credentials_hosts = [domainName];
 				}

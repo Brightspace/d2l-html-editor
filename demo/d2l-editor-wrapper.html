@@ -1,0 +1,54 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="./d2l-html-editor-client.html">
+<link rel="import" href="../d2l-html-editor.html">
+
+<!--
+`d2l-editor-wrapper`
+-->
+
+<dom-module id="d2l-editor-wrapper">
+	<template strip-whitespace>
+		<style>
+			:host {
+				display: inline-block;
+			}
+
+			#test1 {
+				padding: 0.4rem 0.75rem;
+				border: 1px solid blue;
+			}
+
+		</style>
+		<h2>Hello [[prop1]]!</h2>
+		<d2l-html-editor
+			editor-id="[[prop1]]"
+			toolbar=[[_toolbar]]
+			plugins=[[_plugins]]
+		>
+			<div id="[[prop1]]" class="d2l-richtext-editor-container"></div>
+		</d2l-html-editor>
+	</template>
+	<script>
+		Polymer({
+			is: 'd2l-editor-wrapper',
+			properties: {
+				prop1: {
+					type: String,
+				},
+				_toolbar: {
+					type: String,
+					value: 'bold italic bullist',
+				},
+				_plugins: {
+					type: String,
+					value: 'lists paste d2l_placeholder d2l_filter d2l_replacestring',
+				},
+			},
+			attached: function() {
+				var editor = this.$$('d2l-html-editor');
+				editor.appRoot = editor.resolveUrl('../root/');
+				editor.d2lPluginSettings = {};
+			}
+		});
+	</script>
+</dom-module>
