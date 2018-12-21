@@ -28,6 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<div id="html-editor"></div>
 
 		<script>
+			/* global tinymce:true */
 			describe('Attributes Plugin', function() {
 
 				var editor, config, client, service;
@@ -41,12 +42,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					client = {
 						connect: function() {},
 						getService: function() {}
-					}
+					};
 
 					service = {
 						config: function() {},
 						click: function() {}
-					}
+					};
 
 					var servicePromise = sinon.stub(client, 'getService').returnsPromise();
 					servicePromise.resolves(service);
@@ -86,9 +87,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					editor.setContent('');
 					document.getElementById('html-editor').blur();
 					tinymce.EditorManager.execCommand('mceRemoveEditor', true, 'html-editor'); // eslint-disable-line no-undef
-				})
+				});
 
-				describe('click handling', function(done) {
+				describe('click handling', function() {
 
 					xit('sets attributes', function(done) {
 
