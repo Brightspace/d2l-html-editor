@@ -1,16 +1,19 @@
 {
-	"plugins": {
-		"local": {
-			"browsers": ["chrome"]
-		},
-		"sauce": {
-			"browsers": [
-				{
-					"browserName": "chrome",
-					"platform": "Windows 10",
-					"version": ""
-                }
-			]
-		}
-	}
+  "plugins": {
+    "local": {
+      "browsers": ["chrome"],
+      "browserOptions": {
+        "chrome": ["headless", "disable-gpu", "no-sandbox"]
+      }
+    },
+    "sauce": {
+      "browsers": [
+        {
+          "browserName": "chrome",
+          "platform": "Windows 10",
+          "version": ""
+        }
+      ]
+    }
+  }
 }
