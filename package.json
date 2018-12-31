@@ -15,8 +15,7 @@
     "lint:wc": "polymer lint -i *.html",
     "test": "npm run lint && npm run test:polymer:local",
     "test:polymer:local": "cross-env LAUNCHPAD_BROWSERS=chrome polymer test --skip-plugin sauce",
-    "test:polymer:sauce": "polymer test --skip-plugin local",
-    "build": "browserify d2l-html-editor.js -o d2l-html-editor-bundled.js"
+    "test:polymer:sauce": "polymer test --skip-plugin local"
   },
   "repository": {
     "type": "git",
@@ -34,7 +33,6 @@
     "eslint": "^4.15.0",
     "eslint-config-brightspace": "^0.4.0",
     "eslint-plugin-html": "^4.0.1",
-    "polymer-cli": "^1.9.2",
-    "superagent-d2l-session-auth": "^1.0.2"
+    "polymer-cli": "^1.9.2"
   }
 }
