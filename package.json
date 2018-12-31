@@ -1,6 +1,6 @@
 {
   "name": "d2l-html-editor",
-  "version": "0.2.20",
+  "version": "0.3.0",
   "description": "A Polymer web component wrapper around the tinymce html editor.",
   "main": "index.js",
   "directories": {
