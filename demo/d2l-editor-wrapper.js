@@ -27,16 +27,24 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-editor-wrapper">
 
 		</style>
 		<h2>Hello [[prop1]]!</h2>
-		<d2l-html-editor editor-id="[[prop1]]" toolbar="[[_toolbar]]" plugins="[[_plugins]]">
+		<d2l-html-editor
+			editor-id="[[prop1]]"
+			toolbar="[[_toolbar]]"
+			plugins="[[_plugins]]"
+			app-root="[[_appRoot]]"
+		>
 			<div id="[[prop1]]" class="d2l-richtext-editor-container"></div>
 		</d2l-html-editor>
 	</template>
-	
+
 </dom-module>`;
 
 document.head.appendChild($_documentContainer.content);
 Polymer({
 	is: 'd2l-editor-wrapper',
+	get importMeta() {
+		return import.meta;
+	},
 	properties: {
 		prop1: {
 			type: String,
@@ -49,10 +57,15 @@ Polymer({
 			type: String,
 			value: 'lists paste d2l_placeholder d2l_filter d2l_replacestring',
 		},
+		_appRoot: {
+			type: String,
+			value: function() {
+				return this.resolveUrl('../');
+			},
+		},
 	},
 	attached: function() {
 		var editor = this.$$('d2l-html-editor');
-		editor.appRoot = editor.resolveUrl('../root/');
 		editor.d2lPluginSettings = {};
 	}
 });

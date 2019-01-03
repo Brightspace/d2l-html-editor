@@ -30,4 +30,3 @@ document.head.appendChild($_documentContainer.content);
   from HTML and may be out of place here. Review them and
   then delete this comment!
 */
-;
