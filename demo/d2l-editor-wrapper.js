@@ -9,7 +9,7 @@
 import '@polymer/polymer/polymer-legacy.js';
 
 import './d2l-html-editor-client.js';
-import '../d2l-html-editor.js';
+import '../d2l-html-editor-component.js';
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
 const $_documentContainer = document.createElement('template');
 

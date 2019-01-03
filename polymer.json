@@ -5,7 +5,8 @@
       "polymer-3"
     ],
     "ignoreWarnings": [
-      "not-loadable"
+      "not-loadable",
+      "non-literal-import"
     ]
   }
 }

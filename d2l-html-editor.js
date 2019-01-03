@@ -13,6 +13,6 @@ window.tinyMCEPreInit = {
 	baseURL: tinymceBaseUrl,
 	suffix: ''
 };
-import(`${tinymceBaseUrl}/tinymce.js`).then(function() {
+import(tinymceBaseUrl + '/tinymce.js').then(function() {
 	import('./d2l-html-editor-component.js');
 });
