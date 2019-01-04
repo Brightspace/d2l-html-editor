@@ -496,6 +496,7 @@ Polymer({
 			editor.remove();
 		}
 		this.client = null;
+		this.element.removeEventListener('focusin', this._focusInHandler);
 	},
 
 	focus: function() {
@@ -543,8 +544,30 @@ Polymer({
 		this.element.style.overflowY = 'auto';
 		this.element.style.minHeight = this.minHeight;
 		this.element.style.maxHeight = this.maxHeight;
+		this.element.addEventListener('focusin', this._focusInHandler);
 
 		this._initTinyMCE(valenceHost);
+	},
+
+	// This handler is required to prevent issues in IE11 where the toolbar
+	// is shown and then immediately hidden again when an editor gains focus. It occurs because
+	// tinymce registers a document level 'focus' listener to hide the toolbar when the
+	// document gets focus outside the editor. For browsers that don't
+	// support document.documentElement.onFocusIn, it uses a 'focus' event in 'capture'
+	// phase. This seems to be most desktop browsers (Edge, FF, Chrome) even though they
+	// do support the 'focusin' event. However, for IE11 it does use 'focusin'. In contrast
+	// to 'focus', 'focusin' bubbles, so after the editor gets focus the document level
+	// handler fires. Tinymce contains code to try and determine if the target event is related
+	// to the editor. Pre-Polymer 2 this worked for IE11, because event retargetting was not
+	// simulated for shady DOM. However, since Polymer 2, it looks like event retargetting
+	// is implemented by the polyfills. So when the document level handler gets the event
+	// it appears to have come from the top level web component in the document that
+	// encapsulates the editor, and so the handler thinks the editor lost focus, and so
+	// immediately hides the toolbar again. Stopping propagation for this event when
+	// it does come from the editor doesn't seem to have any side effects and works around
+	// the issue.
+	_focusInHandler: function(e) {
+		e.stopPropagation();
 	},
 
 	_extend: function(obj, target) {
