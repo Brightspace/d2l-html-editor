@@ -8,7 +8,7 @@
 // here. However, to ensure this is set before the tinymce import is processed, we have to use a dynamic
 // import. Hence we dynamically import tinymce, and then we dynamically import the d2l-html-editor
 // component.
-const tinymceBaseUrl = 'https://s.brightspace.com/lib/tinymce/dev/4.8.5-a11ychecker.1.2.1-53-powerpaste.3.3.3-308-shadow-dom-fork-1';
+const tinymceBaseUrl = 'https://s.brightspace.com/lib/tinymce/dev/4.8.5-a11ychecker.1.2.1-53-powerpaste.3.3.3-308-shadow-dom-fork-2';
 window.tinyMCEPreInit = {
 	baseURL: tinymceBaseUrl,
 	suffix: ''
