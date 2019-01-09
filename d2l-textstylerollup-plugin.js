@@ -1,0 +1,26 @@
+import './d2l-html-editor-plugin.js';
+/*global tinymce:true */
+/** @polymerBehavior */
+var TextStyleRollupBehavior = {
+	plugin: {
+		addPlugin: function() {
+			tinymce.PluginManager.add('d2l_textstylerollup', function(editor) {
+				editor.addButton('d2l_textstylerollup', {
+					type   : 'MenuButton',
+					icon   : 'arrowdown',
+					title  : 'Text Styles',
+					tooltip: 'More Text Styles',
+					menu   : [
+						editor.menuItems.strikethrough,
+						editor.menuItems.subscript,
+						editor.menuItems.superscript]
+				});
+			});
+		}
+	}
+};
+
+window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+/** @polymerBehavior */
+window.D2LHtmlEditor.PolymerBehaviors.TextStyleRollup = TextStyleRollupBehavior;

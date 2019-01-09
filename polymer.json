@@ -1,10 +1,12 @@
 {
+  "npm": true,
   "lint": {
     "rules": [
-      "polymer-2-hybrid"
+      "polymer-3"
     ],
     "ignoreWarnings": [
-      "not-loadable"
+      "not-loadable",
+      "non-literal-import"
     ]
   }
 }

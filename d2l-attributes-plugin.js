@@ -1,0 +1,139 @@
+import './d2l-html-editor-plugin.js';
+
+function getAttributes(editor) {
+
+	var node = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+
+	if (!canApplyAttributesToNode(node)) {
+		return null;
+	}
+
+	var title = '';
+	if (window.D2LHtmlEditor.PolymerBehaviors.Plugin.hasAttribute(node, 'title')) {
+		title = node.getAttribute('title');
+	}
+
+	var idValue = '';
+	if (window.D2LHtmlEditor.PolymerBehaviors.Plugin.hasAttribute(node, 'id')) {
+		idValue = node.getAttribute('id');
+	}
+
+	var className = node.className;
+
+	var style = '';
+	if (window.D2LHtmlEditor.PolymerBehaviors.Plugin.hasAttribute(node, 'style')) {
+		style = node.getAttribute('style');
+	}
+
+	var textDirection = '';
+	if (window.D2LHtmlEditor.PolymerBehaviors.Plugin.hasAttribute(node, 'dir')) {
+		textDirection = node.getAttribute('dir');
+	}
+
+	return {
+		title: title,
+		id: idValue,
+		className: className,
+		style: style,
+		textDirection: textDirection
+	};
+}
+
+function setAttributes(node, attributes) {
+	if (node === null) {
+		return;
+	}
+
+	var setAttr = function(name, value) {
+		if (value === '') {
+			node.removeAttribute(name);
+		} else {
+			node.setAttribute(name, value);
+		}
+	};
+
+	if (attributes.className) {
+		node.className = attributes.className;
+	}
+
+	setAttr('title', attributes.title);
+	setAttr('id', attributes.id);
+	setAttr('style', attributes.style);
+	setAttr('data-mce-style', attributes.style);
+	setAttr('dir', attributes.textDirection);
+}
+
+function command(service, editor) {
+	var currentAttributes = getAttributes(editor);
+	var bookmark = editor.selection.getBookmark();
+	service.click(currentAttributes).then(function(attributes) {
+		// setTimeout 10 required for IE to get focus back
+		// document.activeELement.blur() required for Chrome to get focus back
+		// moveToBookmark required by IE
+		setTimeout(function() {
+			document.activeElement.blur();
+
+			editor.focus();
+			editor.selection.moveToBookmark(bookmark);
+			var selectedNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+			setAttributes(selectedNode, attributes);
+			editor.focus();
+		}, 10);
+	}, function() {
+		setTimeout(function() {
+			editor.focus();
+			editor.selection.moveToBookmark(bookmark);
+			window.D2LHtmlEditor.PolymerBehaviors.Plugin.clearBookmark(editor, bookmark);
+		}, 100);
+	});
+}
+
+function canApplyAttributesToNode(node) {
+	return node && node.nodeName !== 'BODY' && node.nodeName !== 'BR' && node.nodeType !== 9 && node.getAttribute !== undefined;
+}
+
+function handleDisabledState(editor, ctrl) {
+	function bindStateListener() {
+		var currentNode = window.D2LHtmlEditor.PolymerBehaviors.Plugin.getSelectedNode(editor);
+		if (!canApplyAttributesToNode(currentNode)) {
+			ctrl.disabled(true);
+		}
+
+		editor.on('NodeChange', function(e) {
+			var disabled = !canApplyAttributesToNode(e.node);
+			ctrl.disabled(disabled);
+		});
+	}
+
+	if (editor.initialized) {
+		bindStateListener();
+	} else {
+		editor.on('init', bindStateListener);
+	}
+}
+
+function addPlugin(client) {
+	return window.D2LHtmlEditor.PolymerBehaviors.Plugin.configureSimpleService(
+		client, {
+			id: 'd2l_attributes',
+			label: 'Add Attributes',
+			icon: 'd2l_attributes',
+			serviceId: 'fra-html-editor-attributes',
+			cmd: command,
+			init: function() { },
+			postRender: handleDisabledState,
+			isMenu: true
+		});
+}
+
+/** @polymerBehavior */
+var AttributesBehavior = {
+	plugin: {
+		addPlugin: addPlugin
+	}
+};
+
+window.D2LHtmlEditor = window.D2LHtmlEditor || {};
+window.D2LHtmlEditor.PolymerBehaviors = window.D2LHtmlEditor.PolymerBehaviors || {};
+/** @polymerBehavior */
+window.D2LHtmlEditor.PolymerBehaviors.Attributes = AttributesBehavior;

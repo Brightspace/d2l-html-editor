@@ -13,13 +13,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
-		<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-		<script src="../../web-component-tester/browser.js"></script>
+		<script src="../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+		<script src="../../wct-browser-legacy/browser.js"></script>
 		<script src="../../sinon-stub-promise/index.js"></script>
 
 		<!-- Step 1: import the element to test -->
-		<link rel="import" href="../tinymce-import.html">
-		<link rel="import" href="../d2l-fontfamily-plugin.html">
+		<script type="module" src="../tinymce-import.js"></script>
+		<script type="module" src="../d2l-fontfamily-plugin.js"></script>
 	</head>
 	<body>
 
@@ -27,78 +27,80 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<!--<d2l-html-editor></d2l-html-editor>-->
 		<div id="html-editor"></div>
 
-		<script>
-			describe('Font Family Plugin', function() {
+		<script type="module">
+import '../tinymce-import.js';
+import '../d2l-fontfamily-plugin.js';
+describe('Font Family Plugin', function() {
 
-				var config, client, service;
+	var config, client, service;
 
-				beforeEach(function() {
+	beforeEach(function() {
 
-					config = {
-						isEnabled: true
-					};
+		config = {
+			isEnabled: true
+		};
 
-					client = {
-						connect: function() {},
-						getService: function() {}
-					};
+		client = {
+			connect: function() {},
+			getService: function() {}
+		};
 
-					service = {
-						config: function() {},
-						get: function() {}
-					};
+		service = {
+			config: function() {},
+			get: function() {}
+		};
 
-					var servicePromise = sinon.stub(client, 'getService').returnsPromise();
-					servicePromise.resolves(service);
-					var configPromise = sinon.stub(service, 'config').returnsPromise();
-					configPromise.resolves(config);
-				});
+		var servicePromise = sinon.stub(client, 'getService').returnsPromise();
+		servicePromise.resolves(service);
+		var configPromise = sinon.stub(service, 'config').returnsPromise();
+		configPromise.resolves(config);
+	});
 
-				describe('Font families', function() {
+	describe('Font families', function() {
 
-					it('loads font families', function(done) {
+		it('loads font families', function(done) {
 
-						var fontsPromise = sinon.stub(service, 'get').returnsPromise();
-						fontsPromise.resolves([{
-							Name: 'Arabic Transparent',
-							Value: 'Arabic transparent,sans-serif'
-						}, {
-							Name: 'Arial',
-							Value: 'arial,sans-serif'
-						}]);
+			var fontsPromise = sinon.stub(service, 'get').returnsPromise();
+			fontsPromise.resolves([{
+				Name: 'Arabic Transparent',
+				Value: 'Arabic transparent,sans-serif'
+			}, {
+				Name: 'Arial',
+				Value: 'arial,sans-serif'
+			}]);
 
-						var pluginConfig = {};
-						window.D2LHtmlEditor.PolymerBehaviors.FontFamily.plugin.addPlugin(client, pluginConfig).then(function() {
-							assert.equal(pluginConfig.font_formats,
-								'Arabic Transparent=Arabic transparent,sans-serif;Arial=arial,sans-serif;');
-							done();
-						});
-
-					});
-
-					it('ignores empty fonts', function(done) {
-
-						var fontsPromise = sinon.stub(service, 'get').returnsPromise();
-						fontsPromise.resolves([{
-							Name: 'Font Family',
-							Value: ''
-						}, {
-							Name: 'Arabic Transparent',
-							Value: 'Arabic transparent,sans-serif'
-						}, {
-							Name: 'Arial',
-							Value: 'arial,sans-serif'
-						}]);
-
-						var pluginConfig = {};
-						window.D2LHtmlEditor.PolymerBehaviors.FontFamily.plugin.addPlugin(client, pluginConfig).then(function() {
-							assert.equal(pluginConfig.font_formats,
-								'Arabic Transparent=Arabic transparent,sans-serif;Arial=arial,sans-serif;');
-							done();
-						});
-					});
-				});
+			var pluginConfig = {};
+			window.D2LHtmlEditor.PolymerBehaviors.FontFamily.plugin.addPlugin(client, pluginConfig).then(function() {
+				assert.equal(pluginConfig.font_formats,
+					'Arabic Transparent=Arabic transparent,sans-serif;Arial=arial,sans-serif;');
+				done();
 			});
-		</script>
+
+		});
+
+		it('ignores empty fonts', function(done) {
+
+			var fontsPromise = sinon.stub(service, 'get').returnsPromise();
+			fontsPromise.resolves([{
+				Name: 'Font Family',
+				Value: ''
+			}, {
+				Name: 'Arabic Transparent',
+				Value: 'Arabic transparent,sans-serif'
+			}, {
+				Name: 'Arial',
+				Value: 'arial,sans-serif'
+			}]);
+
+			var pluginConfig = {};
+			window.D2LHtmlEditor.PolymerBehaviors.FontFamily.plugin.addPlugin(client, pluginConfig).then(function() {
+				assert.equal(pluginConfig.font_formats,
+					'Arabic Transparent=Arabic transparent,sans-serif;Arial=arial,sans-serif;');
+				done();
+			});
+		});
+	});
+});
+</script>
 	</body>
 </html>

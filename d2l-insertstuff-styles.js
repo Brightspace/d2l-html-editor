@@ -1,0 +1,32 @@
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<dom-module id="d2l-insertstuff-styles">
+  <template>
+	<style>
+		.disf_default, .disf_flash, .disf_shockwave, .disf_quicktime, .disf_windowsmedia, .disf_realmedia {
+	  border-radius: 0.3rem;
+	  vertical-align: middle;
+	  background-color: #f9fafb;
+	  border: 1px solid #d3d9e3;
+			background-position:center;
+			background-repeat:no-repeat;
+	  background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%3E%3Cg%20fill%3D%22none%22%3E%3Cg%20fill%3D%22%2372777A%22%3E%3Cpath%20d%3D%22M22%202C23.1%202%2024%202.9%2024%204L24%2022C24%2023.1%2023.1%2024%2022%2024L4%2024C2.9%2024%202%2023.1%202%2022L2%204C2%202.9%202.9%202%204%202L22%202%2022%202ZM22%200L4%200C1.8%200%200%201.8%200%204L0%2022C0%2024.2%201.8%2026%204%2026L22%2026C24.2%2026%2026%2024.2%2026%2022L26%204C26%201.8%2024.2%200%2022%200L22%200%2022%200Z%22%2F%3E%3Cpath%20d%3D%22M10%2021C9.4%2021%209%2020.6%209%2020L9%206C9%205.6%209.2%205.3%209.6%205.1%209.9%204.9%2010.3%205%2010.6%205.2L19.6%2012.2C19.9%2012.4%2020%2012.7%2020%2013%2020%2013.3%2019.9%2013.6%2019.6%2013.8L10.6%2020.8C10.4%2020.9%2010.2%2021%2010%2021L10%2021ZM11%208L11%2018%2017.4%2013%2011%208Z%22%2F%3E%3Cpath%20d%3D%22M30%208L30%2026C30%2028.2%2028.2%2030%2026%2030L8%2030C7.4%2030%207%2029.6%207%2029%207%2028.4%207.4%2028%208%2028L24%2028C26.2%2028%2028%2026.2%2028%2024L28%208C28%207.4%2028.4%207%2029%207%2029.6%207%2030%207.4%2030%208L30%208Z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+		}
+
+		.disf_default:hover, .disf_flash:hover, .disf_shockwave:hover, .disf_quicktime:hover, .disf_windowsmedia:hover, .disf_realmedia:hover {
+	  background-color: #f2f8fc;
+	  border: 1px solid #006fbf;
+	  background-image: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%3E%3Cg%20fill%3D%22none%22%3E%3Cg%20fill%3D%22%231C5295%22%3E%3Cpath%20d%3D%22M22%202C23.1%202%2024%202.9%2024%204L24%2022C24%2023.1%2023.1%2024%2022%2024L4%2024C2.9%2024%202%2023.1%202%2022L2%204C2%202.9%202.9%202%204%202L22%202%2022%202ZM22%200L4%200C1.8%200%200%201.8%200%204L0%2022C0%2024.2%201.8%2026%204%2026L22%2026C24.2%2026%2026%2024.2%2026%2022L26%204C26%201.8%2024.2%200%2022%200L22%200%2022%200Z%22%2F%3E%3Cpath%20d%3D%22M10%2021C9.4%2021%209%2020.6%209%2020L9%206C9%205.6%209.2%205.3%209.6%205.1%209.9%204.9%2010.3%205%2010.6%205.2L19.6%2012.2C19.9%2012.4%2020%2012.7%2020%2013%2020%2013.3%2019.9%2013.6%2019.6%2013.8L10.6%2020.8C10.4%2020.9%2010.2%2021%2010%2021L10%2021ZM11%208L11%2018%2017.4%2013%2011%208Z%22%2F%3E%3Cpath%20d%3D%22M30%208L30%2026C30%2028.2%2028.2%2030%2026%2030L8%2030C7.4%2030%207%2029.6%207%2029%207%2028.4%207.4%2028%208%2028L24%2028C26.2%2028%2028%2026.2%2028%2024L28%208C28%207.4%2028.4%207%2029%207%2029.6%207%2030%207.4%2030%208L30%208Z%22%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E);
+		}
+	</style>
+  </template>
+</dom-module>`;
+
+document.head.appendChild($_documentContainer.content);
+
+/* shared-styles.html */
+/*
+  FIXME(polymer-modulizer): the above comments were extracted
+  from HTML and may be out of place here. Review them and
+  then delete this comment!
+*/
