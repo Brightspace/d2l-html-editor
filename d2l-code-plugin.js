@@ -1,3 +1,4 @@
+import './d2l-html-editor-plugin.js';
 /**
  * Released under LGPL License.
  * Copyright (c) 1999-2015 Ephox Corp. All rights reserved
