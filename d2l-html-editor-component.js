@@ -299,8 +299,6 @@ Polymer({
 		// $_iconsCss.rel = 'stylesheet';
 		// $_iconsCss.href = this.appRoot + '../d2l-html-editor/d2l-icons.css';
 		// document.head.appendChild($_iconsCss);
-		const url = this.resolveUrl('../abc');
-		console.log(url);
 	},
 
 	attached: function() {
