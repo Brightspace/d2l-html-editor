@@ -59,19 +59,6 @@ function addLink(rel, name) {
 
 // addScript('https://s.brightspace.com/lib/tinymce/dev/4.8.5-a11ychecker.1.2.1-53-powerpaste.3.3.3-308-shadow-dom-fork-1/tinymce.js');
 
-// These links are intentionally added to the global document as we are assuming the
-// tinymce toolbars are not encapsulated by a shadow root. Historically this was true
-// for React based applications like QED that always use either an inline fixed_toolbar_container
-// or a target element in the light DOM of the HTML editor. For rubrics we are switching
-// to allowing tinymce to control the placement of the inline toolbar, as this gives better
-// support for toolbar positioning for tall/long edit controls.
-
-addLink('stylesheet', 'd2l-icons.css');
-addLink('stylesheet', 'd2l-equation-editor.css');
-addLink('stylesheet', 'd2l-placeholder.css');
-addLink('stylesheet', 'd2l-powerpaste-spinner.css');
-addLink('stylesheet', 'd2l-insertstuff.css');
-
 const $_documentContainer = document.createElement('template');
 
 $_documentContainer.innerHTML = `<dom-module id="d2l-html-editor">
@@ -278,6 +265,19 @@ Polymer({
 
 	// Element Lifecycle
 	registered: function() {
+		// These links are intentionally added to the global document as we are assuming the
+		// tinymce toolbars are not encapsulated by a shadow root. Historically this was true
+		// for React based applications like QED that always use either an inline fixed_toolbar_container
+		// or a target element in the light DOM of the HTML editor. For rubrics we are switching
+		// to allowing tinymce to control the placement of the inline toolbar, as this gives better
+		// support for toolbar positioning for tall/long edit controls.
+
+		addLink('stylesheet', 'd2l-icons.css');
+		addLink('stylesheet', 'd2l-equation-editor.css');
+		addLink('stylesheet', 'd2l-placeholder.css');
+		addLink('stylesheet', 'd2l-powerpaste-spinner.css');
+		addLink('stylesheet', 'd2l-insertstuff.css');
+
 		var client = this.client()({
 			syncFont: false,
 			syncLang: false,
