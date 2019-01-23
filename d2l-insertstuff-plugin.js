@@ -370,7 +370,7 @@ function convertToElements(context) {
 function command(service, editor) {
 	var bookmark = editor.selection.getBookmark();
 	editor.targetElm.blur();
-	service.click(editor.id).then(function(response) {
+	service.click(editor).then(function(response) {
 		setTimeout(function() {
 			document.activeElement.blur();
 			editor.focus();
