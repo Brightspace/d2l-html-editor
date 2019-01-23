@@ -369,9 +369,10 @@ function convertToElements(context) {
 
 function command(service, editor) {
 	var bookmark = editor.selection.getBookmark();
-	document.activeElement.blur();
+	editor.targetElm.blur();
 	service.click(editor.id).then(function(response) {
 		setTimeout(function() {
+			document.activeElement.blur();
 			editor.focus();
 			editor.selection.moveToBookmark(bookmark);
 			editor.execCommand('mceInsertContent', false, response);
