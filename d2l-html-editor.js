@@ -955,9 +955,8 @@ Polymer({
 		while (target.parentNode) {
 			target = target.parentNode;
 		}
-		// If there is no parent node, but there is `host` property - we've just found Shadow Root,
-		// where we'll get selection. Note for Chrome the shadowRoot implements the DocumentOrShadowRoot mixin
-		// but in other browsers it is still implemented on the document
+		// If there is no parent node, but there is `host` property - we've just found Shadow Root
+		// host is the element which includes the html editor component.
 		return target.host;
 	},
 
