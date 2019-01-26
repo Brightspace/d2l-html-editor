@@ -27,14 +27,16 @@ $_documentContainer.innerHTML = `<dom-module id="d2l-editor-wrapper">
 
 		</style>
 		<h2>Hello [[prop1]]!</h2>
-		<d2l-html-editor
-			editor-id="[[prop1]]"
-			toolbar="[[_toolbar]]"
-			plugins="[[_plugins]]"
-			app-root="[[_appRoot]]"
-		>
-			<div id="[[prop1]]" class="d2l-richtext-editor-container"></div>
-		</d2l-html-editor>
+		<div>
+			<d2l-html-editor
+				editor-id="[[prop1]]"
+				toolbar="[[_toolbar]]"
+				plugins="[[_plugins]]"
+				app-root="[[_appRoot]]"
+			>
+				<div id="[[prop1]]" class="d2l-richtext-editor-container"></div>
+			</d2l-html-editor>
+		</div>
 	</template>
 
 </dom-module>`;
