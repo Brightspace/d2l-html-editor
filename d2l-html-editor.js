@@ -289,7 +289,7 @@ Polymer({
 		// import for tinymce. However using a dynamic import for tinymce also has the additional advantage
 		// that we only load tinymce if a component on the page uses it. Otherwise if this component ends up
 		// in shared polymer bundles, we would be loading tinymce even if the component wasn't used.
-		const tinymceBaseUrl = 'https://s.brightspace.com/lib/tinymce/dev/4.8.5-a11ychecker.1.2.1-53-powerpaste.3.3.3-308-shadow-dom-fork-3';
+		const tinymceBaseUrl = 'https://s.brightspace.com/lib/tinymce/dev/4.8.5-a11ychecker.1.2.1-53-powerpaste.3.3.3-308-shadow-dom-fork-6';
 		window.tinyMCEPreInit = {
 			baseURL: tinymceBaseUrl,
 			suffix: ''
@@ -937,10 +937,27 @@ Polymer({
 			}
 		}
 
+		if (window.ShadyDOM && window.ShadyDOM.inUse) {
+			const shadowHost = this.getShadowHost(this);
+			if (shadowHost) {
+				const scope = shadowHost.nodeName.toLowerCase();
+				config.invalid_classes = 'style-scope ' + scope;
+			}
+		}
+
 		tinymce.init(this._extend(this.pluginConfig, config));
 
 		// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
 		this.autoFocus = 0;
+	},
+
+	getShadowHost: function(target) {
+		while (target.parentNode) {
+			target = target.parentNode;
+		}
+		// If there is no parent node, but there is `host` property - we've just found Shadow Root
+		// host is the element which includes the html editor component.
+		return target.host;
 	},
 
 	computeToolbarId: function(editorId) {
