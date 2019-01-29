@@ -377,7 +377,7 @@ function command(service, editor) {
 		toolbar.style.display = 'none';
 	});
 
-	service.click(editor).then(function (response) {
+	service.click(editor).then(function(response) {
 		setTimeout(function() {
 			document.activeElement.blur();
 			editor.focus();
