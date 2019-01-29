@@ -370,6 +370,13 @@ function convertToElements(context) {
 function command(service, editor) {
 	var bookmark = editor.selection.getBookmark();
 	editor.targetElm.blur();
+
+	/* force toolbar to hide in Edge */
+	var toolbars = editor.getDoc().querySelectorAll('.mce-floatpanel');
+	toolbars.forEach(function(toolbar) {
+		toolbar.style.display = 'none';
+	});
+
 	service.click(editor).then(function(response) {
 		setTimeout(function() {
 			document.activeElement.blur();
