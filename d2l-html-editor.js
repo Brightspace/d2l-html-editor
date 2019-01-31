@@ -38,6 +38,7 @@ import './d2l-preview-plugin.js';
 import './d2l-xsplconverter-plugin.js';
 import './d2l-filter-plugin.js';
 import './d2l-placeholder-plugin.js';
+import './d2l-placeholder-styles.js';
 import './d2l-fullpage-plugin.js';
 import './d2l-emoticons-plugin.js';
 import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
@@ -61,11 +62,11 @@ function addLink(rel, name) {
 
 const $_documentContainer = document.createElement('template');
 
-$_documentContainer.innerHTML = `<dom-module id="d2l-html-editor">
+$_documentContainer.innerHTML = /*html*/`<dom-module id="d2l-html-editor">
 
 	<template strip-whitespace="">
 
-		<style include="d2l-insertstuff-styles">
+		<style include="d2l-insertstuff-styles d2l-placeholder-styles">
 			:host {
 				display: block;
 				position: relative;
