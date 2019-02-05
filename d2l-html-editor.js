@@ -946,6 +946,16 @@ Polymer({
 			}
 		}
 
+		if (this.inline) {
+			// This is to work around an issue reading offsetHeight in Edge and IE which performs
+			// very slowly when tinymce is initializing.
+			// https://github.com/tinymce/tinymce/blob/4.8.5/src/core/main/ts/init/Init.ts#L85
+			// Setting a height of 1, prevents tinymce from reading target.offsetHeight and the
+			// height value does not seem to be used anyway in the following code that sets up
+			// the theme UI.
+			config.height = 1;
+		}
+
 		tinymce.init(this._extend(this.pluginConfig, config));
 
 		// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
