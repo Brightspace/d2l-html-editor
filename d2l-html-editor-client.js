@@ -18,11 +18,12 @@
 					isEnabled: pluginSettings.hasOwnProperty('d2l_isf')
 				});
 			},
-			click: function(opener) {
+			click: function(editorId) {
+				var editor = tinymce.EditorManager.get(editorId);
 				return new Promise(function(resolve, reject) {
 					var location = new D2L.LP.Web.Http.UrlLocation(pluginSettings.d2l_isf.endpoint);
 					var openEvent = D2L.LP.Web.UI.Legacy.MasterPages.Dialog.Open(
-						opener,
+						editor,
 						location,
 						'GetSelectedItem',
 						'', /* resizeCallback*/
