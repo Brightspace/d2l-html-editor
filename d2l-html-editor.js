@@ -731,7 +731,7 @@ Polymer({
 					body: formData
 				}).then(function(response) {
 					if (response.ok) {
-						return response.body();
+						return response.json();
 					} else {
 						failCallBack();
 					}
