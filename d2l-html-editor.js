@@ -529,6 +529,9 @@ Polymer({
 
 	clearContent: function() {
 		tinymce.EditorManager.get(this.editorId).setContent('');
+		tinymce.EditorManager.get(this.editorId).undoManager.clear();
+		tinymce.EditorManager.get(this.editorId).undoManager.add();
+		this.fire('change', {content: tinymce.EditorManager.get(this.editorId).getContent()});
 	},
 
 	_keyChanged: function(newKey, oldKey) {
