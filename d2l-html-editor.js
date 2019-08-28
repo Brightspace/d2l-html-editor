@@ -875,6 +875,11 @@ Polymer({
 						const inlineToolbar = document.getElementsByClassName('mce-tinymce-inline')[0];
 						if (inlineToolbar) {
 							inlineToolbar.style.display = 'none';
+							// Hide any floating panels/menus opened from toolbar
+							const floatingPanels = document.getElementsByClassName('mce-floatpanel');
+							Array.prototype.forEach.call(floatingPanels, function(floatingPanel) {
+								floatingPanel.style.display = 'none';
+							});
 						}
 					}
 				});
