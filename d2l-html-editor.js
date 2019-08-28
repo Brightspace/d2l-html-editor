@@ -870,6 +870,15 @@ Polymer({
 					that.fire('blur', e);
 				});
 
+				editor.on('keydown', function(e) {
+					if (e.key === 'Escape' || e.key === 'Esc') { // 'Esc' is to support IE
+						const inlineToolbar = document.getElementsByClassName('mce-tinymce-inline')[0];
+						if (inlineToolbar) {
+							inlineToolbar.style.display = 'none';
+						}
+					}
+				});
+
 				editor.on('keyup', function() {
 					// that.element.value = editor.getContent();
 				});
