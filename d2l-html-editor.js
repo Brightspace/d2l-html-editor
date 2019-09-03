@@ -872,9 +872,11 @@ Polymer({
 
 				editor.on('keydown', function(e) {
 					if (e.key === 'Escape' || e.key === 'Esc') { // 'Esc' is to support IE
-						const inlineToolbar = document.getElementsByClassName('mce-tinymce-inline')[0];
-						if (inlineToolbar) {
-							inlineToolbar.style.display = 'none';
+						const inlineToolbars = document.getElementsByClassName('mce-tinymce-inline');
+						if (inlineToolbars.length) {
+							Array.prototype.forEach.call(inlineToolbars, function(inlineToolbar) {
+								inlineToolbar.style.display = 'none';
+							});
 							// Hide any floating panels/menus opened from toolbar
 							const floatingPanels = document.getElementsByClassName('mce-floatpanel');
 							Array.prototype.forEach.call(floatingPanels, function(floatingPanel) {
