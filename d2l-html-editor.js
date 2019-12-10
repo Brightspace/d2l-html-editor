@@ -749,6 +749,9 @@ Polymer({
 			},
 			setup: function(editor) {
 				that.editor = editor;
+
+				that._disabledChanged(that.disabled);
+				
 				function translateAccessibility(node) {
 					if (node.nodeType === 1) {
 
