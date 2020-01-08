@@ -200,6 +200,10 @@ Polymer({
 			type: Number,
 			value: 0
 		},
+		powerPasteAllowLocalImages: {
+			type: Number,
+			value: 1
+		},
 		powerPasteFormatting: {
 			type: String,
 			value: null
@@ -703,7 +707,7 @@ Polymer({
 			directionality: this.langDir,
 			object_resizing: this.objectResizing,
 			powerpaste_word_import: this.powerPasteFormatting,
-			powerpaste_allow_local_images: this.powerPasteEnabled ? true : false,
+			powerpaste_allow_local_images: this.powerPasteEnabled && this.powerPasteAllowLocalImages ? true : false,
 			powerpaste_block_drop : false,
 			paste_as_text: this.powerPasteEnabled ? false : true,
 			paste_text_sticky: this.powerPasteEnabled ? false : true,
