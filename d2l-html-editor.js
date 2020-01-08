@@ -162,7 +162,8 @@ Polymer({
 			computed: 'computeToolbarId(editorId)'
 		},
 		content: {
-			type: String
+			type: String,
+			observer: '_contentChanged'
 		},
 		baseUrl: {
 			type: String,
@@ -255,6 +256,13 @@ Polymer({
 	 * @return {HTMLElement}
 	 */
 	element: null,
+
+	_contentChanged: function(content) {
+		if (this.editor) {
+			var decodedContent = decodeURIComponent(this.content);
+			this.editor.setContent(decodedContent);
+		}
+	},
 
 	_disabledChanged: function(disabled) {
 		if (disabled) {
