@@ -259,7 +259,7 @@ Polymer({
 
 	_contentChanged: function(content) {
 		if (this.editor) {
-			var decodedContent = decodeURIComponent(this.content);
+			var decodedContent = decodeURIComponent(content);
 			this.editor.setContent(decodedContent);
 		}
 	},
