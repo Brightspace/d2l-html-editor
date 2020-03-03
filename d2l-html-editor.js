@@ -513,14 +513,19 @@ Polymer({
 	// We cannot cleanup in detached because React seems to cause the web component
 	// to detach/attach during move operations
 	cleanup: function() {
-		var editor = tinymce.EditorManager.get(this.editorId);
-		if (editor) {
-		// prevent save before remove, since it throws an exception when the HTML content contains a table
-			editor.save = function() {};
-			editor.remove();
+		if (window.tinymce) {
+			var editor = tinymce.EditorManager.get(this.editorId);
+			if (editor) {
+			// prevent save before remove, since it throws an exception when the HTML content contains a table
+				editor.save = function() {};
+				editor.remove();
+			}
 		}
+
 		this.client = null;
-		this.element.removeEventListener('focusin', this._focusInHandler);
+		if (this.element) {
+			this.element.removeEventListener('focusin', this._focusInHandler);
+		}
 	},
 
 	focus: function() {
