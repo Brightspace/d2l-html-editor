@@ -987,7 +987,10 @@ Polymer({
 			config.height = 1;
 		}
 
-		tinymce.init(this._extend(this.pluginConfig, config));
+		// This is to avoid a memory leak if the cleanup code in detached runs before this code
+		if (this.isAttached) {
+			tinymce.init(this._extend(this.pluginConfig, config));
+		}
 
 		// need to reset auto focus property to prevent unwanted focus during re-ordering of the options
 		this.autoFocus = 0;
