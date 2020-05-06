@@ -28,8 +28,8 @@ var CodeBehavior = {
 									type: 'textbox',
 									name: pluginConfig.icon,
 									multiline: true,
-									minWidth: editor.getParam('code_dialog_width', 600),
-									minHeight: editor.getParam('code_dialog_height', Math.min(tinymce.DOM.getViewPort().h - 200, 200)),
+									minWidth: editor.getParam('code_dialog_width', tinymce.DOM.getViewPort().w * 0.75),
+									minHeight: editor.getParam('code_dialog_height', tinymce.DOM.getViewPort().h * 0.65),
 									spellcheck: false,
 									style: 'direction: ltr; text-align: left'
 								},
