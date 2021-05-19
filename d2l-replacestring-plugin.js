@@ -26,11 +26,15 @@ function encodeReplaceStrings(context, replacementToken, replacementValue) {
 			// when we replace later.
 			tempNode.innerHTML = match;
 			var img = tempNode.firstChild;
+			if (!img) return match;
+
 			var src = img.getAttribute('data-mce-src'); //plugin.Attributes.Data);
 
 			if (!src) {
 				src = img.getAttribute('src');
 			}
+			if (!src) return match;
+
 			var originalSrc = src;
 
 			// loop through possible replace strings and replace them
@@ -72,6 +76,8 @@ function decodeReplaceStrings(obj) {
 			tempNode.innerHTML = match;
 
 			var img = tempNode.firstChild;
+			if (!img) return match;
+
 			var d2l_src = img.getAttribute('data-d2l-src');
 
 			if (d2l_src !== '') {
